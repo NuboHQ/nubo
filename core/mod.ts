@@ -64,7 +64,7 @@ export class Nubo {
       );
     }
 
-    await app.listen(`${host}:${port}`);
+    await app.listen({ port });
   };
 
   public static graphql = async (options: NuboGraphqlOptions) => {
