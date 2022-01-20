@@ -8,6 +8,7 @@ import {
 import { NuboStartOptions } from './types.ts';
 import { NuboGraphqlOptions } from './graphql/types.ts';
 import { config } from './config.ts';
+import { Logger } from './logger.ts';
 
 const app = new Application();
 const router = new Router();
@@ -59,11 +60,12 @@ export class Nubo {
     const host = options.host || DEFAULT_HOST;
     const port = options.port || DEFAULT_PORT;
 
-    console.log(`[nubo] http://${host}:${port}`);
+    Logger.info(`http://${host}:${port}`, 'nubo');
 
     if (graphqlSettings.enabled) {
-      console.log(
-        `[nubo:graphql] http://${host}:${port}${graphqlSettings.path}`,
+      Logger.info(
+        `http://${host}:${port}${graphqlSettings.path}`,
+        'nubo:graphql',
       );
     }
 
