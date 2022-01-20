@@ -7,6 +7,7 @@ import {
 } from '../deps.ts';
 import { NuboStartOptions } from './types.ts';
 import { NuboGraphqlOptions } from './graphql/types.ts';
+import { config } from './config.ts';
 
 const app = new Application();
 const router = new Router();
@@ -19,6 +20,8 @@ const graphqlSettings = {
 
 export class Nubo {
   public static router = router;
+  public static app = app;
+  public static config = config;
 
   public static start = async (options: NuboStartOptions = {}) => {
     app.use(async ({ response }, next) => {
