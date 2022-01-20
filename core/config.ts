@@ -1,4 +1,4 @@
-const VERSION = '0.0.4';
+const VERSION = '0.0.3';
 
 export const config = {
   name: 'nubo',
