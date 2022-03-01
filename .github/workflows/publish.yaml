@@ -5,24 +5,15 @@ on:
     branches: [package]
 
 jobs:
-  main:
+  publish:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Use Node 16
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
-          node-version: "16.x"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Build
-        run: |
-          npm ci
-          npm run build
-      - name: publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: |
-          npm publish --access public
+          node-version: 10
+      - run: npm ci
+      - run: npm run build
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_ACCESS_TOKEN }}
