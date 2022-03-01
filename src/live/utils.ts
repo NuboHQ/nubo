@@ -1,14 +1,14 @@
 import { config } from '../config';
 import { QueryOptions } from './types';
 
-export const formatUrl = ({
+export const formatUrl = <T>({
   list,
   baseUrl,
   options = {},
 }: {
   list: string;
   baseUrl?: string;
-  options?: QueryOptions;
+  options?: QueryOptions<T>;
 }) => {
   const encodedOptions = encodeURIComponent(JSON.stringify(options));
 

@@ -14,7 +14,7 @@ export class Socket<T> {
   list: string;
   apiKey: string | null = null;
   baseUrl: string = config.default.baseUrl;
-  options: QueryOptions = {};
+  options: QueryOptions<T> = {};
   socket: WebSocket | null = null;
   onOpenHandler: OnOpenHandler | null = null;
   onUpdateHandler: OnUpdateHandler<T> | null = null;
@@ -59,7 +59,7 @@ export class Socket<T> {
   }
 
   public connect() {
-    const url = formatUrl({
+    const url = formatUrl<T>({
       list: this.list,
       baseUrl: this.baseUrl,
       options: this.options,

@@ -8,7 +8,7 @@ export type OnCloseHandler = (event: WebSocket.CloseEvent) => void;
 export type LiveQueryOptions<T> = {
   list: string;
   apiKey?: string;
-  options?: QueryOptions;
+  options?: QueryOptions<T>;
   baseUrl?: string;
   onOpen?: OnOpenHandler;
   onUpdate?: OnUpdateHandler<T>;
@@ -32,13 +32,19 @@ export type QueryResult<T> = {
   pagination: Pagination;
 };
 
-export interface QueryOptions {
-  filter?: any;
-  orderBy?: OrderBy;
+export interface QueryOptions<T> {
+  filter?: Filter<T>;
+  orderBy?: OrderBy<T>;
   pageSize?: number;
   page?: number;
 }
 
-export type OrderBy = {
-  [field: string]: 'asc' | 'desc';
+export type FilterKey = '$and' | '$or' | '$not';
+
+export type Filter<T> = {
+  [K in keyof T | FilterKey]?: any;
+};
+
+export type OrderBy<T> = {
+  [K in keyof T]?: 'asc' | 'desc';
 };
