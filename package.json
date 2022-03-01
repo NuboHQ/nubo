@@ -1,6 +1,6 @@
 {
   "name": "nubo",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Nubo",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
