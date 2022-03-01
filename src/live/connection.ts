@@ -10,7 +10,7 @@ import {
 } from './types';
 import { formatUrl } from './utils';
 
-export class Socket<T> {
+export class NuboConnection<T> {
   list: string;
   apiKey: string | null = null;
   baseUrl: string = config.default.baseUrl;
@@ -23,7 +23,7 @@ export class Socket<T> {
   maxRetries: number = 0;
   retries: number = 0;
   retryDelay: number = 0;
-  disconnected: boolean = false;
+  closed: boolean = false;
 
   constructor({
     list,
@@ -73,8 +73,8 @@ export class Socket<T> {
     this.socket.onclose = this.onClose.bind(this);
   }
 
-  public disconnect() {
-    this.disconnected = true;
+  public close() {
+    this.closed = true;
 
     if (this.socket) {
       this.socket.close();
@@ -111,7 +111,7 @@ export class Socket<T> {
       this.onCloseHandler(event);
     }
 
-    if (!this.disconnected) {
+    if (!this.closed) {
       this.reconnect();
     }
   }
