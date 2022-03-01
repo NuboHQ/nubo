@@ -10,14 +10,14 @@ import {
 } from './types';
 import { formatUrl } from './utils';
 
-export class Socket {
+export class Socket<T> {
   list: string;
   apiKey: string | null = null;
   baseUrl: string = config.default.baseUrl;
   options: QueryOptions = {};
   socket: WebSocket | null = null;
   onOpenHandler: OnOpenHandler | null = null;
-  onUpdateHandler: OnUpdateHandler | null = null;
+  onUpdateHandler: OnUpdateHandler<T> | null = null;
   onErrorHandler: OnErrorHandler | null = null;
   onCloseHandler: OnCloseHandler | null = null;
   maxRetries: number = 0;
@@ -36,7 +36,7 @@ export class Socket {
     onClose,
     maxRetries = 3,
     retryDelay = 2000,
-  }: LiveQueryOptions) {
+  }: LiveQueryOptions<T>) {
     this.onOpenHandler = onOpen || null;
     this.onUpdateHandler = onUpdate || null;
     this.onErrorHandler = onError || null;
