@@ -4,6 +4,7 @@
     "data": "packages/data",
     "demo": "packages/demo",
     "demo-e2e": "packages/demo-e2e",
-    "nubo": "packages/nubo"
+    "nubo": "packages/nubo",
+    "search": "packages/search"
   }
 }
