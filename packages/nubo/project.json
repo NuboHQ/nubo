@@ -1,0 +1,39 @@
+{
+  "root": "packages/nubo",
+  "sourceRoot": "packages/nubo/src",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/nubo",
+        "main": "packages/nubo/src/index.ts",
+        "tsConfig": "packages/nubo/tsconfig.lib.json",
+        "assets": ["packages/nubo/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/nubo/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/packages/nubo"],
+      "options": {
+        "jestConfig": "packages/nubo/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "dist/packages/nubo",
+        "command": "npm publish --access public"
+      }
+    }
+  },
+  "tags": []
+}

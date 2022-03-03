@@ -42,7 +42,8 @@
     "publish": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "commands": ["./scripts/publish data"]
+        "cwd": "dist/packages/data",
+        "command": "npm publish --access public"
       }
     }
   }
