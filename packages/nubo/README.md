@@ -1,11 +1,35 @@
-# nubo
+# Nubo
 
-This library was generated with [Nx](https://nx.dev).
+## Install Nubo
 
-## Building
+```
+npm i nubo
+```
 
-Run `nx build nubo` to build the library.
+## Usage
 
-## Running unit tests
+```typescript
+import nubo from 'nubo';
 
-Run `nx test nubo` to execute the unit tests via [Jest](https://jestjs.io).
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  age: number;
+}
+
+const connection = nubo.live.query<User>({
+  list: 'users',
+  options: {
+    filter: { age: { $gt: 20 } },
+    orderBy: {
+      name: 'asc',
+    },
+    page: 1,
+    pageSize: 25,
+  },
+  onUpdate: ({ items: users }) => {
+    console.log(users);
+  },
+});
+```
