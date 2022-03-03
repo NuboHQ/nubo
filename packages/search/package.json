@@ -1,4 +1,12 @@
 {
   "name": "@nubo-ui/search",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "description": "Nubo UI - Search",
+  "author": "Nubo, Inc.",
+  "license": "MIT",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nubohq/nubo-ui.git"
+  }
 }

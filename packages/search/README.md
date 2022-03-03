@@ -1,7 +1,27 @@
-# search
+# Nubo UI - Search
 
-This library was generated with [Nx](https://nx.dev).
+```
+npm i @nubo-ui/search
+```
 
-## Running unit tests
+## Usage
 
-Run `nx test search` to execute the unit tests via [Jest](https://jestjs.io).
+```tsx
+import {
+  getSearchClient,
+  Hits,
+  InstantSearch,
+  SearchBox,
+} from '@nubo-ui/search';
+
+const searchClient = getSearchClient({
+  apiKey: 'apik-...',
+});
+
+const App = () => (
+  <InstantSearch searchClient={searchClient} indexName="users">
+    <SearchBox />
+    <Hits />
+  </InstantSearch>
+);
+```
