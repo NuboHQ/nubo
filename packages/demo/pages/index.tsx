@@ -8,7 +8,12 @@ export function Index() {
 
   useEffect(() => {
     const connection = nubo.live.query({
-      list: 'users',
+      list: 'companies',
+      options: {
+        orderBy: {
+          created: 'desc',
+        },
+      },
       onUpdate: (data) => {
         setItems(data.items);
       },
@@ -21,8 +26,8 @@ export function Index() {
 
   return (
     <div className={styles.page}>
-      {items.map((item) => (
-        <Data key={item.id} value={item.name} />
+      {items.map((item, itemIndex) => (
+        <Data key={item.id} value={`${itemIndex + 1} - ${item.name}`} />
       ))}
     </div>
   );

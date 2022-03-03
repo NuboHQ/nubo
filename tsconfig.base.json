@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@nubo-ui/search": ["packages/search/src/index.ts"],
       "@nubo/data": ["packages/data/src/index.ts"],
       "nubo": ["packages/nubo/src/index.ts"]
     }
