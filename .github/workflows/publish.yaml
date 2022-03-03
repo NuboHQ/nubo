@@ -8,21 +8,28 @@ jobs:
   main:
     runs-on: ubuntu-latest
 
+    env:
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Fetch main
+        run: git fetch origin main
 
       - name: Use Node 16
         uses: actions/setup-node@v2
         with:
-          node-version: "16.x"
+          node-version: "16"
           registry-url: "https://registry.npmjs.org"
 
+      - name: Install
+        run: yarn
+
       - name: Build
-        run: |
-          yarn
-          yarn build
-      - name: publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-        run: |
-          npm publish --access public
+        run: npx nx affected --target=build --parallel --max-parallel=5 --base=remotes/origin/main~1
+
+      - name: Publish
+        run: npx nx affected --target=publish --parallel --max-parallel=5 --base=remotes/origin/main~1

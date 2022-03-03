@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "projects": {
+    "data": "packages/data",
+    "demo": "packages/demo",
+    "demo-e2e": "packages/demo-e2e"
+  }
+}
