@@ -38,6 +38,13 @@
         "jestConfig": "packages/search/jest.config.js",
         "passWithNoTests": true
       }
+    },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "cwd": "dist/packages/search",
+        "command": "npm publish --access public"
+      }
     }
   }
 }
