@@ -1,18 +1,14 @@
 # Nubo UI - Search
 
 ```
-npm i @nubo-ui/search
+npm i @nubo-ui/search react-instantsearch-dom @meilisearch/instant-meilisearch
 ```
 
 ## Usage
 
 ```tsx
-import {
-  getSearchClient,
-  Hits,
-  InstantSearch,
-  SearchBox,
-} from '@nubo-ui/search';
+import { getSearchClient } from '@nubo-ui/search';
+import { Hits, InstantSearch, SearchBox } from 'react-instantsearch-dom';
 
 const searchClient = getSearchClient({
   apiKey: 'apik-...',
