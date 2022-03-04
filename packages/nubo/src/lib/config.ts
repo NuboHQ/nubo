@@ -10,5 +10,7 @@ export const config = {
       'wss://api-europe-west.nubo.app',
   },
   apiKey:
-    process.env['NUBO_API_KEY'] || process.env['NEXT_PUBLIC_NUBO_API_KEY'],
+    process.env['NUBO_API_KEY'] ||
+    process.env['REACT_APP_NUBO_API_KEY'] ||
+    process.env['NEXT_PUBLIC_NUBO_API_KEY'],
 };

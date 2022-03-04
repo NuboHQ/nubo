@@ -1,6 +1,14 @@
 # Nubo
 
-## Install
+Nubo is a platform for building JavaScript and TypeScript applications.
+<br/>
+Visit [nubo.app](https://nubo.app) for more information.
+<br/>
+<br/>
+
+## Getting Started
+
+First sign up for a free account at [nubo.app](https://nubo.app), then install the Nubo Library with npm.
 
 ```
 npm i nubo
@@ -20,6 +28,7 @@ interface User {
 
 const subscription = nubo.lists.subscribe<User>({
   list: 'users',
+  apiKey: 'apik-xxxxx',
   options: {
     filter: { age: { $gt: 20 } },
     orderBy: {
@@ -32,4 +41,28 @@ const subscription = nubo.lists.subscribe<User>({
     console.log(users);
   },
 });
+```
+
+## Authentication
+
+Authentication to your data is done with an API key. You have two options.
+
+### Option 1
+
+Set the API key directly in the client.
+
+```typescript
+nubo.lists.subscribe<User>({
+  apiKey: 'apik-xxxxx',
+});
+```
+
+### Option 2
+
+Set the API key with an environment variable. Choose one of the following, depending on your environment.
+
+```
+NUBO_API_KEY=apik-xxxxx
+REACT_APP_NUBO_API_KEY=apik-xxxxx
+NEXT_PUBLIC_NUBO_API_KEY=apik-xxxxx
 ```

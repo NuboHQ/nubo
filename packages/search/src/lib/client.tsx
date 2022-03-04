@@ -5,8 +5,8 @@ export const getSearchClient = ({
   apiKey,
   url,
 }: {
-  apiKey: string;
+  apiKey?: string;
   url?: string;
 }) => {
-  return instantMeiliSearch(url || config.url, apiKey);
+  return instantMeiliSearch(url || config.url, apiKey || config.apiKey);
 };
