@@ -14,5 +14,5 @@ export const formatUrl = <T>({
 
   return `${
     baseUrl || config.baseUrl
-  }/live/lists/${list}?options=${encodedOptions}`;
+  }/subscriptions/lists/${list}?options=${encodedOptions}`;
 };
