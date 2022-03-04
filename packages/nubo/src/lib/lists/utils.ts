@@ -1,5 +1,5 @@
 import { config } from '../config';
-import { QueryOptions } from './types';
+import { NuboQueryOptions } from './types';
 
 export const formatUrl = <T>({
   list,
@@ -8,11 +8,11 @@ export const formatUrl = <T>({
 }: {
   list: string;
   baseUrl?: string;
-  options?: QueryOptions<T>;
+  options?: NuboQueryOptions<T>;
 }) => {
   const encodedOptions = encodeURIComponent(JSON.stringify(options));
 
   return `${
-    baseUrl || config.default.baseUrl
+    baseUrl || config.baseUrl
   }/live/lists/${list}?options=${encodedOptions}`;
 };

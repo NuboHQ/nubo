@@ -1,15 +1,15 @@
 import WebSocket from 'isomorphic-ws';
 
-export type OnUpdateHandler<T> = (result: QueryResult<T>) => void;
+export type OnUpdateHandler<T> = (result: NuboQueryResult<T>) => void;
 export type OnOpenHandler = (event: any) => void;
 export type OnErrorHandler = (error: Error) => void;
 export type OnCloseHandler = (event: WebSocket.CloseEvent) => void;
 
-export type LiveQueryOptions<T> = {
+export type NuboSubscriptionOptions<T> = {
   list: string;
   apiKey?: string;
-  options?: QueryOptions<T>;
-  liveBaseUrl?: string;
+  options?: NuboQueryOptions<T>;
+  subscriptionBaseUrl?: string;
   onOpen?: OnOpenHandler;
   onUpdate?: OnUpdateHandler<T>;
   onError?: OnErrorHandler;
@@ -18,21 +18,12 @@ export type LiveQueryOptions<T> = {
   retryDelay?: number;
 };
 
-export interface Pagination {
-  total: number;
-  pages: number;
-  firstPage: boolean;
-  lastPage: boolean;
-  page: number;
-  pageSize: number;
-}
-
-export type QueryResult<T> = {
+export type NuboQueryResult<T> = {
   items: T[];
   pagination: Pagination;
 };
 
-export interface QueryOptions<T> {
+export interface NuboQueryOptions<T> {
   filter?: Filter<T>;
   orderBy?: OrderBy<T>;
   pageSize?: number;
@@ -48,3 +39,12 @@ export type Filter<T> = {
 export type OrderBy<T> = {
   [K in keyof T]?: 'asc' | 'desc';
 };
+
+export interface Pagination {
+  total: number;
+  pages: number;
+  firstPage: boolean;
+  lastPage: boolean;
+  page: number;
+  pageSize: number;
+}

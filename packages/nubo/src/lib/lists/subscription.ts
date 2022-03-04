@@ -1,20 +1,20 @@
 import WebSocket from 'isomorphic-ws';
 import { config } from '../config';
 import {
-  LiveQueryOptions,
+  NuboQueryOptions,
+  NuboSubscriptionOptions,
   OnCloseHandler,
   OnErrorHandler,
   OnOpenHandler,
   OnUpdateHandler,
-  QueryOptions,
 } from './types';
 import { formatUrl } from './utils';
 
-export class NuboConnection<T> {
+export class NuboSubscription<T> {
   list: string;
   apiKey: string | null = null;
-  liveBaseUrl: string = config.default.live.baseUrl;
-  options: QueryOptions<T> = {};
+  subscriptionBaseUrl: string = config.subscription.baseUrl;
+  options: NuboQueryOptions<T> = {};
   socket: WebSocket | null = null;
   onOpenHandler: OnOpenHandler | null = null;
   onUpdateHandler: OnUpdateHandler<T> | null = null;
@@ -28,7 +28,7 @@ export class NuboConnection<T> {
   constructor({
     list,
     apiKey,
-    liveBaseUrl,
+    subscriptionBaseUrl,
     options,
     onUpdate,
     onOpen,
@@ -36,7 +36,7 @@ export class NuboConnection<T> {
     onClose,
     maxRetries = 3,
     retryDelay = 2000,
-  }: LiveQueryOptions<T>) {
+  }: NuboSubscriptionOptions<T>) {
     this.onOpenHandler = onOpen || null;
     this.onUpdateHandler = onUpdate || null;
     this.onErrorHandler = onError || null;
@@ -51,8 +51,8 @@ export class NuboConnection<T> {
       throw new Error('Missing API key');
     }
 
-    if (liveBaseUrl) {
-      this.liveBaseUrl = liveBaseUrl;
+    if (subscriptionBaseUrl) {
+      this.subscriptionBaseUrl = subscriptionBaseUrl;
     }
 
     this.connect();
@@ -61,7 +61,7 @@ export class NuboConnection<T> {
   public connect() {
     const url = formatUrl<T>({
       list: this.list,
-      baseUrl: this.liveBaseUrl,
+      baseUrl: this.subscriptionBaseUrl,
       options: this.options,
     });
 

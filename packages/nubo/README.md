@@ -18,7 +18,7 @@ interface User {
   age: number;
 }
 
-const connection = nubo.live.query<User>({
+const subscription = nubo.lists.subscribe<User>({
   list: 'users',
   options: {
     filter: { age: { $gt: 20 } },
