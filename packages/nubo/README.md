@@ -1,6 +1,6 @@
 # Nubo
 
-## Install Nubo
+## Install
 
 ```
 npm i nubo
