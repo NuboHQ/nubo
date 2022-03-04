@@ -7,7 +7,7 @@ export function Index() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    const connection = nubo.live.query({
+    const subscription = nubo.lists.subscribe({
       list: 'companies',
       options: {
         orderBy: {
@@ -20,7 +20,7 @@ export function Index() {
     });
 
     return () => {
-      connection.close();
+      subscription.close();
     };
   }, [setItems]);
 
