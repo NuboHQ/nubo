@@ -1,6 +1,6 @@
 # Nubo
 
-Nubo is a platform for building JavaScript and TypeScript applications.
+Nubo is a platform for deploying and managing TypeScript applications.
 <br/>
 Visit [nubo.app](https://nubo.app) for more information.
 <br/>
@@ -8,10 +8,12 @@ Visit [nubo.app](https://nubo.app) for more information.
 
 ## Getting Started
 
-First sign up for a free account at [nubo.app](https://nubo.app), then install the Nubo Library with npm.
+First sign up for a free account at [nubo.app](https://nubo.app), then install the Nubo client library with npm.
 
 ```
 npm i nubo
+# or
+yarn add nubo
 ```
 
 ## Usage
