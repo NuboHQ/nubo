@@ -5,8 +5,8 @@ export const config = {
     'https://api-europe-west.nubo.app',
   subscription: {
     baseUrl:
-      process.env['NUBO_LIVE_BASE_URL'] ||
-      process.env['NEXT_PUBLIC_NUBO_LIVE_BASE_URL'] ||
+      process.env['NUBO_SUBSCRIPTIONS_BASE_URL'] ||
+      process.env['NEXT_PUBLIC_NUBO_SUBSCRIPTIONS_BASE_URL'] ||
       'wss://api-europe-west.nubo.app',
   },
   apiKey:
