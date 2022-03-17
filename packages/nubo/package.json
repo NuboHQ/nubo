@@ -1,6 +1,6 @@
 {
   "name": "nubo",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "type": "commonjs",
   "dependencies": {
     "isomorphic-ws": "^4.0.1",
