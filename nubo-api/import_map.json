@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "@nubo-shared/": "../nubo-shared/"
+  }
+}

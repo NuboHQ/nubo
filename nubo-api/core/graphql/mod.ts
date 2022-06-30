@@ -1,15 +1,23 @@
-import { Application, Router, applyGraphQL, gql } from '../../deps.ts';
+import { config, Application, Router, applyGraphQL, gql } from '../../deps.ts';
 
 const types = gql`
+  scalar JSON
+
+  type Nubo {
+    name: String
+  }
+
   type Query {
-    hello: String
+    nubo: Nubo
   }
 `;
 
 const resolvers = {
   Query: {
-    hello: (parent: any, { id }: any, context: any, info: any) => {
-      return 'Hello Nubo!';
+    nubo: (parent: any, { id }: any, context: any, info: any) => {
+      return {
+        name: config.name,
+      };
     },
   },
 };
@@ -19,9 +27,9 @@ export const graphql = async (app: Application) => {
   const GraphQLService = await applyGraphQL<Router>({
     Router,
     path,
-    typeDefs: types,
+    typeDefs: [types],
     resolvers: resolvers,
-    usePlayground: true,
+    usePlayground: false,
     // context: options.context,
   });
 

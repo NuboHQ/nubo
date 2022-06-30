@@ -1,7 +1,8 @@
 import { Application, Router, isHttpError, Status, logger } from '../deps.ts';
 import { config } from '../config.ts';
 import { graphql } from './graphql/mod.ts';
-import { rootHandler } from './routes/root/handlers.ts';
+import { init as initRoot } from './routes/root/handlers.ts';
+import { init as initPages } from './routes/pages/handlers.ts';
 
 export const app = new Application();
 export const router = new Router();
@@ -32,7 +33,9 @@ export const server = async () => {
   // routes
   app.use(router.routes());
   app.use(router.allowedMethods());
-  rootHandler(router);
+
+  initRoot(router);
+  initPages(router);
 
   // graphql
   await graphql(app);
@@ -50,9 +53,9 @@ export const server = async () => {
   const host = config.host;
   const port = config.port;
 
-  logger.info(`http://${host}:${port}`, [config.name]);
-  logger.info(`http://${host}:${port}/graphql`, [config.name, 'graphql']);
-  logger.success(`ready`, [config.name]);
+  logger.info(`http://${host}:${port}`);
+  logger.info(`http://${host}:${port}/graphql`, ['graphql']);
+  logger.success(`ready`);
 
   await app.listen({ port });
 };
