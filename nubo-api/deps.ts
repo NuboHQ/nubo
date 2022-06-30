@@ -12,3 +12,5 @@ export {
   gql,
   GQLError,
 } from 'https://deno.land/x/oak_graphql/mod.ts';
+
+export * as logger from '../nubo-shared/utils/logger.ts';
