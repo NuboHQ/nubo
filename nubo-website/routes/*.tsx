@@ -4,23 +4,33 @@ import { PageProps, Handlers } from '$fresh/server.ts';
 import { ErrorPage } from '../components/pages/mod.ts';
 import { BasicTemplate } from '../components/templates/mod.ts';
 import { Page } from '@nubo-shared/pages/mod.ts';
+import * as logger from '@nubo-shared/utils/logger.ts';
 import { config } from '@/config.ts';
+import { gql, request } from '@/deps.ts';
 
 export type PageData = {
   page: Page | null;
+  // deno-lint-ignore no-explicit-any
+  error?: any | null;
 };
 
 export const handler: Handlers<PageData> = {
   async GET(_, ctx) {
     try {
       const path = `/${ctx.params[0]}`;
-      const response = await fetch(`${config.api.url}/page?path=${path}`);
-      const result = await response.json();
-      const page = result.data;
+      const query = gql`
+        {
+          page(path: "${path}") {
+            title
+          }
+        }
+      `;
+      const data = await request(config.api.graphql, query);
+      const page = data.page;
 
-      return ctx.render({ page });
+      return ctx.render({ page, error: null });
     } catch (error) {
-      return ctx.render({ page: null });
+      return ctx.render({ page: null, error });
     }
   },
 };
@@ -28,6 +38,12 @@ export const handler: Handlers<PageData> = {
 export default function PageComponent(props: PageProps<PageData>) {
   if (props.data.page) {
     return <BasicTemplate page={props.data.page} />;
+  }
+
+  if (props.data.error?.message) {
+    logger.error(props.data.error);
+
+    return <ErrorPage statusCode={500} message="Check logs for error" />;
   }
 
   return <ErrorPage statusCode={404} message="Page not found" />;

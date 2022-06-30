@@ -1,4 +1,5 @@
 import { config, Application, Router, applyGraphQL, gql } from '../../deps.ts';
+import * as pagesGraphql from '../pages/graphql.ts';
 
 const types = gql`
   scalar JSON
@@ -19,6 +20,7 @@ const resolvers = {
         name: config.name,
       };
     },
+    ...pagesGraphql.resolvers.Query,
   },
 };
 
@@ -27,9 +29,9 @@ export const graphql = async (app: Application) => {
   const GraphQLService = await applyGraphQL<Router>({
     Router,
     path,
-    typeDefs: [types],
+    typeDefs: [types, pagesGraphql.types],
     resolvers: resolvers,
-    usePlayground: false,
+    usePlayground: true,
     // context: options.context,
   });
 
