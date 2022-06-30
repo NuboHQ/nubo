@@ -2,7 +2,7 @@ import * as Colors from 'https://deno.land/std/fmt/colors.ts';
 
 const options = { name: '' };
 
-export const init = ({ name }: { name }) => {
+export const init = ({ name }: { name: string }) => {
   options.name = name;
 };
 

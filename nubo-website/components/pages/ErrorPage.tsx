@@ -7,7 +7,7 @@ export interface ErrorPageProps {
   message?: string;
 }
 
-export default function ErrorPage({ statusCode, message }: ErrorPageProps) {
+export const ErrorPage = ({ statusCode, message }: ErrorPageProps) => {
   return (
     <div class={tw`flex h-screen`}>
       <div class={tw`m-auto text-center`}>
@@ -16,4 +16,4 @@ export default function ErrorPage({ statusCode, message }: ErrorPageProps) {
       </div>
     </div>
   );
-}
+};
