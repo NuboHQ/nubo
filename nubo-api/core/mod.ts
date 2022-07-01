@@ -3,6 +3,7 @@ import { config } from '@/config.ts';
 import { graphql } from '@/core/server/graphql/mod.ts';
 import { init as initRoot } from '@/core/server/routes/root/handlers.ts';
 import { init as initPages } from '@/core/server/routes/pages/handlers.ts';
+import '@/core/data/mod.ts';
 
 export const app = new Application();
 export const router = new Router();

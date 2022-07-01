@@ -14,4 +14,7 @@ export const config = {
   port: parseInt(Deno.env.get('PORT') || '5001'),
   host: Deno.env.get('HOST') || 'localhost',
   secretKey,
+  database: {
+    url: Deno.env.get('DATABASE_URL') || '',
+  },
 };
