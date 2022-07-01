@@ -10,5 +10,6 @@ export const config = {
   api: {
     url: apiUrl,
     graphql: `${apiUrl}/graphql`,
+    secretKey: Deno.env.get('NUBO_SECRET_KEY') || '',
   },
 };

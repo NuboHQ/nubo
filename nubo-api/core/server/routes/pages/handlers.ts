@@ -1,4 +1,4 @@
-import { Router } from '../../../deps.ts';
+import { Router } from '@/deps.ts';
 import { Page } from '@nubo-shared/pages/mod.ts';
 
 const pages: { [path: string]: Page } = { '/': { title: 'Home' } };

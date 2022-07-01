@@ -1,4 +1,4 @@
-import { gql } from '../../deps.ts';
+import { gql } from '@/deps.ts';
 import { Page } from '@nubo-shared/pages/mod.ts';
 
 export const types = gql`

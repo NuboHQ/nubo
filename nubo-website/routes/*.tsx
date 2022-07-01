@@ -6,7 +6,7 @@ import { BasicTemplate } from '../components/templates/mod.ts';
 import { Page } from '@nubo-shared/pages/mod.ts';
 import * as logger from '@nubo-shared/utils/logger.ts';
 import { config } from '@/config.ts';
-import { gql, request } from '@/deps.ts';
+import { gql, graphql } from '@/deps.ts';
 
 export type PageData = {
   page: Page | null;
@@ -25,7 +25,9 @@ export const handler: Handlers<PageData> = {
           }
         }
       `;
-      const data = await request(config.api.graphql, query);
+      const data = await graphql(config.api.graphql, query, null, {
+        'x-nubo-secret-key': config.api.secretKey,
+      });
       const page = data.page;
 
       return ctx.render({ page, error: null });

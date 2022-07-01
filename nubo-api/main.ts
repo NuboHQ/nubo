@@ -1,3 +1,3 @@
-import { server } from './core/mod.ts';
+import { server } from '@/core/mod.ts';
 
 await server();

@@ -1,4 +1,4 @@
-import { RouterContext } from '../../deps.ts';
+import { RouterContext } from '@/deps.ts';
 
 export type NuboGraphqlOptions = {
   path?: string;

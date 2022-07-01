@@ -1,5 +1,5 @@
-import { config, Application, Router, applyGraphQL, gql } from '../../deps.ts';
-import * as pagesGraphql from '../pages/graphql.ts';
+import { config, Application, Router, applyGraphQL, gql } from '@/deps.ts';
+import * as pagesGraphql from '@/core/pages/graphql.ts';
 
 const types = gql`
   scalar JSON

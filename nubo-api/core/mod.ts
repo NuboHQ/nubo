@@ -1,8 +1,8 @@
-import { Application, Router, isHttpError, Status, logger } from '../deps.ts';
-import { config } from '../config.ts';
-import { graphql } from './graphql/mod.ts';
-import { init as initRoot } from './routes/root/handlers.ts';
-import { init as initPages } from './routes/pages/handlers.ts';
+import { Application, Router, isHttpError, Status, logger } from '@/deps.ts';
+import { config } from '@/config.ts';
+import { graphql } from '@/core/server/graphql/mod.ts';
+import { init as initRoot } from '@/core/server/routes/root/handlers.ts';
+import { init as initPages } from '@/core/server/routes/pages/handlers.ts';
 
 export const app = new Application();
 export const router = new Router();
@@ -27,6 +27,19 @@ export const server = async () => {
           message: error.message || 'Unknown error',
         };
       }
+    }
+  });
+
+  app.use(async ({ request, response }, next) => {
+    if (request.headers.get('x-nubo-secret-key') === config.secretKey) {
+      await next();
+    } else {
+      response.status = 401;
+      response.body = {
+        statusCode: 401,
+        error: 'Unauthorized',
+        message: 'Invalid API key',
+      };
     }
   });
 
