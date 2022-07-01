@@ -1,7 +1,7 @@
 import { gql } from '@/deps.ts';
-import { Website } from '@nubo-shared/website/mod.ts';
+import type { Website } from '@nubo/website/mod.ts';
 
-export const types = gql`
+export const typeDefs = gql`
   type Website {
     name: String
     domains: [String]
@@ -14,10 +14,8 @@ export const types = gql`
 
 const website: Website = { name: 'Nubo Demo', domains: ['nubo.local'] };
 
-export const resolvers = {
-  Query: {
-    website: () => {
-      return website;
-    },
+export const queries = {
+  website: () => {
+    return website;
   },
 };

@@ -1,10 +1,10 @@
 /** @jsx h */
 import { h } from 'preact';
 import { PageProps, Handlers } from '$fresh/server.ts';
-import { ErrorPage } from '../components/pages/mod.ts';
-import { BasicTemplate } from '../components/templates/mod.ts';
-import { Page } from '@nubo-shared/pages/mod.ts';
-import * as logger from '@nubo-shared/utils/logger.ts';
+import { ErrorPage } from '@/components/pages/mod.ts';
+import { BasicTemplate } from '@/components/templates/mod.ts';
+import { Page } from '@nubo/pages/mod.ts';
+import { logger } from '@/deps.ts';
 import { config } from '@/config.ts';
 import { gql, graphql } from '@/deps.ts';
 
@@ -19,15 +19,20 @@ export const handler: Handlers<PageData> = {
     try {
       const path = `/${ctx.params[0]}`;
       const query = gql`
-        {
-          page(path: "${path}") {
+        query GetPage($path: String!) {
+          page(path: $path) {
             title
           }
         }
       `;
-      const data = await graphql(config.api.graphql, query, null, {
-        'x-nubo-secret-key': config.api.secretKey,
-      });
+      const data = await graphql(
+        config.api.graphql,
+        query,
+        { path },
+        {
+          'x-nubo-secret-key': config.api.secretKey,
+        },
+      );
       const page = data.page;
 
       return ctx.render({ page, error: null });

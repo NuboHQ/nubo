@@ -1,6 +1,6 @@
 {
   "imports": {
     "@/": "./",
-    "@nubo/": "../nubo-modules/"
+    "@nubo/": "./"
   }
 }

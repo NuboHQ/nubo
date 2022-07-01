@@ -1,5 +1,7 @@
 {
   "imports": {
+    "@/": "./",
+    "@nubo/": "../nubo-modules/",
     "$fresh/": "https://deno.land/x/fresh@1.0.0/",
     "preact": "https://esm.sh/preact@10.8.1",
     "preact/": "https://esm.sh/preact@10.8.1/",
@@ -7,8 +9,6 @@
     "@twind": "./utils/twind.ts",
     "twind": "https://esm.sh/twind@0.16.17",
     "twind/": "https://esm.sh/twind@0.16.17/",
-    "@nubo-shared/": "../nubo-shared/",
-    "@components/": "./components/",
-    "@/": "./"
+    "@components/": "./components/"
   }
 }

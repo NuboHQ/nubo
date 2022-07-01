@@ -1,7 +1,7 @@
 /** @jsx h */
 import { h, FunctionalComponent } from 'preact';
 import { tw } from '@twind';
-import { Page } from '@nubo-shared/pages/mod.ts';
+import { Page } from '@nubo/pages/mod.ts';
 
 interface Props {
   page: Page;
