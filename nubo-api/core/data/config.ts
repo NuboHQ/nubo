@@ -1,5 +1,9 @@
 import { config } from '@/config.ts';
 
+if (!config.database.url) {
+  throw new Error('Missing environment variable: DATABASE_URL');
+}
+
 export type DatabaseConfig = {
   type: string;
   user: string;
