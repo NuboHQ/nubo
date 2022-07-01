@@ -1,10 +1,11 @@
 import config from '@nubo/config/mod.ts';
 import { DataModule } from './types.ts';
+import { postgres } from './postgres/mod.ts';
 
-let dataModule: DataModule | null = null;
+export let dataModule: DataModule | null = null;
 
 if (config.data.type === 'postgresql') {
-  dataModule = await import('@nubo/data/postgres/mod.ts');
+  dataModule = postgres;
 }
 
 if (!dataModule) {
