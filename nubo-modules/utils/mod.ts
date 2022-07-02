@@ -1,9 +1,5 @@
-import { crypto } from 'https://deno.land/std@0.105.0/crypto/mod.ts';
+import { uniqueString } from 'https://deno.land/x/uniquestring/mod.ts';
 
-export const createId = () => {
-  if (crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-
-  throw new Error('createId is only available in secure contexts');
+export const createId = (length = 25) => {
+  return uniqueString(length);
 };

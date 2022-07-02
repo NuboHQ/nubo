@@ -2,6 +2,7 @@ import 'https://deno.land/x/dotenv/load.ts';
 
 const secretKey = Deno.env.get('NUBO_SECRET_KEY') || '';
 const databaseUrl = Deno.env.get('DATABASE_URL') || '';
+const databaseName = Deno.env.get('DATABASE_NAME') || 'nubo';
 
 if (!secretKey) {
   throw new Error('Missing environment variable: NUBO_SECRET_KEY');
@@ -16,8 +17,11 @@ export const config = {
   host: Deno.env.get('HOST') || 'localhost',
   secretKey,
   data: {
-    type: Deno.env.get('NUBO_DATA_TYPE') || 'postgresql',
-    url: databaseUrl,
+    type: Deno.env.get('NUBO_DATA_TYPE') || 'mongodb',
+    database: {
+      url: databaseUrl,
+      name: databaseName,
+    },
   },
   graphql: {
     playground: Deno.env.get('GRAPHQL_PLAYGROUND') === 'true' ? true : false,
