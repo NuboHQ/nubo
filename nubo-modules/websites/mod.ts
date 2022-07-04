@@ -1,9 +1,11 @@
 import { data } from '@nubo/data/mod.ts';
 import type { Website, WebsitesOrder } from './types.ts';
 
+const WEBSITES_NAME = 'websites';
+
 export const addWebsite = async (website: Partial<Website>) => {
   const newWebsite = await data.add<Website>({
-    name: 'website',
+    name: WEBSITES_NAME,
     data: website,
   });
 
@@ -18,7 +20,7 @@ export const updateWebsite = async ({
   website: Partial<Website>;
 }) => {
   const updatedWebsite = await data.update<Website>({
-    name: 'website',
+    name: WEBSITES_NAME,
     filter: filter,
     data: website,
   });
@@ -38,7 +40,7 @@ export const getWebsites = async ({
   order?: WebsitesOrder;
 }) => {
   const website = await data.find<Website>({
-    name: 'website',
+    name: WEBSITES_NAME,
     filter,
     pageSize,
     page,
@@ -49,13 +51,13 @@ export const getWebsites = async ({
 };
 
 export const getWebsite = async (filter: Partial<Website>) => {
-  const website = await data.findOne<Website>({ name: 'website', filter });
+  const website = await data.findOne<Website>({ name: WEBSITES_NAME, filter });
 
   return website;
 };
 
 export const removeWebsite = async (filter: Partial<Website>) => {
-  const removed = await data.remove<Website>({ name: 'website', filter });
+  const removed = await data.remove<Website>({ name: WEBSITES_NAME, filter });
 
   return removed;
 };

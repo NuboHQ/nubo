@@ -31,7 +31,6 @@ export const add = async <T extends Item>({
   data,
 }: AddOptions<T>): Promise<T> => {
   const collection = getCollection(name);
-
   const id = data.id || createUniqueId();
   const created = new Date();
   const dataWithId = { id, created, updated: created, ...data };

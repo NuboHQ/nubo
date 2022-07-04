@@ -5,7 +5,7 @@ import {
   addWebsite,
   updateWebsite,
   removeWebsite,
-} from '@nubo/website/mod.ts';
+} from '@nubo/websites/mod.ts';
 import {
   AddWebsiteQueryData,
   UpdateWebsiteQueryData,

@@ -15,12 +15,13 @@ export type PageData = {
 };
 
 export const handler: Handlers<PageData> = {
-  async GET(_, ctx) {
+  async GET(request, ctx) {
     try {
+      const domain = new URL(request.url).hostname;
       const path = `/${ctx.params[0]}`;
       const query = gql`
-        query GetPage($path: String!) {
-          website {
+        query GetPage($path: String!, $websiteFilter: JSON!) {
+          website(filter: $websiteFilter) {
             name
           }
           page(path: $path) {
@@ -31,7 +32,12 @@ export const handler: Handlers<PageData> = {
       const data = await graphql(
         config.api.graphql,
         query,
-        { path },
+        {
+          path,
+          websiteFilter: {
+            domains: domain,
+          },
+        },
         {
           'x-nubo-secret-key': config.api.secretKey,
         },

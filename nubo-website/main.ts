@@ -15,6 +15,7 @@ import { config } from './config.ts';
 logger.init({ name: config.name });
 
 const sheet = virtualSheet();
+
 sheet.reset();
 setup({
   ...twindConfig,

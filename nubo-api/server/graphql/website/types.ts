@@ -1,4 +1,4 @@
-import { Website, WebsitesOrder } from '@nubo/website/types.ts';
+import { Website, WebsitesOrder } from '@nubo/websites/types.ts';
 
 export type AddWebsiteQueryData = {
   website: Website;
