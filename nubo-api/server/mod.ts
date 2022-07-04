@@ -8,7 +8,7 @@ logger.init({ name: 'nubo-api' });
 
 export const app = new Application();
 
-const PUBLIC_ROUTES = ['/graphql'];
+const PUBLIC_ROUTES: string[] = [];
 
 export const server = async () => {
   app.use(async ({ response }, next) => {
@@ -38,7 +38,11 @@ export const server = async () => {
       return;
     }
 
-    if (request.headers.get('x-nubo-secret-key') === config.secretKey) {
+    const secretKey =
+      request.headers.get('x-nubo-secret-key') ||
+      request.url.searchParams.get('secretKey');
+
+    if (secretKey === config.secretKey) {
       await next();
 
       return;

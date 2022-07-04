@@ -1,6 +1,13 @@
 import * as logger from '@nubo/logger/mod.ts';
 import { createUniqueId } from '@nubo/utils/mod.ts';
-import type { DataModule, Item, ItemOrder } from '@nubo/data/types.ts';
+import type {
+  DataModule,
+  Item,
+  FindOptions,
+  FindResult,
+  FindOneOptions,
+  AddOptions,
+} from '@nubo/data/types.ts';
 import { connect, getCollection } from './client.ts';
 import {
   formatForDatabase,
@@ -10,7 +17,6 @@ import {
   getItems,
   getItemsWithCount,
 } from './utils.ts';
-import { Result } from './types.ts';
 
 export const init = async () => {
   await connect();
@@ -21,10 +27,7 @@ export const init = async () => {
 export const add = async <T extends Item>({
   name,
   data,
-}: {
-  name: string;
-  data: Partial<T>;
-}): Promise<T> => {
+}: AddOptions<T>): Promise<T> => {
   const collection = getCollection(name);
 
   const id = data.id || createUniqueId();
@@ -37,8 +40,9 @@ export const add = async <T extends Item>({
   const newItem: T = await collection.findOne({
     _id: id,
   });
+  const formattedNewItem = formatFromDatabase<T>(newItem);
 
-  return newItem;
+  return formattedNewItem;
 };
 
 export const find = async <T extends Item>({
@@ -47,13 +51,7 @@ export const find = async <T extends Item>({
   pageSize,
   page,
   order,
-}: {
-  name: string;
-  filter?: Partial<T>;
-  pageSize?: number;
-  page?: number;
-  order?: ItemOrder<Partial<T>>;
-}): Promise<Result<T>> => {
+}: FindOptions<T>): Promise<FindResult<T>> => {
   const collection = getCollection(name);
   const formattedFilter = formatForDatabase(filter || {});
   const paging = getPaging({ page, pageSize });
@@ -79,7 +77,26 @@ export const find = async <T extends Item>({
   return { items: formattedItems, pagination };
 };
 
+export const findOne = async <T extends Item>({
+  name,
+  filter,
+}: FindOneOptions<T>) => {
+  const collection = getCollection(name);
+  const formattedFilter = formatForDatabase(filter || {});
+  const item = await collection.findOne(formattedFilter);
+
+  if (item) {
+    const formattedItem = formatFromDatabase(item) as T;
+
+    return formattedItem as T;
+  }
+
+  return null;
+};
+
 export const mongodb: DataModule = {
   init,
   add,
+  find,
+  findOne,
 };

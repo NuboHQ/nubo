@@ -1,12 +1,8 @@
 export type DataModule = {
   init: () => Promise<void>;
-  add: <T extends Item>({
-    name,
-    data,
-  }: {
-    name: string;
-    data: Partial<T>;
-  }) => Promise<T>;
+  add: <T extends Item>(options: AddOptions<T>) => Promise<T>;
+  find: <T extends Item>(options: FindOptions<T>) => Promise<FindResult<T>>;
+  findOne: <T extends Item>(options: FindOneOptions<T>) => Promise<T | null>;
 };
 
 export interface Item {
@@ -34,3 +30,26 @@ export interface Pagination {
   page: number;
   pageSize: number;
 }
+
+export type FindOptions<T> = {
+  name: string;
+  filter?: Partial<T>;
+  pageSize?: number;
+  page?: number;
+  order?: ItemOrder<Partial<T>>;
+};
+
+export type FindResult<T> = {
+  items: T[];
+  pagination: Pagination;
+};
+
+export type FindOneOptions<T> = {
+  name: string;
+  filter?: Partial<T>;
+};
+
+export type AddOptions<T> = {
+  name: string;
+  data: Partial<T>;
+};

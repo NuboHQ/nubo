@@ -40,3 +40,5 @@ export const queries = {
     return null;
   },
 };
+
+export const mutations = {};

@@ -16,6 +16,10 @@ const resolvers = {
     ...pagesGraphql.queries,
     ...websiteGraphql.queries,
   },
+  Mutation: {
+    ...pagesGraphql.mutations,
+    ...websiteGraphql.mutations,
+  },
 };
 
 export const graphql = async (app: Application) => {
