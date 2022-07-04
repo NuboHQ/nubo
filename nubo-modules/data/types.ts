@@ -1,6 +1,7 @@
 export type DataModule = {
   init: () => Promise<void>;
   add: <T extends Item>(options: AddOptions<T>) => Promise<T>;
+  update: <T extends Item>(options: AddOptions<T>) => Promise<T>;
   find: <T extends Item>(options: FindOptions<T>) => Promise<FindResult<T>>;
   findOne: <T extends Item>(options: FindOneOptions<T>) => Promise<T | null>;
 };

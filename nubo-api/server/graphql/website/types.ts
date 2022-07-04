@@ -7,3 +7,7 @@ export type AddWebsiteQueryData = {
 export type GetWebsiteQueryData = {
   filter: Partial<Website>;
 };
+
+export type UpdateWebsiteQueryData = {
+  website: Partial<Website>;
+};
