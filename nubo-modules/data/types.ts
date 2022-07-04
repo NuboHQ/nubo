@@ -1,9 +1,10 @@
 export type DataModule = {
   init: () => Promise<void>;
   add: <T extends Item>(options: AddOptions<T>) => Promise<T>;
-  update: <T extends Item>(options: AddOptions<T>) => Promise<T>;
+  update: <T extends Item>(options: UpdateOptions<T>) => Promise<T | null>;
   find: <T extends Item>(options: FindOptions<T>) => Promise<FindResult<T>>;
   findOne: <T extends Item>(options: FindOneOptions<T>) => Promise<T | null>;
+  remove: <T extends Item>(options: RemoveOptions<T>) => Promise<boolean>;
 };
 
 export interface Item {
@@ -53,4 +54,15 @@ export type FindOneOptions<T> = {
 export type AddOptions<T> = {
   name: string;
   data: Partial<T>;
+};
+
+export type UpdateOptions<T> = {
+  name: string;
+  filter: Partial<T>;
+  data: Partial<T>;
+};
+
+export type RemoveOptions<T> = {
+  name: string;
+  filter: Partial<T>;
 };

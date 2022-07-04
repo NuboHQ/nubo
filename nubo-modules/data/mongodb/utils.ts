@@ -6,18 +6,24 @@ import { Paging, Pagination } from '@nubo/data/types.ts';
 export const formatForDatabase = <T>(data: any): T => {
   const _id = data.id;
   const itemWithoutId = omit(data, ['id']);
-  const formattedData: T = { _id, ...itemWithoutId };
 
-  return formattedData;
+  if (Object.prototype.hasOwnProperty.call(data, 'id')) {
+    return { _id, ...itemWithoutId };
+  }
+
+  return itemWithoutId;
 };
 
 // deno-lint-ignore no-explicit-any
 export const formatFromDatabase = <T>(data: any): T => {
   const id = data._id;
   const dataWithoutId = omit(data, ['_id']);
-  const formattedData: T = { id, ...dataWithoutId };
 
-  return formattedData;
+  if (Object.prototype.hasOwnProperty.call(data, '_id')) {
+    return { id, ...dataWithoutId };
+  }
+
+  return dataWithoutId;
 };
 
 export const getPaging = ({

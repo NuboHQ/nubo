@@ -7,6 +7,8 @@ import type {
   FindResult,
   FindOneOptions,
   AddOptions,
+  UpdateOptions,
+  RemoveOptions,
 } from '@nubo/data/types.ts';
 import { connect, getCollection } from './client.ts';
 import {
@@ -45,6 +47,25 @@ export const add = async <T extends Item>({
   return formattedNewItem;
 };
 
+export const update = async <T extends Item>({
+  name,
+  filter,
+  data,
+}: UpdateOptions<T>): Promise<T | null> => {
+  const collection = getCollection(name);
+  const updated = new Date();
+  const formattedFilter = formatForDatabase(filter);
+  const formattedData = formatForDatabase({ ...data, updated });
+
+  await collection.updateOne(formattedFilter, {
+    $set: formattedData,
+  });
+
+  const item = await findOne<T>({ name, filter });
+
+  return item;
+};
+
 export const find = async <T extends Item>({
   name,
   filter,
@@ -54,6 +75,7 @@ export const find = async <T extends Item>({
 }: FindOptions<T>): Promise<FindResult<T>> => {
   const collection = getCollection(name);
   const formattedFilter = formatForDatabase(filter || {});
+  const formattedOrder = formatForDatabase(order);
   const paging = getPaging({ page, pageSize });
   // deno-lint-ignore no-explicit-any
   const options: any = { limit: paging.pageSize, skip: paging.startIndex };
@@ -61,13 +83,13 @@ export const find = async <T extends Item>({
     ? await getItemsWithCount({
         collection,
         filter: formattedFilter,
-        order,
+        order: formattedOrder,
         options,
       })
     : await getItems({
         collection,
         filter: formattedFilter,
-        order,
+        order: formattedOrder,
         options,
       });
 
@@ -94,9 +116,22 @@ export const findOne = async <T extends Item>({
   return null;
 };
 
+export const remove = async <T extends Item>({
+  name,
+  filter,
+}: RemoveOptions<T>): Promise<boolean> => {
+  const collection = getCollection(name);
+  const formattedFilter = formatForDatabase(filter || {});
+  const removedCount = await collection.deleteOne(formattedFilter);
+
+  return !!removedCount;
+};
+
 export const mongodb: DataModule = {
   init,
   add,
+  update,
   find,
   findOne,
+  remove,
 };
