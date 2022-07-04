@@ -1,4 +1,4 @@
-import 'https://deno.land/x/dotenv/load.ts';
+import 'https://deno.land/x/dotenv@v3.2.0/load.ts';
 
 const secretKey = Deno.env.get('NUBO_SECRET_KEY') || '';
 const databaseUrl = Deno.env.get('DATABASE_URL') || '';

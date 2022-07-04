@@ -1,4 +1,4 @@
-import * as Colors from 'https://deno.land/std/fmt/colors.ts';
+import { Colors } from '@nubo/deps.ts';
 
 const options = { name: '' };
 

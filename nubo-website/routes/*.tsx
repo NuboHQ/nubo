@@ -20,6 +20,9 @@ export const handler: Handlers<PageData> = {
       const path = `/${ctx.params[0]}`;
       const query = gql`
         query GetPage($path: String!) {
+          website {
+            name
+          }
           page(path: $path) {
             title
           }
