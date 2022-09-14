@@ -17,7 +17,7 @@ export const config = {
   host: Deno.env.get('HOST') || 'localhost',
   secretKey,
   data: {
-    type: Deno.env.get('NUBO_DATA_TYPE') || 'mongodb',
+    type: Deno.env.get('NUBO_DATA_TYPE') || 'postgres',
     database: {
       url: databaseUrl,
       name: databaseName,

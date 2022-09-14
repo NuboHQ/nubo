@@ -24,30 +24,29 @@ export const typeDefs = gql`
   }
 
   type WebsitesResponse {
-    items: [Website]
+    items: [Website]!
     pagination: JSON!
   }
 
-  input AddWebsiteInput {
+  input AddWebsiteDataInput {
     name: String!
     domains: [String!]!
   }
 
   input UpdateWebsiteFilterInput {
-    id: ID
     name: String
-    domains: [String!]
+    domains: [String]
   }
 
   input RemoveWebsiteFilterInput {
     id: ID
     name: String
-    domains: [String!]
+    domains: [String]
   }
 
-  input UpdateWebsiteInput {
+  input UpdateWebsiteDataInput {
     name: String
-    domains: [String!]
+    domains: [String]
   }
 
   type RemoveWebsiteRespone {
@@ -65,10 +64,10 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    addWebsite(website: AddWebsiteInput): Website
+    addWebsite(data: AddWebsiteDataInput): Website
     updateWebsite(
       filter: UpdateWebsiteFilterInput!
-      website: UpdateWebsiteInput
+      data: UpdateWebsiteDataInput
     ): Website
     removeWebsite(filter: RemoveWebsiteFilterInput!): RemoveWebsiteRespone
   }
@@ -86,6 +85,7 @@ export const queries = {
   },
   // deno-lint-ignore no-explicit-any
   website: async (_: any, { filter }: GetWebsiteQueryData) => {
+    console.log('get website');
     const website = await getWebsite(filter);
 
     return website;
@@ -94,19 +94,19 @@ export const queries = {
 
 export const mutations = {
   // deno-lint-ignore no-explicit-any
-  addWebsite: async (_: any, { website }: AddWebsiteQueryData) => {
-    const newWebsite = await addWebsite(website);
+  addWebsite: async (_: any, { data }: AddWebsiteQueryData) => {
+    const newWebsite = await addWebsite(data);
 
     return newWebsite;
   },
   updateWebsite: async (
     // deno-lint-ignore no-explicit-any
     _: any,
-    { filter, website }: UpdateWebsiteQueryData,
+    { filter, data }: UpdateWebsiteQueryData,
   ) => {
     const updatedWebsite = await updateWebsite({
       filter,
-      website,
+      website: data,
     });
 
     return updatedWebsite;

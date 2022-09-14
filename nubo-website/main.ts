@@ -17,10 +17,28 @@ logger.init({ name: config.name });
 const sheet = virtualSheet();
 
 sheet.reset();
+
 setup({
   ...twindConfig,
   sheet,
-  theme: {},
+  theme: {
+    extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#000',
+        },
+      },
+      fontFamily: {
+        sans: ['Mulish', 'sans-serif'],
+      },
+      fontSize: {
+        xxs: '0.5rem',
+      },
+      boxShadow: {
+        glow: '0px 5px 20px rgba(0, 0, 0, 0.05)',
+      },
+    },
+  },
 });
 
 function render(ctx: RenderContext, render: InnerRenderFunction) {

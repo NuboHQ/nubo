@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { PageProps, Handlers } from '$fresh/server.ts';
 import { ErrorPage } from '@/components/pages/mod.ts';
 import { BasicTemplate } from '@/components/templates/mod.ts';
-import { Page } from '@nubo/pages/mod.ts';
+import { Page } from '@nubo/pages/types.ts';
 import { logger } from '@/deps.ts';
 import { config } from '@/config.ts';
 import { gql, graphql } from '@/deps.ts';
@@ -19,12 +19,16 @@ export const handler: Handlers<PageData> = {
     try {
       const domain = new URL(request.url).hostname;
       const path = `/${ctx.params[0]}`;
-      const query = gql`
-        query GetPage($path: String!, $websiteFilter: JSON!) {
-          website(filter: $websiteFilter) {
-            name
+      const query1 = gql`
+        query GetPage($pageFilter: JSON!, $websiteFilter: JSON!) {
+          page(filter: $pageFilter) {
+            title
           }
-          page(path: $path) {
+        }
+      `;
+      const query = gql`
+        query GetPage($pageFilter: JSON!) {
+          page(filter: $pageFilter) {
             title
           }
         }
@@ -33,7 +37,9 @@ export const handler: Handlers<PageData> = {
         config.api.graphql,
         query,
         {
-          path,
+          pageFilter: {
+            path,
+          },
           websiteFilter: {
             domains: domain,
           },

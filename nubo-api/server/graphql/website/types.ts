@@ -1,12 +1,12 @@
 import { Website, WebsitesOrder } from '@nubo/websites/types.ts';
 
 export type AddWebsiteQueryData = {
-  website: Website;
+  data: Website;
 };
 
 export type UpdateWebsiteQueryData = {
   filter: Partial<Website>;
-  website: Partial<Website>;
+  data: Partial<Website>;
 };
 
 export type GetWebsitesQueryData = {
