@@ -16,7 +16,7 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@nubo-core/*": ["core/*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

@@ -1,16 +1,19 @@
 {
   "scripts": {
-    "dev": "nodemon --exec npx ts-node -r tsconfig-paths/register server/index.ts",
+    "dev": "nodemon server/index.ts",
+    "vite": "vite",
     "build": "vite build",
-    "start": "cross-env NODE_ENV=production ts-node tsconfig-paths/register ./server",
+    "start": "cross-env NODE_ENV=production ts-node ./server",
     "data": "run-p data:*",
     "data:generate": "npx prisma generate",
-    "data:push": "npx prisma db push"
+    "data:push": "npx prisma db push",
+    "postinstall": "npm run data:generate"
   },
   "dependencies": {
     "@prisma/client": "^4.3.1",
     "@types/graphql-fields": "^1.3.4",
     "@vitejs/plugin-react": "^2.0.1",
+    "autoprefixer": "^10.4.12",
     "class-validator": "^0.13.2",
     "compression": "^1.7.4",
     "cross-env": "^7.0.3",
@@ -18,13 +21,14 @@
     "express-graphql": "^0.12.0",
     "graphql-fields": "^2.0.3",
     "graphql-playground-middleware-express": "^1.7.23",
+    "graphql-request": "^5.0.0",
     "graphql-scalars": "^1.18.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "reflect-metadata": "^0.1.13",
     "sirv": "^2.0.2",
-    "ts-node": "^10.7.0",
-    "tsconfig-paths": "^4.1.0",
+    "tailwindcss": "^3.1.8",
+    "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
     "type-graphql": "^1.1.1",
     "typescript": "^4.6.4",
@@ -39,7 +43,16 @@
     "@types/react-dom": "^18.0.3",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.16",
     "prisma": "^4.3.1",
     "typegraphql-prisma": "^0.21.4"
+  },
+  "imports": {
+    "#root/*": {
+      "default": "./*"
+    }
+  },
+  "exports": {
+    "./*": "./*"
   }
 }

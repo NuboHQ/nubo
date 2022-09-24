@@ -1,6 +1,7 @@
+// reflect-metadata has to be the first package in the list
 import 'reflect-metadata';
 import { resolvers } from '@generated/type-graphql';
-import { prisma } from '@nubo-core/data';
+import { prisma } from '../core/data';
 import compression from 'compression';
 import express from 'express';
 import { buildSchema } from 'type-graphql';

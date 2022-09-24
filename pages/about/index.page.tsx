@@ -1,15 +1,18 @@
-import React from 'react'
-import './code.css'
+import React from 'react';
 
-export { Page }
+export { Page };
 
 function Page() {
   return (
     <>
       <h1>About</h1>
       <p>
-        Demo using <code>vite-plugin-ssr</code>.
+        Demo using{' '}
+        <code className="bg-gray-200 py-1 px-2 rounded-md">
+          vite-plugin-ssr
+        </code>
+        .
       </p>
     </>
-  )
+  );
 }
