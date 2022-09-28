@@ -1,5 +1,5 @@
 {
-  "name": "@nubo-core/graphql",
+  "name": "@nubo-core/graphql1",
   "version": "0.0.0",
   "description": "GraphQL server",
   "author": "Nubo",
@@ -21,7 +21,7 @@
     "url": "git+https://github.com/NuboHQ/nubo.git"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "tsc",
     "test": "node ./__tests__/@nubo-core/graphql.test.js"
   },
   "bugs": {

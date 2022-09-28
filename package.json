@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": false,
+  "scripts": {
+    "publish": "lerna run build && lerna publish"
+  },
   "workspaces": [
     "packages/*"
   ],
