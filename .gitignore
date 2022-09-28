@@ -3,3 +3,6 @@ dist/
 .env
 .env.*
 .DS_Store
+lerna-debug.log
+.idea
+packages/*/lib
