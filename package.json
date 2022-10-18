@@ -9,7 +9,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "docker": "npm run docker:build && npm run docker:run",
+    "docker:build": "docker build -t nubodev/nubo:0.0.1 .",
+    "docker:run": "docker run -d -p 5555:5555 nubodev/nubo:0.0.1",
+    "docker:push": "docker push nubodev/nubo:0.0.1"
   },
   "dependencies": {
     "react": "^18.2.0",
