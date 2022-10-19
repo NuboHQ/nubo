@@ -3,7 +3,7 @@ import fs from 'fs';
 import mime from 'mime';
 import { handler as ssrHandler } from '../dist/server/entry.mjs';
 
-const PORT = process.env.PORT || 5555;
+const PORT = process.env.PORT || 5000;
 const clientRoot = new URL('../dist/client/', import.meta.url);
 
 async function handle(req, res) {

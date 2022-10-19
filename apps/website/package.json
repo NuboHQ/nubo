@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev --port 5555",
+    "dev": "astro dev --port 5000",
     "start": "node server/server.mjs",
     "build": "astro build",
     "preview": "astro preview",
@@ -11,14 +11,14 @@
     "clean": "rimraf dist",
     "docker": "npm run docker:build && npm run docker:run",
     "docker:build": "docker build -t nubodev/nubo:0.0.1 .",
-    "docker:run": "docker run -d -p 5555:5555 nubodev/nubo:0.0.1",
+    "docker:run": "docker run -d -p 5000:5000 nubodev/nubo:0.0.1",
     "docker:push": "docker push nubodev/nubo:0.0.1"
   },
   "dependencies": {
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@nubojs/maths": "*",
+    "@nubojs/database": "*",
     "@nubojs/ui": "*"
   },
   "devDependencies": {

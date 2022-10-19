@@ -1,8 +1,12 @@
-import { add } from '@nubojs/maths';
 import { Button } from '@nubojs/ui';
+import type { FC } from 'react';
 
-const Test = () => {
-  console.log(add(15615, 1561856));
+interface Props {
+  data: any;
+}
+
+const Test: FC<Props> = ({ data }) => {
+  console.log(data);
   return (
     <div>
       Test
