@@ -9,6 +9,11 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../graphql"
+}
+
 model Page {
   id    String @id @default(cuid())
   title String

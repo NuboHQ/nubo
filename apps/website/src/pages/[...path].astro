@@ -2,6 +2,7 @@
 import Test from '@/components/Test';
 import Layout from '../layouts/Layout.astro';
 
+console.log(Astro.params);
 const result = await fetch('http://localhost:5003/pages');
 const pages = await result.json();
 ---
