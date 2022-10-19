@@ -1,12 +1,13 @@
+import type { Page } from '@nubojs/database';
 import { Button } from '@nubojs/ui';
 import type { FC } from 'react';
 
 interface Props {
-  data: any;
+  pages: Page[];
 }
 
-const Test: FC<Props> = ({ data }) => {
-  console.log(data);
+const Test: FC<Props> = ({ pages }) => {
+  console.log(pages[0]);
   return (
     <div>
       Test
