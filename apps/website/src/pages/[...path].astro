@@ -2,16 +2,29 @@
 import Test from '@/components/Test';
 import Layout from '../layouts/Layout.astro';
 
-console.log(Astro.params);
-const result = await fetch('http://localhost:5003/pages');
-const pages = await result.json();
+const response = await fetch('http://localhost:5003/graphql', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    query: `
+        query {
+            pages (orderBy: {title: asc}) {
+              id
+              title
+            }
+          }
+        `,
+  }),
+});
+
+const {
+  data: { pages },
+} = await response.json();
 ---
 
 <Layout title="Nubo">
   <main>
-    <h1 class="text-2xl font-bold">Nubo</h1>
-
-    <a href="/about">About</a>
+    <h1 class="py-4 text-2xl font-bold">Nubo</h1>
 
     <Test client:load pages={pages} />
   </main>

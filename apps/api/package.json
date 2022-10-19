@@ -12,10 +12,14 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@nubojs/data": "*",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql-playground-middleware-express": "^1.7.23",
     "helmet": "^6.0.0",
-    "@nubojs/database": "*"
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

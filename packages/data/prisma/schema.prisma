@@ -11,7 +11,7 @@ datasource db {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
-  output   = "../graphql"
+  output   = "../src/generated/graphql"
 }
 
 model Page {
@@ -19,4 +19,12 @@ model Page {
   title String
 
   @@map("pages")
+}
+
+model Website {
+  id      String @id @default(cuid())
+  name    String
+  domains Json
+
+  @@map("websites")
 }

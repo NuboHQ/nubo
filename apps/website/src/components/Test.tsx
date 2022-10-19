@@ -1,4 +1,4 @@
-import type { Page } from '@nubojs/database';
+import type { Page } from '@nubojs/data';
 import { Button } from '@nubojs/ui';
 import type { FC } from 'react';
 
@@ -7,11 +7,11 @@ interface Props {
 }
 
 const Test: FC<Props> = ({ pages }) => {
-  console.log(pages[0]);
   return (
     <div>
-      Test
-      <Button />
+      {pages.map((page) => (
+        <div key={page.id}>{page.title}</div>
+      ))}
     </div>
   );
 };
