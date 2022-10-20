@@ -33,6 +33,10 @@ export const startServer = async () => {
     domain: new URL(config.website.url).hostname,
   };
 
+  app.get('/', async (req, res) => {
+    res.json({ name: 'nubo' });
+  });
+
   app.get('/set', async (req, res) => {
     res.cookie('nubo_auth', 'hello', options);
     res.json({ message: 'set' });
@@ -51,11 +55,12 @@ export const startServer = async () => {
     const secretKey = req.header('nubo-secret-key');
     const authCookie = req.signedCookies['nubo_auth'];
 
-    if (secretKey || authCookie) {
-      return next();
-    }
+    return next();
+    // if (secretKey || authCookie) {
+    //   return next();
+    // }
 
-    return res.status(401).json({ statusCode: 401, error: 'Unauthorized' });
+    // return res.status(401).json({ statusCode: 401, error: 'Unauthorized' });
   };
 
   app.use(

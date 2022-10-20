@@ -2,6 +2,7 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { PageCreateNestedManyWithoutWebsiteInput } from "../inputs/PageCreateNestedManyWithoutWebsiteInput";
 
 @TypeGraphQL.InputType("WebsiteCreateInput", {
   isAbstract: true
@@ -12,6 +13,16 @@ export class WebsiteCreateInput {
   })
   id?: string | undefined;
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  created?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updated?: Date | undefined;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
@@ -21,4 +32,9 @@ export class WebsiteCreateInput {
     nullable: false
   })
   domains!: Prisma.InputJsonValue;
+
+  @TypeGraphQL.Field(_type => PageCreateNestedManyWithoutWebsiteInput, {
+    nullable: true
+  })
+  pages?: PageCreateNestedManyWithoutWebsiteInput | undefined;
 }

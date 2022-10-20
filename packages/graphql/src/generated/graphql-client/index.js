@@ -32,11 +32,17 @@ export const enumSortOrder = {
 
 export const enumPageScalarFieldEnum = {
   id: 'id',
+  created: 'created',
+  updated: 'updated',
   title: 'title',
+  path: 'path',
+  websiteId: 'websiteId',
 }
 
 export const enumWebsiteScalarFieldEnum = {
   id: 'id',
+  created: 'created',
+  updated: 'updated',
   name: 'name',
   domains: 'domains',
 }

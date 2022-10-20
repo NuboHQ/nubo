@@ -1,45 +1,15 @@
-import type { Page, Website } from '@nubojs/database';
-import { client } from '@nubojs/graphql';
-import { Button } from '@nubojs/ui';
-import { FC, useEffect } from 'react';
+import type { FC } from 'react';
+import type { Page } from '@nubojs/database';
 
 interface Props {
-  websites: Website[];
-  pages: Page[];
+  page: Page;
 }
 
-const Test: FC<Props> = ({ websites, pages }) => {
-  useEffect(() => {
-    const fn = async () => {
-      try {
-        const result = await client.query({
-          pages: {
-            id: true,
-            title: true,
-          },
-        });
-
-        console.log(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fn();
-  }, []);
+const Test: FC<Props> = ({ page }) => {
   return (
     <div>
       <div className="py-10">
-        <h2 className="text-lg font-bold">Websites</h2>
-        {websites.map((website) => (
-          <div key={website.id}>{website.name}</div>
-        ))}
-      </div>
-
-      <div className="py-10">
-        <h2 className="text-lg font-bold">Pages</h2>
-        {pages.map((page) => (
-          <div key={page.id}>{page.title}</div>
-        ))}
+        <h1 className="text-lg font-bold">{page.title}</h1>
       </div>
     </div>
   );

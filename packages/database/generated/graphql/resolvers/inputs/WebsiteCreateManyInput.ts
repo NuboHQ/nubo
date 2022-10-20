@@ -12,6 +12,16 @@ export class WebsiteCreateManyInput {
   })
   id?: string | undefined;
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  created?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updated?: Date | undefined;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })

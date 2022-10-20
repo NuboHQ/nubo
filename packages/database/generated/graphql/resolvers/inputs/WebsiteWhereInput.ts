@@ -2,7 +2,9 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { JsonFilter } from "../inputs/JsonFilter";
+import { PageListRelationFilter } from "../inputs/PageListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 
 @TypeGraphQL.InputType("WebsiteWhereInput", {
@@ -29,6 +31,16 @@ export class WebsiteWhereInput {
   })
   id?: StringFilter | undefined;
 
+  @TypeGraphQL.Field(_type => DateTimeFilter, {
+    nullable: true
+  })
+  created?: DateTimeFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFilter, {
+    nullable: true
+  })
+  updated?: DateTimeFilter | undefined;
+
   @TypeGraphQL.Field(_type => StringFilter, {
     nullable: true
   })
@@ -38,4 +50,9 @@ export class WebsiteWhereInput {
     nullable: true
   })
   domains?: JsonFilter | undefined;
+
+  @TypeGraphQL.Field(_type => PageListRelationFilter, {
+    nullable: true
+  })
+  pages?: PageListRelationFilter | undefined;
 }

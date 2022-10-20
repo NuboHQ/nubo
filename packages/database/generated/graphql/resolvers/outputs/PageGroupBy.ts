@@ -15,10 +15,30 @@ export class PageGroupBy {
   })
   id!: string;
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  created!: Date;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  updated!: Date;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })
   title!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true
+  })
+  path!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false
+  })
+  websiteId!: string;
 
   @TypeGraphQL.Field(_type => PageCountAggregate, {
     nullable: true

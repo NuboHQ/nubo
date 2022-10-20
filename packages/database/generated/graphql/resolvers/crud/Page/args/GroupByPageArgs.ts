@@ -20,7 +20,7 @@ export class GroupByPageArgs {
   @TypeGraphQL.Field(_type => [PageScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "title">;
+  by!: Array<"id" | "created" | "updated" | "title" | "path" | "websiteId">;
 
   @TypeGraphQL.Field(_type => PageScalarWhereWithAggregatesInput, {
     nullable: true

@@ -4,24 +4,36 @@ import Layout from '../layouts/Layout.astro';
 import { client } from '@nubojs/graphql';
 
 const result = await client.query({
-  websites: {
-    id: true,
-    name: true,
-    domains: true,
-  },
-  pages: {
-    id: true,
-    title: true,
-  },
+  findFirstPage: [
+    {
+      where: {
+        path: {
+          equals: Astro.url.pathname,
+        },
+      },
+    },
+    {
+      id: true,
+      title: true,
+      path: true,
+    },
+  ],
 });
+const page = result.findFirstPage;
 
-// console.log(result);
+console.log('-');
+console.log(page);
+console.log('-');
+
+if (!page) {
+  return Astro.redirect('/404');
+}
 ---
 
-<Layout title="Nubo">
+<Layout title={page.title}>
   <main>
     <h1 class="py-4 text-2xl font-bold">Nubo</h1>
 
-    <Test client:load websites={result.websites} pages={result.pages} />
+    {page && <Test client:load page={page} />}
   </main>
 </Layout>

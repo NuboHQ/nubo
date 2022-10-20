@@ -12,6 +12,16 @@ export class WebsiteMaxAggregate {
   })
   id!: string | null;
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  created!: Date | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true
+  })
+  updated!: Date | null;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: true
   })

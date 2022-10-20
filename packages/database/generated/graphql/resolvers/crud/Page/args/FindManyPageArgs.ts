@@ -35,5 +35,5 @@ export class FindManyPageArgs {
   @TypeGraphQL.Field(_type => [PageScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "title"> | undefined;
+  distinct?: Array<"id" | "created" | "updated" | "title" | "path" | "websiteId"> | undefined;
 }

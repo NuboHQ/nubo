@@ -3,29 +3,16 @@ import * as tslib from "tslib";
 import * as crudResolvers from "./resolvers/crud/resolvers-crud.index";
 import * as argsTypes from "./resolvers/crud/args.index";
 import * as actionResolvers from "./resolvers/crud/resolvers-actions.index";
+import * as relationResolvers from "./resolvers/relations/resolvers.index";
 import * as models from "./models";
 import * as outputTypes from "./resolvers/outputs";
 import * as inputTypes from "./resolvers/inputs";
 
 const crudResolversMap = {
-  Page: crudResolvers.PageCrudResolver,
-  Website: crudResolvers.WebsiteCrudResolver
+  Website: crudResolvers.WebsiteCrudResolver,
+  Page: crudResolvers.PageCrudResolver
 };
 const actionResolversMap = {
-  Page: {
-    aggregatePage: actionResolvers.AggregatePageResolver,
-    createManyPage: actionResolvers.CreateManyPageResolver,
-    createOnePage: actionResolvers.CreateOnePageResolver,
-    deleteManyPage: actionResolvers.DeleteManyPageResolver,
-    deleteOnePage: actionResolvers.DeleteOnePageResolver,
-    findFirstPage: actionResolvers.FindFirstPageResolver,
-    pages: actionResolvers.FindManyPageResolver,
-    page: actionResolvers.FindUniquePageResolver,
-    groupByPage: actionResolvers.GroupByPageResolver,
-    updateManyPage: actionResolvers.UpdateManyPageResolver,
-    updateOnePage: actionResolvers.UpdateOnePageResolver,
-    upsertOnePage: actionResolvers.UpsertOnePageResolver
-  },
   Website: {
     aggregateWebsite: actionResolvers.AggregateWebsiteResolver,
     createManyWebsite: actionResolvers.CreateManyWebsiteResolver,
@@ -39,25 +26,27 @@ const actionResolversMap = {
     updateManyWebsite: actionResolvers.UpdateManyWebsiteResolver,
     updateOneWebsite: actionResolvers.UpdateOneWebsiteResolver,
     upsertOneWebsite: actionResolvers.UpsertOneWebsiteResolver
+  },
+  Page: {
+    aggregatePage: actionResolvers.AggregatePageResolver,
+    createManyPage: actionResolvers.CreateManyPageResolver,
+    createOnePage: actionResolvers.CreateOnePageResolver,
+    deleteManyPage: actionResolvers.DeleteManyPageResolver,
+    deleteOnePage: actionResolvers.DeleteOnePageResolver,
+    findFirstPage: actionResolvers.FindFirstPageResolver,
+    pages: actionResolvers.FindManyPageResolver,
+    page: actionResolvers.FindUniquePageResolver,
+    groupByPage: actionResolvers.GroupByPageResolver,
+    updateManyPage: actionResolvers.UpdateManyPageResolver,
+    updateOnePage: actionResolvers.UpdateOnePageResolver,
+    upsertOnePage: actionResolvers.UpsertOnePageResolver
   }
 };
 const crudResolversInfo = {
-  Page: ["aggregatePage", "createManyPage", "createOnePage", "deleteManyPage", "deleteOnePage", "findFirstPage", "pages", "page", "groupByPage", "updateManyPage", "updateOnePage", "upsertOnePage"],
-  Website: ["aggregateWebsite", "createManyWebsite", "createOneWebsite", "deleteManyWebsite", "deleteOneWebsite", "findFirstWebsite", "websites", "website", "groupByWebsite", "updateManyWebsite", "updateOneWebsite", "upsertOneWebsite"]
+  Website: ["aggregateWebsite", "createManyWebsite", "createOneWebsite", "deleteManyWebsite", "deleteOneWebsite", "findFirstWebsite", "websites", "website", "groupByWebsite", "updateManyWebsite", "updateOneWebsite", "upsertOneWebsite"],
+  Page: ["aggregatePage", "createManyPage", "createOnePage", "deleteManyPage", "deleteOnePage", "findFirstPage", "pages", "page", "groupByPage", "updateManyPage", "updateOnePage", "upsertOnePage"]
 };
 const argsInfo = {
-  AggregatePageArgs: ["where", "orderBy", "cursor", "take", "skip"],
-  CreateManyPageArgs: ["data", "skipDuplicates"],
-  CreateOnePageArgs: ["data"],
-  DeleteManyPageArgs: ["where"],
-  DeleteOnePageArgs: ["where"],
-  FindFirstPageArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
-  FindManyPageArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
-  FindUniquePageArgs: ["where"],
-  GroupByPageArgs: ["where", "orderBy", "by", "having", "take", "skip"],
-  UpdateManyPageArgs: ["data", "where"],
-  UpdateOnePageArgs: ["data", "where"],
-  UpsertOnePageArgs: ["where", "create", "update"],
   AggregateWebsiteArgs: ["where", "orderBy", "cursor", "take", "skip"],
   CreateManyWebsiteArgs: ["data", "skipDuplicates"],
   CreateOneWebsiteArgs: ["data"],
@@ -69,7 +58,19 @@ const argsInfo = {
   GroupByWebsiteArgs: ["where", "orderBy", "by", "having", "take", "skip"],
   UpdateManyWebsiteArgs: ["data", "where"],
   UpdateOneWebsiteArgs: ["data", "where"],
-  UpsertOneWebsiteArgs: ["where", "create", "update"]
+  UpsertOneWebsiteArgs: ["where", "create", "update"],
+  AggregatePageArgs: ["where", "orderBy", "cursor", "take", "skip"],
+  CreateManyPageArgs: ["data", "skipDuplicates"],
+  CreateOnePageArgs: ["data"],
+  DeleteManyPageArgs: ["where"],
+  DeleteOnePageArgs: ["where"],
+  FindFirstPageArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
+  FindManyPageArgs: ["where", "orderBy", "cursor", "take", "skip", "distinct"],
+  FindUniquePageArgs: ["where"],
+  GroupByPageArgs: ["where", "orderBy", "by", "having", "take", "skip"],
+  UpdateManyPageArgs: ["data", "where"],
+  UpdateOnePageArgs: ["data", "where"],
+  UpsertOnePageArgs: ["where", "create", "update"]
 };
 
 type ResolverModelNames = keyof typeof crudResolversMap;
@@ -158,6 +159,54 @@ export function applyArgsTypesEnhanceMap(
   }
 }
 
+const relationResolversMap = {
+  Website: relationResolvers.WebsiteRelationsResolver,
+  Page: relationResolvers.PageRelationsResolver
+};
+const relationResolversInfo = {
+  Website: ["pages"],
+  Page: ["website"]
+};
+
+type RelationResolverModelNames = keyof typeof relationResolversMap;
+
+type RelationResolverActionNames<
+  TModel extends RelationResolverModelNames
+> = keyof typeof relationResolversMap[TModel]["prototype"];
+
+export type RelationResolverActionsConfig<TModel extends RelationResolverModelNames>
+  = Partial<Record<RelationResolverActionNames<TModel> | "_all", MethodDecorator[]>>;
+
+export type RelationResolversEnhanceMap = {
+  [TModel in RelationResolverModelNames]?: RelationResolverActionsConfig<TModel>;
+};
+
+export function applyRelationResolversEnhanceMap(
+  relationResolversEnhanceMap: RelationResolversEnhanceMap,
+) {
+  for (const relationResolversEnhanceMapKey of Object.keys(relationResolversEnhanceMap)) {
+    const modelName = relationResolversEnhanceMapKey as keyof typeof relationResolversEnhanceMap;
+    const relationResolverTarget = relationResolversMap[modelName].prototype;
+    const relationResolverActionsConfig = relationResolversEnhanceMap[modelName]!;
+    if (relationResolverActionsConfig._all) {
+      const allActionsDecorators = relationResolverActionsConfig._all;
+      const relationResolverActionNames = relationResolversInfo[modelName as keyof typeof relationResolversInfo];
+      for (const relationResolverActionName of relationResolverActionNames) {
+        tslib.__decorate(allActionsDecorators, relationResolverTarget, relationResolverActionName, null);
+      }
+    }
+    const relationResolverActionsToApply = Object.keys(relationResolverActionsConfig).filter(
+      it => it !== "_all"
+    );
+    for (const relationResolverActionName of relationResolverActionsToApply) {
+      const decorators = relationResolverActionsConfig[
+        relationResolverActionName as keyof typeof relationResolverActionsConfig
+      ] as MethodDecorator[];
+      tslib.__decorate(decorators, relationResolverTarget, relationResolverActionName, null);
+    }
+  }
+}
+
 type TypeConfig = {
   class?: ClassDecorator[];
   fields?: FieldsConfig;
@@ -197,8 +246,8 @@ function applyTypeClassEnhanceConfig<
 }
 
 const modelsInfo = {
-  Page: ["id", "title"],
-  Website: ["id", "name", "domains"]
+  Website: ["id", "created", "updated", "name", "domains"],
+  Page: ["id", "created", "updated", "title", "path", "websiteId"]
 };
 
 type ModelNames = keyof typeof models;
@@ -237,17 +286,18 @@ export function applyModelsEnhanceMap(modelsEnhanceMap: ModelsEnhanceMap) {
 }
 
 const outputsInfo = {
-  AggregatePage: ["_count", "_min", "_max"],
-  PageGroupBy: ["id", "title", "_count", "_min", "_max"],
   AggregateWebsite: ["_count", "_min", "_max"],
-  WebsiteGroupBy: ["id", "name", "domains", "_count", "_min", "_max"],
+  WebsiteGroupBy: ["id", "created", "updated", "name", "domains", "_count", "_min", "_max"],
+  AggregatePage: ["_count", "_min", "_max"],
+  PageGroupBy: ["id", "created", "updated", "title", "path", "websiteId", "_count", "_min", "_max"],
   AffectedRowsOutput: ["count"],
-  PageCountAggregate: ["id", "title", "_all"],
-  PageMinAggregate: ["id", "title"],
-  PageMaxAggregate: ["id", "title"],
-  WebsiteCountAggregate: ["id", "name", "domains", "_all"],
-  WebsiteMinAggregate: ["id", "name"],
-  WebsiteMaxAggregate: ["id", "name"]
+  WebsiteCount: ["pages"],
+  WebsiteCountAggregate: ["id", "created", "updated", "name", "domains", "_all"],
+  WebsiteMinAggregate: ["id", "created", "updated", "name"],
+  WebsiteMaxAggregate: ["id", "created", "updated", "name"],
+  PageCountAggregate: ["id", "created", "updated", "title", "path", "websiteId", "_all"],
+  PageMinAggregate: ["id", "created", "updated", "title", "path", "websiteId"],
+  PageMaxAggregate: ["id", "created", "updated", "title", "path", "websiteId"]
 };
 
 type OutputTypesNames = keyof typeof outputTypes;
@@ -288,39 +338,70 @@ export function applyOutputTypesEnhanceMap(
 }
 
 const inputsInfo = {
-  PageWhereInput: ["AND", "OR", "NOT", "id", "title"],
-  PageOrderByWithRelationInput: ["id", "title"],
-  PageWhereUniqueInput: ["id"],
-  PageOrderByWithAggregationInput: ["id", "title", "_count", "_max", "_min"],
-  PageScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "title"],
-  WebsiteWhereInput: ["AND", "OR", "NOT", "id", "name", "domains"],
-  WebsiteOrderByWithRelationInput: ["id", "name", "domains"],
+  WebsiteWhereInput: ["AND", "OR", "NOT", "id", "created", "updated", "name", "domains", "pages"],
+  WebsiteOrderByWithRelationInput: ["id", "created", "updated", "name", "domains", "pages"],
   WebsiteWhereUniqueInput: ["id"],
-  WebsiteOrderByWithAggregationInput: ["id", "name", "domains", "_count", "_max", "_min"],
-  WebsiteScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "name", "domains"],
-  PageCreateInput: ["id", "title"],
-  PageUpdateInput: ["id", "title"],
-  PageCreateManyInput: ["id", "title"],
-  PageUpdateManyMutationInput: ["id", "title"],
-  WebsiteCreateInput: ["id", "name", "domains"],
-  WebsiteUpdateInput: ["id", "name", "domains"],
-  WebsiteCreateManyInput: ["id", "name", "domains"],
-  WebsiteUpdateManyMutationInput: ["id", "name", "domains"],
+  WebsiteOrderByWithAggregationInput: ["id", "created", "updated", "name", "domains", "_count", "_max", "_min"],
+  WebsiteScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "created", "updated", "name", "domains"],
+  PageWhereInput: ["AND", "OR", "NOT", "id", "created", "updated", "title", "path", "websiteId", "website"],
+  PageOrderByWithRelationInput: ["id", "created", "updated", "title", "path", "websiteId", "website"],
+  PageWhereUniqueInput: ["id"],
+  PageOrderByWithAggregationInput: ["id", "created", "updated", "title", "path", "websiteId", "_count", "_max", "_min"],
+  PageScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "created", "updated", "title", "path", "websiteId"],
+  WebsiteCreateInput: ["id", "created", "updated", "name", "domains", "pages"],
+  WebsiteUpdateInput: ["id", "created", "updated", "name", "domains", "pages"],
+  WebsiteCreateManyInput: ["id", "created", "updated", "name", "domains"],
+  WebsiteUpdateManyMutationInput: ["id", "created", "updated", "name", "domains"],
+  PageCreateInput: ["id", "created", "updated", "title", "path", "website"],
+  PageUpdateInput: ["id", "created", "updated", "title", "path", "website"],
+  PageCreateManyInput: ["id", "created", "updated", "title", "path", "websiteId"],
+  PageUpdateManyMutationInput: ["id", "created", "updated", "title", "path"],
   StringFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
-  PageCountOrderByAggregateInput: ["id", "title"],
-  PageMaxOrderByAggregateInput: ["id", "title"],
-  PageMinOrderByAggregateInput: ["id", "title"],
-  StringWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
+  DateTimeFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
   JsonFilter: ["equals", "path", "string_contains", "string_starts_with", "string_ends_with", "array_contains", "array_starts_with", "array_ends_with", "lt", "lte", "gt", "gte", "not"],
-  WebsiteCountOrderByAggregateInput: ["id", "name", "domains"],
-  WebsiteMaxOrderByAggregateInput: ["id", "name"],
-  WebsiteMinOrderByAggregateInput: ["id", "name"],
+  PageListRelationFilter: ["every", "some", "none"],
+  PageOrderByRelationAggregateInput: ["_count"],
+  WebsiteCountOrderByAggregateInput: ["id", "created", "updated", "name", "domains"],
+  WebsiteMaxOrderByAggregateInput: ["id", "created", "updated", "name"],
+  WebsiteMinOrderByAggregateInput: ["id", "created", "updated", "name"],
+  StringWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
+  DateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
   JsonWithAggregatesFilter: ["equals", "path", "string_contains", "string_starts_with", "string_ends_with", "array_contains", "array_starts_with", "array_ends_with", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
+  StringNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
+  WebsiteRelationFilter: ["is", "isNot"],
+  PageCountOrderByAggregateInput: ["id", "created", "updated", "title", "path", "websiteId"],
+  PageMaxOrderByAggregateInput: ["id", "created", "updated", "title", "path", "websiteId"],
+  PageMinOrderByAggregateInput: ["id", "created", "updated", "title", "path", "websiteId"],
+  StringNullableWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
+  PageCreateNestedManyWithoutWebsiteInput: ["create", "connectOrCreate", "createMany", "connect"],
   StringFieldUpdateOperationsInput: ["set"],
+  DateTimeFieldUpdateOperationsInput: ["set"],
+  PageUpdateManyWithoutWebsiteNestedInput: ["create", "connectOrCreate", "upsert", "createMany", "set", "disconnect", "delete", "connect", "update", "updateMany", "deleteMany"],
+  WebsiteCreateNestedOneWithoutPagesInput: ["create", "connectOrCreate", "connect"],
+  NullableStringFieldUpdateOperationsInput: ["set"],
+  WebsiteUpdateOneRequiredWithoutPagesNestedInput: ["create", "connectOrCreate", "upsert", "connect", "update"],
   NestedStringFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
+  NestedDateTimeFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
   NestedStringWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
   NestedIntFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
-  NestedJsonFilter: ["equals", "path", "string_contains", "string_starts_with", "string_ends_with", "array_contains", "array_starts_with", "array_ends_with", "lt", "lte", "gt", "gte", "not"]
+  NestedDateTimeWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not", "_count", "_min", "_max"],
+  NestedJsonFilter: ["equals", "path", "string_contains", "string_starts_with", "string_ends_with", "array_contains", "array_starts_with", "array_ends_with", "lt", "lte", "gt", "gte", "not"],
+  NestedStringNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not"],
+  NestedStringNullableWithAggregatesFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "contains", "startsWith", "endsWith", "not", "_count", "_min", "_max"],
+  NestedIntNullableFilter: ["equals", "in", "notIn", "lt", "lte", "gt", "gte", "not"],
+  PageCreateWithoutWebsiteInput: ["id", "created", "updated", "title", "path"],
+  PageCreateOrConnectWithoutWebsiteInput: ["where", "create"],
+  PageCreateManyWebsiteInputEnvelope: ["data", "skipDuplicates"],
+  PageUpsertWithWhereUniqueWithoutWebsiteInput: ["where", "update", "create"],
+  PageUpdateWithWhereUniqueWithoutWebsiteInput: ["where", "data"],
+  PageUpdateManyWithWhereWithoutWebsiteInput: ["where", "data"],
+  PageScalarWhereInput: ["AND", "OR", "NOT", "id", "created", "updated", "title", "path", "websiteId"],
+  WebsiteCreateWithoutPagesInput: ["id", "created", "updated", "name", "domains"],
+  WebsiteCreateOrConnectWithoutPagesInput: ["where", "create"],
+  WebsiteUpsertWithoutPagesInput: ["update", "create"],
+  WebsiteUpdateWithoutPagesInput: ["id", "created", "updated", "name", "domains"],
+  PageCreateManyWebsiteInput: ["id", "created", "updated", "title", "path"],
+  PageUpdateWithoutWebsiteInput: ["id", "created", "updated", "title", "path"]
 };
 
 type InputTypesNames = keyof typeof inputTypes;

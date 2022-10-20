@@ -2,6 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
+import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
+import { PageUpdateManyWithoutWebsiteNestedInput } from "../inputs/PageUpdateManyWithoutWebsiteNestedInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
 
 @TypeGraphQL.InputType("WebsiteUpdateInput", {
@@ -13,6 +15,16 @@ export class WebsiteUpdateInput {
   })
   id?: StringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  created?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true
+  })
+  updated?: DateTimeFieldUpdateOperationsInput | undefined;
+
   @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
     nullable: true
   })
@@ -22,4 +34,9 @@ export class WebsiteUpdateInput {
     nullable: true
   })
   domains?: Prisma.InputJsonValue | undefined;
+
+  @TypeGraphQL.Field(_type => PageUpdateManyWithoutWebsiteNestedInput, {
+    nullable: true
+  })
+  pages?: PageUpdateManyWithoutWebsiteNestedInput | undefined;
 }

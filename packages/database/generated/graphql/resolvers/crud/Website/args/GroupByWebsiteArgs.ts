@@ -20,7 +20,7 @@ export class GroupByWebsiteArgs {
   @TypeGraphQL.Field(_type => [WebsiteScalarFieldEnum], {
     nullable: false
   })
-  by!: Array<"id" | "name" | "domains">;
+  by!: Array<"id" | "created" | "updated" | "name" | "domains">;
 
   @TypeGraphQL.Field(_type => WebsiteScalarWhereWithAggregatesInput, {
     nullable: true

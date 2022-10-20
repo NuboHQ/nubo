@@ -2,6 +2,8 @@ import * as TypeGraphQL from "type-graphql";
 
 export enum WebsiteScalarFieldEnum {
   id = "id",
+  created = "created",
+  updated = "updated",
   name = "name",
   domains = "domains"
 }

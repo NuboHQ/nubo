@@ -5,6 +5,7 @@ export { PageCountAggregate } from "./PageCountAggregate";
 export { PageGroupBy } from "./PageGroupBy";
 export { PageMaxAggregate } from "./PageMaxAggregate";
 export { PageMinAggregate } from "./PageMinAggregate";
+export { WebsiteCount } from "./WebsiteCount";
 export { WebsiteCountAggregate } from "./WebsiteCountAggregate";
 export { WebsiteGroupBy } from "./WebsiteGroupBy";
 export { WebsiteMaxAggregate } from "./WebsiteMaxAggregate";

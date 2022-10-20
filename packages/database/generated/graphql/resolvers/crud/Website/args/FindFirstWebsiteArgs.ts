@@ -35,5 +35,5 @@ export class FindFirstWebsiteArgs {
   @TypeGraphQL.Field(_type => [WebsiteScalarFieldEnum], {
     nullable: true
   })
-  distinct?: Array<"id" | "name" | "domains"> | undefined;
+  distinct?: Array<"id" | "created" | "updated" | "name" | "domains"> | undefined;
 }

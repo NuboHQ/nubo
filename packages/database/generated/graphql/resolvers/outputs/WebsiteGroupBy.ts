@@ -15,6 +15,16 @@ export class WebsiteGroupBy {
   })
   id!: string;
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  created!: Date;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false
+  })
+  updated!: Date;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: false
   })

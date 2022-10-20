@@ -60,11 +60,17 @@ export declare const enumSortOrder: {
 
 export declare const enumPageScalarFieldEnum: {
   readonly id: 'id'
+  readonly created: 'created'
+  readonly updated: 'updated'
   readonly title: 'title'
+  readonly path: 'path'
+  readonly websiteId: 'websiteId'
 }
 
 export declare const enumWebsiteScalarFieldEnum: {
   readonly id: 'id'
+  readonly created: 'created'
+  readonly updated: 'updated'
   readonly name: 'name'
   readonly domains: 'domains'
 }

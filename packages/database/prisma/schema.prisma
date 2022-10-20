@@ -14,17 +14,25 @@ generator typegraphql {
   output   = "../generated/graphql"
 }
 
-model Page {
-  id    String @id @default(cuid())
-  title String
-
-  @@map("pages")
-}
-
 model Website {
-  id      String @id @default(cuid())
+  id      String   @id @default(cuid())
+  created DateTime @default(now())
+  updated DateTime @default(now()) @updatedAt
   name    String
   domains Json
+  pages   Page[]
 
   @@map("websites")
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  created   DateTime @default(now())
+  updated   DateTime @default(now()) @updatedAt
+  title     String
+  path      String?
+  websiteId String
+  website   Website  @relation(fields: [websiteId], references: [id])
+
+  @@map("pages")
 }

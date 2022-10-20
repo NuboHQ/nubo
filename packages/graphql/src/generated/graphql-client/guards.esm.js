@@ -47,6 +47,22 @@ export var isPage = function(obj) {
 
 
 
+var Website_possibleTypes = ['Website']
+export var isWebsite = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isWebsite"')
+  return Website_possibleTypes.includes(obj.__typename)
+}
+
+
+
+var WebsiteCount_possibleTypes = ['WebsiteCount']
+export var isWebsiteCount = function(obj) {
+  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isWebsiteCount"')
+  return WebsiteCount_possibleTypes.includes(obj.__typename)
+}
+
+
+
 var PageGroupBy_possibleTypes = ['PageGroupBy']
 export var isPageGroupBy = function(obj) {
   if (!obj || !obj.__typename) throw new Error('__typename is missing in "isPageGroupBy"')
@@ -83,14 +99,6 @@ var WebsiteMaxAggregate_possibleTypes = ['WebsiteMaxAggregate']
 export var isWebsiteMaxAggregate = function(obj) {
   if (!obj || !obj.__typename) throw new Error('__typename is missing in "isWebsiteMaxAggregate"')
   return WebsiteMaxAggregate_possibleTypes.includes(obj.__typename)
-}
-
-
-
-var Website_possibleTypes = ['Website']
-export var isWebsite = function(obj) {
-  if (!obj || !obj.__typename) throw new Error('__typename is missing in "isWebsite"')
-  return Website_possibleTypes.includes(obj.__typename)
 }
 
 
