@@ -4,13 +4,14 @@ import Layout from '../layouts/Layout.astro';
 import { client } from '@nubojs/graphql';
 
 const result = await client.query({
+  websites: {
+    id: true,
+    name: true,
+    domains: true,
+  },
   pages: {
     id: true,
     title: true,
-  },
-  websites: {
-    id: true,
-    domains: true,
   },
 });
 
@@ -21,6 +22,6 @@ console.log(result);
   <main>
     <h1 class="py-4 text-2xl font-bold">Nubo</h1>
 
-    <Test client:load pages={[]} />
+    <Test client:load websites={result.websites} pages={result.pages} />
   </main>
 </Layout>
