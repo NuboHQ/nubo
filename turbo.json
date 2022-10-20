@@ -22,9 +22,11 @@
       "outputs": []
     },
     "graphql:generate": {
+      "cache": false,
       "outputs": []
     },
     "generate": {
+      "cache": false,
       "dependsOn": ["^generate"]
     }
   }

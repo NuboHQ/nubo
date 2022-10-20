@@ -13,26 +13,8 @@ const result = await client.query({
     domains: true,
   },
 });
-console.log(result.websites[0]);
 
-// const response = await fetch('http://localhost:5003/graphql', {
-//   method: 'POST',
-//   headers: { 'Content-Type': 'application/json' },
-//   body: JSON.stringify({
-//     query: `
-//         query {
-//             pages (orderBy: {title: asc}) {
-//               id
-//               title
-//             }
-//           }
-//         `,
-//   }),
-// });
-
-// const {
-//   data: { pages },
-// } = await response.json();
+console.log(result);
 ---
 
 <Layout title="Nubo">

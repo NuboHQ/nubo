@@ -1,0 +1,12 @@
+export { AggregatePageArgs } from "./AggregatePageArgs";
+export { CreateManyPageArgs } from "./CreateManyPageArgs";
+export { CreateOnePageArgs } from "./CreateOnePageArgs";
+export { DeleteManyPageArgs } from "./DeleteManyPageArgs";
+export { DeleteOnePageArgs } from "./DeleteOnePageArgs";
+export { FindFirstPageArgs } from "./FindFirstPageArgs";
+export { FindManyPageArgs } from "./FindManyPageArgs";
+export { FindUniquePageArgs } from "./FindUniquePageArgs";
+export { GroupByPageArgs } from "./GroupByPageArgs";
+export { UpdateManyPageArgs } from "./UpdateManyPageArgs";
+export { UpdateOnePageArgs } from "./UpdateOnePageArgs";
+export { UpsertOnePageArgs } from "./UpsertOnePageArgs";
