@@ -11,14 +11,18 @@ interface Props {
 const Test: FC<Props> = ({ websites, pages }) => {
   useEffect(() => {
     const fn = async () => {
-      const result = await client.query({
-        pages: {
-          id: true,
-          title: true,
-        },
-      });
+      try {
+        const result = await client.query({
+          pages: {
+            id: true,
+            title: true,
+          },
+        });
 
-      console.log(result);
+        console.log(result);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fn();
   }, []);

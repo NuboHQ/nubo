@@ -1,6 +1,6 @@
 // reflect-metadata has to be the first package in the list
 import 'reflect-metadata';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { prisma, resolvers } from '@nubojs/database';
@@ -25,13 +25,6 @@ export const startServer = async () => {
   app.use(cookieParser(config.secretKey));
   app.use(cors({ origin: config.api.allowedUrls, credentials: true }));
 
-  app.use('*', (req, res, next) => {
-    console.log('-----');
-    console.log(req.headers);
-    console.log('-----');
-    next();
-  });
-
   const options = {
     signed: true,
     maxAge: 90 * 24 * 60 * 60 * 1000,
@@ -54,13 +47,29 @@ export const startServer = async () => {
     res.json({ message: 'removed' });
   });
 
+  const authGuard = (req: Request, res: Response, next: NextFunction) => {
+    const secretKey = req.header('nubo-secret-key');
+    const authCookie = req.signedCookies['nubo_auth'];
+
+    if (secretKey || authCookie) {
+      return next();
+    }
+
+    return res.status(401).json({ statusCode: 401, error: 'Unauthorized' });
+  };
+
   app.use(
     '/graphql',
+    authGuard,
     graphqlHTTP({
       schema: schema,
       context: { prisma },
     }),
   );
+
+  app.use('*', (req, res) => {
+    res.status(404).json({ statusCode: 404, error: 'Not Found' });
+  });
 
   app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
