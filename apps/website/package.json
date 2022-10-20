@@ -1,7 +1,7 @@
 {
   "name": "@nubojs/website",
-  "type": "module",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "dev": "astro dev --port 5000",
     "start": "node server/server.mjs",
@@ -15,11 +15,12 @@
     "docker:push": "docker push nubodev/nubo:0.0.1"
   },
   "dependencies": {
+    "@nubojs/data": "*",
+    "@nubojs/graphql": "*",
+    "@nubojs/ui": "*",
     "express": "^4.18.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@nubojs/data": "*",
-    "@nubojs/ui": "*"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@astrojs/node": "^2.0.0",

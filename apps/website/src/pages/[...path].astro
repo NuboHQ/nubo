@@ -1,31 +1,44 @@
 ---
 import Test from '@/components/Test';
 import Layout from '../layouts/Layout.astro';
+// import { client } from '@nubojs/data';
 
-const response = await fetch('http://localhost:5003/graphql', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    query: `
-        query {
-            pages (orderBy: {title: asc}) {
-              id
-              title
-            }
-          }
-        `,
-  }),
-});
+// const result = await client.query({
+//   pages: {
+//     id: true,
+//     title: true,
+//   },
+//   websites: {
+//     id: true,
+//     domains: true,
+//   },
+// });
+// console.log(result.websites[0]);
 
-const {
-  data: { pages },
-} = await response.json();
+// const response = await fetch('http://localhost:5003/graphql', {
+//   method: 'POST',
+//   headers: { 'Content-Type': 'application/json' },
+//   body: JSON.stringify({
+//     query: `
+//         query {
+//             pages (orderBy: {title: asc}) {
+//               id
+//               title
+//             }
+//           }
+//         `,
+//   }),
+// });
+
+// const {
+//   data: { pages },
+// } = await response.json();
 ---
 
 <Layout title="Nubo">
   <main>
     <h1 class="py-4 text-2xl font-bold">Nubo</h1>
 
-    <Test client:load pages={pages} />
+    <Test client:load pages={[]} />
   </main>
 </Layout>

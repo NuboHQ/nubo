@@ -22,6 +22,10 @@ export const startServer = async () => {
   app.use(helmet());
   app.use(cors());
 
+  app.get('/test', async (req, res) => {
+    res.json({ message: 'test' });
+  });
+
   app.use(
     '/graphql',
     graphqlHTTP({
