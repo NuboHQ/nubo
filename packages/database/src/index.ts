@@ -1,2 +1,2 @@
 export * from './prisma';
-export { resolvers } from './graphql';
+export { resolvers } from './generated/graphql';

@@ -11,7 +11,7 @@ datasource db {
 
 generator typegraphql {
   provider = "typegraphql-prisma"
-  output   = "../src/graphql"
+  output   = "../src/generated/graphql"
 }
 
 model Page {
