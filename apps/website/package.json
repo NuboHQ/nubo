@@ -15,7 +15,7 @@
     "docker:push": "docker push nubodev/nubo:0.0.1"
   },
   "dependencies": {
-    "@nubojs/data": "*",
+    "@nubojs/database": "*",
     "@nubojs/graphql": "*",
     "@nubojs/ui": "*",
     "express": "^4.18.2",

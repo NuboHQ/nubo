@@ -1,19 +1,19 @@
 ---
 import Test from '@/components/Test';
 import Layout from '../layouts/Layout.astro';
-// import { client } from '@nubojs/data';
+import { client } from '@nubojs/graphql';
 
-// const result = await client.query({
-//   pages: {
-//     id: true,
-//     title: true,
-//   },
-//   websites: {
-//     id: true,
-//     domains: true,
-//   },
-// });
-// console.log(result.websites[0]);
+const result = await client.query({
+  pages: {
+    id: true,
+    title: true,
+  },
+  websites: {
+    id: true,
+    domains: true,
+  },
+});
+console.log(result.websites[0]);
 
 // const response = await fetch('http://localhost:5003/graphql', {
 //   method: 'POST',

@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { prisma, resolvers } from '@nubojs/data';
+import { prisma, resolvers } from '@nubojs/database';
 import playground from 'graphql-playground-middleware-express';
 import { buildSchema } from 'type-graphql';
 import { graphqlHTTP } from 'express-graphql';

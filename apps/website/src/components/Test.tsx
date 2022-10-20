@@ -1,4 +1,4 @@
-// import type { Page } from '@nubojs/data';
+// import type { Page } from '@nubojs/database';
 import { Button } from '@nubojs/ui';
 import { FC, useEffect } from 'react';
 
