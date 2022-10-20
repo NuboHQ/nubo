@@ -1,4 +1,5 @@
-import type { Page, Website } from '@nubojs/data';
+import type { Page, Website } from '@nubojs/database';
+import { client } from '@nubojs/graphql';
 import { Button } from '@nubojs/ui';
 import { FC, useEffect } from 'react';
 
@@ -10,13 +11,14 @@ interface Props {
 const Test: FC<Props> = ({ websites, pages }) => {
   useEffect(() => {
     const fn = async () => {
-      // console.log(client);
-      // const result = await client.query({
-      //   pages: {
-      //     id: true,
-      //     title: true,
-      //   },
-      // });
+      const result = await client.query({
+        pages: {
+          id: true,
+          title: true,
+        },
+      });
+
+      console.log(result);
     };
     fn();
   }, []);

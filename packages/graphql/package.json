@@ -8,6 +8,8 @@
     "graphql:generate": "genql --esm --endpoint http://localhost:5003/graphql --output ./src/generated/graphql-client"
   },
   "dependencies": {
+    "@nubojs/config": "*",
+    "@nubojs/utils": "*",
     "@genql/runtime": "^2.10.0",
     "typescript": "latest"
   },
