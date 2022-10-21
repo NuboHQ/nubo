@@ -1,0 +1,788 @@
+type Query {
+  aggregatePage(where: PageWhereInput, orderBy: [PageOrderByWithRelationInput!], cursor: PageWhereUniqueInput, take: Int, skip: Int): AggregatePage!
+  findFirstPage(where: PageWhereInput, orderBy: [PageOrderByWithRelationInput!], cursor: PageWhereUniqueInput, take: Int, skip: Int, distinct: [PageScalarFieldEnum!]): Page
+  pages(where: PageWhereInput, orderBy: [PageOrderByWithRelationInput!], cursor: PageWhereUniqueInput, take: Int, skip: Int, distinct: [PageScalarFieldEnum!]): [Page!]!
+  page(where: PageWhereUniqueInput!): Page
+  groupByPage(where: PageWhereInput, orderBy: [PageOrderByWithAggregationInput!], by: [PageScalarFieldEnum!]!, having: PageScalarWhereWithAggregatesInput, take: Int, skip: Int): [PageGroupBy!]!
+  aggregateWebsite(where: WebsiteWhereInput, orderBy: [WebsiteOrderByWithRelationInput!], cursor: WebsiteWhereUniqueInput, take: Int, skip: Int): AggregateWebsite!
+  findFirstWebsite(where: WebsiteWhereInput, orderBy: [WebsiteOrderByWithRelationInput!], cursor: WebsiteWhereUniqueInput, take: Int, skip: Int, distinct: [WebsiteScalarFieldEnum!]): Website
+  websites(where: WebsiteWhereInput, orderBy: [WebsiteOrderByWithRelationInput!], cursor: WebsiteWhereUniqueInput, take: Int, skip: Int, distinct: [WebsiteScalarFieldEnum!]): [Website!]!
+  website(where: WebsiteWhereUniqueInput!): Website
+  groupByWebsite(where: WebsiteWhereInput, orderBy: [WebsiteOrderByWithAggregationInput!], by: [WebsiteScalarFieldEnum!]!, having: WebsiteScalarWhereWithAggregatesInput, take: Int, skip: Int): [WebsiteGroupBy!]!
+}
+
+type AggregatePage {
+  _count: PageCountAggregate
+  _min: PageMinAggregate
+  _max: PageMaxAggregate
+}
+
+type PageCountAggregate {
+  id: Int!
+  created: Int!
+  updated: Int!
+  title: Int!
+  path: Int!
+  websiteId: Int!
+  _all: Int!
+}
+
+type PageMinAggregate {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String
+  path: String
+  websiteId: String
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type PageMaxAggregate {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String
+  path: String
+  websiteId: String
+}
+
+input PageWhereInput {
+  AND: [PageWhereInput!]
+  OR: [PageWhereInput!]
+  NOT: [PageWhereInput!]
+  id: StringFilter
+  created: DateTimeFilter
+  updated: DateTimeFilter
+  title: StringFilter
+  path: StringNullableFilter
+  websiteId: StringFilter
+  website: WebsiteRelationFilter
+}
+
+input StringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input NestedStringFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringFilter
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
+input NestedStringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableFilter
+}
+
+input WebsiteRelationFilter {
+  is: WebsiteWhereInput
+  isNot: WebsiteWhereInput
+}
+
+input WebsiteWhereInput {
+  AND: [WebsiteWhereInput!]
+  OR: [WebsiteWhereInput!]
+  NOT: [WebsiteWhereInput!]
+  id: StringFilter
+  created: DateTimeFilter
+  updated: DateTimeFilter
+  name: StringFilter
+  domains: JsonFilter
+  pages: PageListRelationFilter
+}
+
+input JsonFilter {
+  equals: JSON
+  path: String
+  string_contains: String
+  string_starts_with: String
+  string_ends_with: String
+  array_contains: JSON
+  array_starts_with: JSON
+  array_ends_with: JSON
+  lt: JSON
+  lte: JSON
+  gt: JSON
+  gte: JSON
+  not: JSON
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+input PageListRelationFilter {
+  every: PageWhereInput
+  some: PageWhereInput
+  none: PageWhereInput
+}
+
+input PageOrderByWithRelationInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  title: SortOrder
+  path: SortOrder
+  websiteId: SortOrder
+  website: WebsiteOrderByWithRelationInput
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input WebsiteOrderByWithRelationInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  name: SortOrder
+  domains: SortOrder
+  pages: PageOrderByRelationAggregateInput
+}
+
+input PageOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input PageWhereUniqueInput {
+  id: String
+}
+
+type Page {
+  id: String!
+  created: DateTime!
+  updated: DateTime!
+  title: String!
+  path: String
+  websiteId: String!
+  website: Website!
+}
+
+type Website {
+  id: String!
+  created: DateTime!
+  updated: DateTime!
+  name: String!
+  domains: JSON!
+  _count: WebsiteCount
+  pages(where: PageWhereInput, orderBy: [PageOrderByWithRelationInput!], cursor: PageWhereUniqueInput, take: Int, skip: Int, distinct: [PageScalarFieldEnum!]): [Page!]!
+}
+
+type WebsiteCount {
+  pages: Int!
+}
+
+enum PageScalarFieldEnum {
+  id
+  created
+  updated
+  title
+  path
+  websiteId
+}
+
+type PageGroupBy {
+  id: String!
+  created: DateTime!
+  updated: DateTime!
+  title: String!
+  path: String
+  websiteId: String!
+  _count: PageCountAggregate
+  _min: PageMinAggregate
+  _max: PageMaxAggregate
+}
+
+input PageOrderByWithAggregationInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  title: SortOrder
+  path: SortOrder
+  websiteId: SortOrder
+  _count: PageCountOrderByAggregateInput
+  _max: PageMaxOrderByAggregateInput
+  _min: PageMinOrderByAggregateInput
+}
+
+input PageCountOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  title: SortOrder
+  path: SortOrder
+  websiteId: SortOrder
+}
+
+input PageMaxOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  title: SortOrder
+  path: SortOrder
+  websiteId: SortOrder
+}
+
+input PageMinOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  title: SortOrder
+  path: SortOrder
+  websiteId: SortOrder
+}
+
+input PageScalarWhereWithAggregatesInput {
+  AND: [PageScalarWhereWithAggregatesInput!]
+  OR: [PageScalarWhereWithAggregatesInput!]
+  NOT: [PageScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  created: DateTimeWithAggregatesFilter
+  updated: DateTimeWithAggregatesFilter
+  title: StringWithAggregatesFilter
+  path: StringNullableWithAggregatesFilter
+  websiteId: StringWithAggregatesFilter
+}
+
+input StringWithAggregatesFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringWithAggregatesFilter
+  _count: NestedIntFilter
+  _min: NestedStringFilter
+  _max: NestedStringFilter
+}
+
+input NestedStringWithAggregatesFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringWithAggregatesFilter
+  _count: NestedIntFilter
+  _min: NestedStringFilter
+  _max: NestedStringFilter
+}
+
+input NestedIntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntFilter
+}
+
+input DateTimeWithAggregatesFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeWithAggregatesFilter
+  _count: NestedIntFilter
+  _min: NestedDateTimeFilter
+  _max: NestedDateTimeFilter
+}
+
+input NestedDateTimeWithAggregatesFilter {
+  equals: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  gt: DateTime
+  gte: DateTime
+  not: NestedDateTimeWithAggregatesFilter
+  _count: NestedIntFilter
+  _min: NestedDateTimeFilter
+  _max: NestedDateTimeFilter
+}
+
+input StringNullableWithAggregatesFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableWithAggregatesFilter
+  _count: NestedIntNullableFilter
+  _min: NestedStringNullableFilter
+  _max: NestedStringNullableFilter
+}
+
+input NestedStringNullableWithAggregatesFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  not: NestedStringNullableWithAggregatesFilter
+  _count: NestedIntNullableFilter
+  _min: NestedStringNullableFilter
+  _max: NestedStringNullableFilter
+}
+
+input NestedIntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: NestedIntNullableFilter
+}
+
+type AggregateWebsite {
+  _count: WebsiteCountAggregate
+  _min: WebsiteMinAggregate
+  _max: WebsiteMaxAggregate
+}
+
+type WebsiteCountAggregate {
+  id: Int!
+  created: Int!
+  updated: Int!
+  name: Int!
+  domains: Int!
+  _all: Int!
+}
+
+type WebsiteMinAggregate {
+  id: String
+  created: DateTime
+  updated: DateTime
+  name: String
+}
+
+type WebsiteMaxAggregate {
+  id: String
+  created: DateTime
+  updated: DateTime
+  name: String
+}
+
+input WebsiteWhereUniqueInput {
+  id: String
+}
+
+enum WebsiteScalarFieldEnum {
+  id
+  created
+  updated
+  name
+  domains
+}
+
+type WebsiteGroupBy {
+  id: String!
+  created: DateTime!
+  updated: DateTime!
+  name: String!
+  domains: JSON!
+  _count: WebsiteCountAggregate
+  _min: WebsiteMinAggregate
+  _max: WebsiteMaxAggregate
+}
+
+input WebsiteOrderByWithAggregationInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  name: SortOrder
+  domains: SortOrder
+  _count: WebsiteCountOrderByAggregateInput
+  _max: WebsiteMaxOrderByAggregateInput
+  _min: WebsiteMinOrderByAggregateInput
+}
+
+input WebsiteCountOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  name: SortOrder
+  domains: SortOrder
+}
+
+input WebsiteMaxOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  name: SortOrder
+}
+
+input WebsiteMinOrderByAggregateInput {
+  id: SortOrder
+  created: SortOrder
+  updated: SortOrder
+  name: SortOrder
+}
+
+input WebsiteScalarWhereWithAggregatesInput {
+  AND: [WebsiteScalarWhereWithAggregatesInput!]
+  OR: [WebsiteScalarWhereWithAggregatesInput!]
+  NOT: [WebsiteScalarWhereWithAggregatesInput!]
+  id: StringWithAggregatesFilter
+  created: DateTimeWithAggregatesFilter
+  updated: DateTimeWithAggregatesFilter
+  name: StringWithAggregatesFilter
+  domains: JsonWithAggregatesFilter
+}
+
+input JsonWithAggregatesFilter {
+  equals: JSON
+  path: String
+  string_contains: String
+  string_starts_with: String
+  string_ends_with: String
+  array_contains: JSON
+  array_starts_with: JSON
+  array_ends_with: JSON
+  lt: JSON
+  lte: JSON
+  gt: JSON
+  gte: JSON
+  not: JSON
+  _count: NestedIntFilter
+  _min: NestedJsonFilter
+  _max: NestedJsonFilter
+}
+
+input NestedJsonFilter {
+  equals: JSON
+  path: String
+  string_contains: String
+  string_starts_with: String
+  string_ends_with: String
+  array_contains: JSON
+  array_starts_with: JSON
+  array_ends_with: JSON
+  lt: JSON
+  lte: JSON
+  gt: JSON
+  gte: JSON
+  not: JSON
+}
+
+type Mutation {
+  createManyPage(data: [PageCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createOnePage(data: PageCreateInput!): Page!
+  deleteManyPage(where: PageWhereInput): AffectedRowsOutput!
+  deleteOnePage(where: PageWhereUniqueInput!): Page
+  updateManyPage(data: PageUpdateManyMutationInput!, where: PageWhereInput): AffectedRowsOutput!
+  updateOnePage(data: PageUpdateInput!, where: PageWhereUniqueInput!): Page
+  upsertOnePage(where: PageWhereUniqueInput!, create: PageCreateInput!, update: PageUpdateInput!): Page!
+  createManyWebsite(data: [WebsiteCreateManyInput!]!, skipDuplicates: Boolean): AffectedRowsOutput!
+  createOneWebsite(data: WebsiteCreateInput!): Website!
+  deleteManyWebsite(where: WebsiteWhereInput): AffectedRowsOutput!
+  deleteOneWebsite(where: WebsiteWhereUniqueInput!): Website
+  updateManyWebsite(data: WebsiteUpdateManyMutationInput!, where: WebsiteWhereInput): AffectedRowsOutput!
+  updateOneWebsite(data: WebsiteUpdateInput!, where: WebsiteWhereUniqueInput!): Website
+  upsertOneWebsite(where: WebsiteWhereUniqueInput!, create: WebsiteCreateInput!, update: WebsiteUpdateInput!): Website!
+}
+
+type AffectedRowsOutput {
+  count: Int!
+}
+
+input PageCreateManyInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String!
+  path: String
+  websiteId: String!
+}
+
+input PageCreateInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String!
+  path: String
+  website: WebsiteCreateNestedOneWithoutPagesInput!
+}
+
+input WebsiteCreateNestedOneWithoutPagesInput {
+  create: WebsiteCreateWithoutPagesInput
+  connectOrCreate: WebsiteCreateOrConnectWithoutPagesInput
+  connect: WebsiteWhereUniqueInput
+}
+
+input WebsiteCreateWithoutPagesInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  name: String!
+  domains: JSON!
+}
+
+input WebsiteCreateOrConnectWithoutPagesInput {
+  where: WebsiteWhereUniqueInput!
+  create: WebsiteCreateWithoutPagesInput!
+}
+
+input PageUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  path: NullableStringFieldUpdateOperationsInput
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
+input PageUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  path: NullableStringFieldUpdateOperationsInput
+  website: WebsiteUpdateOneRequiredWithoutPagesNestedInput
+}
+
+input WebsiteUpdateOneRequiredWithoutPagesNestedInput {
+  create: WebsiteCreateWithoutPagesInput
+  connectOrCreate: WebsiteCreateOrConnectWithoutPagesInput
+  upsert: WebsiteUpsertWithoutPagesInput
+  connect: WebsiteWhereUniqueInput
+  update: WebsiteUpdateWithoutPagesInput
+}
+
+input WebsiteUpsertWithoutPagesInput {
+  update: WebsiteUpdateWithoutPagesInput!
+  create: WebsiteCreateWithoutPagesInput!
+}
+
+input WebsiteUpdateWithoutPagesInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  domains: JSON
+}
+
+input WebsiteCreateManyInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  name: String!
+  domains: JSON!
+}
+
+input WebsiteCreateInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  name: String!
+  domains: JSON!
+  pages: PageCreateNestedManyWithoutWebsiteInput
+}
+
+input PageCreateNestedManyWithoutWebsiteInput {
+  create: [PageCreateWithoutWebsiteInput!]
+  connectOrCreate: [PageCreateOrConnectWithoutWebsiteInput!]
+  createMany: PageCreateManyWebsiteInputEnvelope
+  connect: [PageWhereUniqueInput!]
+}
+
+input PageCreateWithoutWebsiteInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String!
+  path: String
+}
+
+input PageCreateOrConnectWithoutWebsiteInput {
+  where: PageWhereUniqueInput!
+  create: PageCreateWithoutWebsiteInput!
+}
+
+input PageCreateManyWebsiteInputEnvelope {
+  data: [PageCreateManyWebsiteInput!]!
+  skipDuplicates: Boolean
+}
+
+input PageCreateManyWebsiteInput {
+  id: String
+  created: DateTime
+  updated: DateTime
+  title: String!
+  path: String
+}
+
+input WebsiteUpdateManyMutationInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  domains: JSON
+}
+
+input WebsiteUpdateInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  domains: JSON
+  pages: PageUpdateManyWithoutWebsiteNestedInput
+}
+
+input PageUpdateManyWithoutWebsiteNestedInput {
+  create: [PageCreateWithoutWebsiteInput!]
+  connectOrCreate: [PageCreateOrConnectWithoutWebsiteInput!]
+  upsert: [PageUpsertWithWhereUniqueWithoutWebsiteInput!]
+  createMany: PageCreateManyWebsiteInputEnvelope
+  set: [PageWhereUniqueInput!]
+  disconnect: [PageWhereUniqueInput!]
+  delete: [PageWhereUniqueInput!]
+  connect: [PageWhereUniqueInput!]
+  update: [PageUpdateWithWhereUniqueWithoutWebsiteInput!]
+  updateMany: [PageUpdateManyWithWhereWithoutWebsiteInput!]
+  deleteMany: [PageScalarWhereInput!]
+}
+
+input PageUpsertWithWhereUniqueWithoutWebsiteInput {
+  where: PageWhereUniqueInput!
+  update: PageUpdateWithoutWebsiteInput!
+  create: PageCreateWithoutWebsiteInput!
+}
+
+input PageUpdateWithoutWebsiteInput {
+  id: StringFieldUpdateOperationsInput
+  created: DateTimeFieldUpdateOperationsInput
+  updated: DateTimeFieldUpdateOperationsInput
+  title: StringFieldUpdateOperationsInput
+  path: NullableStringFieldUpdateOperationsInput
+}
+
+input PageUpdateWithWhereUniqueWithoutWebsiteInput {
+  where: PageWhereUniqueInput!
+  data: PageUpdateWithoutWebsiteInput!
+}
+
+input PageUpdateManyWithWhereWithoutWebsiteInput {
+  where: PageScalarWhereInput!
+  data: PageUpdateManyMutationInput!
+}
+
+input PageScalarWhereInput {
+  AND: [PageScalarWhereInput!]
+  OR: [PageScalarWhereInput!]
+  NOT: [PageScalarWhereInput!]
+  id: StringFilter
+  created: DateTimeFilter
+  updated: DateTimeFilter
+  title: StringFilter
+  path: StringNullableFilter
+  websiteId: StringFilter
+}
