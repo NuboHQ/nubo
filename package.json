@@ -13,11 +13,7 @@
     "generate": "turbo run generate",
     "graphql:generate": "turbo run graphql:generate",
     "db:push": "turbo run db:push",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "docker": "npm run docker:build && npm run docker:run",
-    "docker:build": "docker build -t gcr.io/nubo-development/nubojs-api:0.0.1 .",
-    "docker:run": "docker run -d -p 5003:5003 gcr.io/nubo-development/nubojs-api:0.0.1",
-    "docker:push": "docker push gcr.io/nubo-development/nubojs-api:0.0.1"
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "dependencies": {
     "graphql": "15.3.0"
