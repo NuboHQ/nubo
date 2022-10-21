@@ -1,1 +1,1 @@
-export { resolvers } from '../generated/graphql';
+export { resolvers } from './generated/graphql';

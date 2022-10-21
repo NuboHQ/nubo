@@ -1,39 +1,39 @@
 ---
 import Test from '@/components/Test';
 import Layout from '../layouts/Layout.astro';
-import { client } from '@nubojs/graphql';
+// import { client } from '@nubojs/graphql';
 
-const result = await client.query({
-  findFirstPage: [
-    {
-      where: {
-        path: {
-          equals: Astro.url.pathname,
-        },
-      },
-    },
-    {
-      id: true,
-      title: true,
-      path: true,
-    },
-  ],
-});
-const page = result.findFirstPage;
+// const result = await client.query({
+//   findFirstPage: [
+//     {
+//       where: {
+//         path: {
+//           equals: Astro.url.pathname,
+//         },
+//       },
+//     },
+//     {
+//       id: true,
+//       title: true,
+//       path: true,
+//     },
+//   ],
+// });
+// const page = result.findFirstPage;
 
-console.log('-');
-console.log(page);
-console.log('-');
+// console.log('-');
+// console.log(page);
+// console.log('-');
 
-if (!page) {
-  return Astro.redirect('/404');
-}
+// if (!page) {
+//   return Astro.redirect('/404');
+// }
 ---
 
-<Layout title={page.title}>
+<Layout title="Nubo">
   <main>
     <h1 class="py-4 text-2xl font-bold">Nubo</h1>
 
-    {page && <Test client:load page={page} />}
+    <!-- {page && <Test client:load page={page} />} -->
   </main>
 </Layout>

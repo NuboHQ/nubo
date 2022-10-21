@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { Page } from '@nubojs/database';
 
 interface Props {
-  page: Page;
+  page: Partial<Page>;
 }
 
 const Test: FC<Props> = ({ page }) => {

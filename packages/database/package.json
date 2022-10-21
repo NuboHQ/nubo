@@ -1,11 +1,13 @@
 {
   "name": "@nubojs/database",
   "version": "0.0.0",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
-  "type": "commonjs",
+  "main": "dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf .turbo node_modules dist",
+    "build": "npm-run-all clean tsc",
+    "tsc": "tsc",
+    "clean": "rimraf .turbo dist",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
@@ -26,7 +28,9 @@
   },
   "devDependencies": {
     "@types/graphql-fields": "^1.3.4",
+    "@types/node": "^18.11.3",
     "prisma": "~4.4.0",
+    "ts-node": "^10.9.1",
     "tsup": "^6.3.0",
     "typegraphql-prisma": "^0.22.0",
     "typescript": "latest"

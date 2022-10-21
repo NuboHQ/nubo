@@ -1,10 +1,14 @@
 {
   "name": "@nubojs/api-config",
   "version": "0.0.0",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "./dist/index.js",
   "types": "src/index.ts",
-  "type": "commonjs",
-  "scripts": {},
+  "scripts": {
+    "build": "npm-run-all clean tsc",
+    "tsc": "tsc",
+    "clean": "rimraf .turbo dist"
+  },
   "dependencies": {},
   "devDependencies": {
     "typescript": "latest"
