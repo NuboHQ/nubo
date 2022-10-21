@@ -21,12 +21,8 @@ const result = await client.query({
 });
 const page = result.findFirstPage;
 
-console.log('-');
-console.log(page);
-console.log('-');
-
 if (!page) {
-  return Astro.redirect('/404');
+  return Astro.redirect('/not-found');
 }
 ---
 
