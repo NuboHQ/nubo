@@ -1,5 +1,5 @@
 {
-  "name": "@example/basics",
+  "name": "@nubojs/website",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -9,13 +9,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "clean": "rimraf dist",
-    "docker": "npm run docker:build && npm run docker:run",
-    "docker:build": "docker build -t nubodev/nubo:0.0.1 .",
-    "docker:run": "docker run -d -p 5555:5555 nubodev/nubo:0.0.1",
-    "docker:push": "docker push nubodev/nubo:0.0.1"
+    "clean": "rimraf dist"
   },
   "dependencies": {
+    "@nubojs/graphql": "*",
+    "path-to-regexp": "^6.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
