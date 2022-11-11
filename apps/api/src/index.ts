@@ -1,3 +1,9 @@
-import { startServer } from './server';
+import { api, startApi } from '@nubojs/api';
 
-startServer();
+(async () => {
+  api.get('/', async (req, res) => {
+    res.json({ message: 'nubo edge api' });
+  });
+
+  await startApi();
+})();
