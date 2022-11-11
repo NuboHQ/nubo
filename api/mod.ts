@@ -4,8 +4,8 @@ import { config } from './config.ts';
 
 export const api = opine() as NuboApi;
 
-export const startApi = () => {
+export const startApi = ({ name }: { name: string }) => {
   api.listen(config.port, () =>
-    console.log(`[nubo-api] http://localhost:${config.port}`),
+    console.log(`[${name}] http://localhost:${config.port}`),
   );
 };

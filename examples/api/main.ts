@@ -5,4 +5,4 @@ api.get('/', (_, res) => {
   res.json({ name: 'nubo-api', region: config.region });
 });
 
-startApi();
+startApi({ name: 'nubo-api' });

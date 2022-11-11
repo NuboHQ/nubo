@@ -16,4 +16,4 @@ api.get('/hello', async (_, res) => {
   res.json(data);
 });
 
-startApi();
+startApi({ name: 'nubo-functions' });
