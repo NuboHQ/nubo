@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run -A --watch=static/,routes/ dev.ts"
+    "dev": "denon run -A --unstable main.ts"
   },
   "importMap": "./import_map.json"
 }

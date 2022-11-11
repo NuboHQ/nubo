@@ -1,5 +1,0 @@
-{
-  "tasks": {
-    "website": "cd nubo-website && deno task dev"
-  }
-}
