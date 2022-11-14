@@ -1,36 +1,45 @@
-import { serve } from 'https://deno.land/std@0.140.0/http/server.ts';
 import { PrismaClient } from './generated/client/deno/edge.ts';
 
 const prisma = new PrismaClient();
 
-async function handler(request: Request) {
+const port = parseInt(Deno.env.get('PORT') || '5000');
+
+import { opine } from 'https://deno.land/x/opine@2.3.3/mod.ts';
+
+const app = opine();
+
+app.get('/', async (req, res) => {
   const log = await prisma.log.create({
     data: {
       level: 'Info',
-      message: `${request.method} ${request.url}`,
+      message: `${req.method} ${req.url}`,
       meta: {
-        headers: JSON.stringify(request.headers),
+        headers: JSON.stringify(req.headers),
       },
     },
   });
-  const body = JSON.stringify(log, null, 2);
-  return new Response(body, {
-    headers: { 'content-type': 'application/json; charset=utf-8' },
-  });
-}
 
-serve(handler);
+  res.json(log);
+});
 
-// import { Application } from 'https://deno.land/x/oak/mod.ts';
+app.get('/logs', async (_, res) => {
+  const logs = await prisma.log.findMany();
 
-// const app = new Application();
-// const port = parseInt(Deno.env.get('PORT') || '3000');
+  res.json(logs);
+});
 
-// app.use((ctx) => {
-//   console.log(ctx.request.headers);
-//   ctx.response.body = 'My Oak Server';
-// });
+app.get('/logs/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const log = await prisma.log.findUnique({ where: { id } });
 
-// console.log(`http://localhost:${port}`);
+  if (!log) {
+    res.status = 404;
 
-// await app.listen({ port });
+    return res.json({ message: 'Not found' });
+  }
+
+  // res.json(logs);
+  res.json(log);
+});
+
+app.listen(port, () => console.log(`http://localhost:${port}`));
