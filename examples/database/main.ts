@@ -1,4 +1,4 @@
-import 'https://deno.land/x/dotenv/load.ts';
+import 'https://deno.land/x/dotenv@v3.2.0/load.ts';
 import { PrismaClient } from './generated/client/deno/edge.ts';
 
 const prisma = new PrismaClient({
@@ -22,6 +22,7 @@ app.get('/', async (req, res) => {
         level: 'Info',
         message: `${req.method} ${req.url}`,
         meta: {
+          // deno-lint-ignore no-explicit-any
           headers: req.headers as any,
         },
       },
