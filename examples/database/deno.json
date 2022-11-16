@@ -1,6 +1,6 @@
 {
   "tasks": {
     "dev": "deno run -A --watch main.ts",
-    "push": "deno run -A --unstable npm:prisma db push"
+    "generate": "deno run -A --unstable npm:prisma generate --data-proxy"
   }
 }
