@@ -1764,14 +1764,6 @@ export namespace Prisma {
   export type LogScalarFieldEnum = (typeof LogScalarFieldEnum)[keyof typeof LogScalarFieldEnum]
 
 
-  export const QueryMode: {
-    default: 'default',
-    insensitive: 'insensitive'
-  };
-
-  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -1913,7 +1905,6 @@ export namespace Prisma {
     contains?: string
     startsWith?: string
     endsWith?: string
-    mode?: QueryMode
     not?: NestedStringFilter | string
   }
   export type JsonFilter = 
@@ -1925,7 +1916,7 @@ export namespace Prisma {
 
   export type JsonFilterBase = {
     equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
+    path?: string
     string_contains?: string
     string_starts_with?: string
     string_ends_with?: string
@@ -2003,7 +1994,6 @@ export namespace Prisma {
     contains?: string
     startsWith?: string
     endsWith?: string
-    mode?: QueryMode
     not?: NestedStringWithAggregatesFilter | string
     _count?: NestedIntFilter
     _min?: NestedStringFilter
@@ -2018,7 +2008,7 @@ export namespace Prisma {
 
   export type JsonWithAggregatesFilterBase = {
     equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
+    path?: string
     string_contains?: string
     string_starts_with?: string
     string_ends_with?: string
@@ -2145,7 +2135,7 @@ export namespace Prisma {
 
   export type NestedJsonFilterBase = {
     equals?: InputJsonValue | JsonNullValueFilter
-    path?: Array<string>
+    path?: string
     string_contains?: string
     string_starts_with?: string
     string_ends_with?: string

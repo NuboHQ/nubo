@@ -110,11 +110,6 @@ exports.Prisma.LogScalarFieldEnum = makeEnum({
   meta: 'meta'
 });
 
-exports.Prisma.QueryMode = makeEnum({
-  default: 'default',
-  insensitive: 'insensitive'
-});
-
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'
@@ -173,7 +168,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "postgresql",
+  "activeProvider": "mysql",
   "dataProxy": false
 }
 config.document = dmmf

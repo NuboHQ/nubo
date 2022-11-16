@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "dev": "deno run -A main.ts",
+    "push": "deno run -A --unstable npm:prisma db push"
+  }
+}

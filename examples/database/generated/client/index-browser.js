@@ -106,11 +106,6 @@ exports.Prisma.LogScalarFieldEnum = makeEnum({
   meta: 'meta'
 });
 
-exports.Prisma.QueryMode = makeEnum({
-  default: 'default',
-  insensitive: 'insensitive'
-});
-
 exports.Prisma.SortOrder = makeEnum({
   asc: 'asc',
   desc: 'desc'

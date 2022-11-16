@@ -136,7 +136,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/marcelthomas/development/deno/generated/client",
+      "value": "/Users/marcelthomas/development/nubo/examples/database/generated/client",
       "fromEnvVar": null
     },
     "config": {
