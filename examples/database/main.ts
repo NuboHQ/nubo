@@ -35,7 +35,7 @@ app.get('/', async (req, res) => {
 
 app.get('/logs', async (_, res) => {
   try {
-    const logs = await prisma.log.findMany({ take: 2 });
+    const logs = await prisma.log.findMany({ take: 10 });
 
     res.json(logs);
   } catch (error) {
