@@ -1,4 +1,4 @@
-import { api, startApi } from '../../api/mod.ts';
+import { api, startApi } from '@/nubo-api/mod.ts';
 import index from './functions/index.ts';
 import hello from './functions/hello.ts';
 
