@@ -1,0 +1,13 @@
+{
+  "importMap": "./import_map.json",
+  "tasks": {
+    "cli:dev": "denon run -A nubo-cli/nubo.ts",
+    "cli:start": "deno run -A nubo-cli/nubo.ts",
+    "cli:install": "deno install -qAf nubo-cli/nubo.ts"
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any"]
+    }
+  }
+}

@@ -1,5 +1,5 @@
-import { nubo } from '@/cli/mod.ts';
+import { nuboCli } from '@/nubo-cli/mod.ts';
 
 if (import.meta.main) {
-  nubo();
+  nuboCli();
 }
