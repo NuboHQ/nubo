@@ -9,7 +9,7 @@ export const generate = async (args: GenerateOptions) => {
   spinner.start(`Generating schema from ${args.schema}`);
   const schema = await Deno.readTextFile(args.schema);
 
-  await fetch('https://local.nubo.services/1/generate', {
+  await fetch(`${Deno.env.get('DATA_PROXY_URL')}/1/generate`, {
     method: 'POST',
     body: JSON.stringify({ schema }),
   });

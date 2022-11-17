@@ -9,7 +9,7 @@ export const push = async (args: PushOptions) => {
   spinner.start(`Pushing schema from ${args.schema}`);
   const schema = await Deno.readTextFile(args.schema);
 
-  await fetch('https://local.nubo.services/1/push', {
+  await fetch(`${Deno.env.get('DATA_PROXY_URL')}/1/push`, {
     method: 'POST',
     body: JSON.stringify({ schema }),
   });
