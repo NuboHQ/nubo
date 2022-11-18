@@ -3,7 +3,9 @@
   "tasks": {
     "cli:dev": "denon run -A --unsafely-ignore-certificate-errors nubo-cli/nubo.ts",
     "cli:start": "deno run -A nubo-cli/nubo.ts",
-    "cli:install": "deno install -qAf nubo-cli/nubo.ts"
+    "cli:install": "deno install -qAf nubo-cli/nubo.ts",
+    "example:database": "denon run -A examples/database/main.ts",
+    "example:database:dev": "denon run -A --unsafely-ignore-certificate-errors examples/database/main.ts"
   },
   "lint": {
     "rules": {

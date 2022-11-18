@@ -1,13 +1,9 @@
 import 'https://deno.land/x/dotenv@v3.2.0/load.ts';
-import { PrismaClient } from './generated/client/deno/edge.ts';
+import { prisma } from './prisma.ts';
 
-const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: Deno.env.get('DATABASE_URL'),
-    },
-  },
-});
+console.log('------');
+console.log(Deno.env.get('DATABASE_URL'));
+console.log('------');
 
 const port = parseInt(Deno.env.get('PORT') || '5000');
 
@@ -15,7 +11,37 @@ import { opine } from 'https://deno.land/x/opine@2.3.3/mod.ts';
 
 const app = opine();
 
-app.get('/', async (req, res) => {
+app.get('/', (_, res) => {
+  const now = new Date();
+
+  res.json({
+    platform: 'nubo',
+    time: `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`,
+  });
+});
+
+app.get('/cities/nubo', async (req, res) => {
+  try {
+    const limit = parseInt(req.query.limit || 0) || 10;
+    const cities = await prisma.city.findMany({ take: limit });
+    const now = new Date();
+
+    res.json({
+      platform: 'nubo',
+      database: {
+        provider: 'nubo',
+        type: 'nubosql',
+      },
+      time: `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`,
+      total: cities.length,
+      cities,
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+app.get('/log', async (req, res) => {
   try {
     const log = await prisma.log.create({
       data: {
