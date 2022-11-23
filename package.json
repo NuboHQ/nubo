@@ -11,7 +11,9 @@
     "build:client": "esbuild src/client/index.tsx --bundle --jsx=automatic --minify --outfile=.nubo/app.js",
     "build:dev": "npm-run-all clean build:client:dev",
     "build:client:dev": "esbuild src/client/index.tsx --bundle --watch --jsx=automatic --sourcemap --outfile=.nubo/app.js",
-    "clean": "rimraf .nubo"
+    "generate": "prisma generate --data-proxy",
+    "clean": "rimraf .nubo",
+    "postinstall": "npm run generate"
   },
   "dependencies": {
     "@prisma/client": "^4.6.1",
