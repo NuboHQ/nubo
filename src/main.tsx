@@ -68,7 +68,9 @@ app.get('/logs', async (c) => {
 });
 
 app.get('/', async (c) => {
-  const logs = await prisma.log.findMany();
+  const [logs] = await Promise.all([prisma.log.findMany()]);
+  // const data = result.json();
+  // console.log(data);
   const app = renderToString(<App logs={logs} />);
   const nuboData = {
     env: { environment: process.env.NODE_ENV },
@@ -101,7 +103,8 @@ if (process.env.NODE_ENV === 'production') {
   console.log(`http://localhost:${port}`);
 }
 
-export default {
-  port,
-  fetch: app.fetch,
+const start = async () => {
+  Bun.serve({ port, fetch: app.fetch });
 };
+
+start();

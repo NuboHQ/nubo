@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "target": "ESNext",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["bun-types"]
   },
   "include": ["src"]
 }

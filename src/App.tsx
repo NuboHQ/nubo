@@ -29,6 +29,7 @@ export const App: FC<Props> = ({ logs }) => {
         animate={{ rotate: 0 * 10, opacity: 1 }}
         whileHover={{ scale: 1.1, rotate: 20 }}
         whileTap={{ scale: 0.8 }}
+        onClick={() => setCount(count + 1)}
       />
 
       <br />
