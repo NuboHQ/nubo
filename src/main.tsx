@@ -4,6 +4,18 @@ import { renderToString } from 'react-dom/server';
 import { App } from './App';
 import { statSync } from 'fs';
 import { PrismaClient } from '@prisma/client/edge';
+import * as handler from './functions/hello';
+
+const warn = console.warn;
+console.warn = (...data: any) => {
+  try {
+    if (data[0].indexOf('index.html is not found') >= 0) {
+      return;
+    }
+  } catch (error) {}
+
+  warn(...data);
+};
 
 const prisma = new PrismaClient();
 
@@ -24,7 +36,28 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+app.get(handler.config.path, async (c, next) => {
+  return handler.default({
+    req: c.req,
+    region: process.env.NUBO_REGION || 'local',
+  });
+});
+
 app.get('/log', async (c) => {
+  const log = await prisma.log.create({
+    data: {
+      message: 'Hello',
+      level: 'Info',
+      meta: {
+        headers: {},
+      },
+    },
+  });
+
+  return c.json({ log });
+});
+
+app.get('/log/:id', async (c) => {
   const log = await prisma.log.create({
     data: {
       message: 'Hello',
