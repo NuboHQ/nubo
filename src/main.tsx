@@ -3,6 +3,9 @@ import { serveStatic } from 'hono/serve-static.bun';
 import { renderToString } from 'react-dom/server';
 import { App } from './App';
 import { statSync } from 'fs';
+import { PrismaClient } from '@prisma/client/edge';
+
+const prisma = new PrismaClient();
 
 const port = Number(process.env.PORT || 5000);
 const app = new Hono();
@@ -21,9 +24,33 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+app.get('/log', async (c) => {
+  const log = await prisma.log.create({
+    data: {
+      message: 'Hello',
+      level: 'Info',
+      meta: {
+        headers: {},
+      },
+    },
+  });
+
+  return c.json({ log });
+});
+
+app.get('/logs', async (c) => {
+  const logs = await prisma.log.findMany();
+
+  return c.json({ logs });
+});
+
 app.get('/', async (c) => {
-  const app = renderToString(<App />);
-  const nuboData = { env: { environment: process.env.NODE_ENV } };
+  const logs = await prisma.log.findMany();
+  const app = renderToString(<App logs={logs} />);
+  const nuboData = {
+    env: { environment: process.env.NODE_ENV },
+    props: { logs },
+  };
 
   const html = `
     <html lang="en">

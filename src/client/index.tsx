@@ -3,7 +3,10 @@ import { hydrateRoot } from 'react-dom/client';
 import { App } from '../App';
 import { config } from './config';
 
-hydrateRoot(document.getElementById('root') as HTMLElement, <App />);
+hydrateRoot(
+  document.getElementById('root') as HTMLElement,
+  <App logs={config.props.logs} />,
+);
 
 // import { createRoot } from 'react-dom/client';
 // import { App } from '../App';

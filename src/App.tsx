@@ -1,9 +1,12 @@
 import { FC, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Log } from '@prisma/client';
 
-interface Props {}
+interface Props {
+  logs: Log[];
+}
 
-export const App: FC<Props> = () => {
+export const App: FC<Props> = ({ logs }) => {
   const [count, setCount] = useState(5);
 
   return (
@@ -27,6 +30,12 @@ export const App: FC<Props> = () => {
         whileHover={{ scale: 1.1, rotate: 20 }}
         whileTap={{ scale: 0.8 }}
       />
+
+      <br />
+      <br />
+      {logs.map((log) => (
+        <div key={log.id}>{log.message}</div>
+      ))}
 
       <br />
       <br />

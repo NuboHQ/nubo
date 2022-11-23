@@ -14,6 +14,7 @@
     "clean": "rimraf .nubo"
   },
   "dependencies": {
+    "@prisma/client": "^4.6.1",
     "bun-types": "^0.2.2",
     "framer-motion": "^7.6.9",
     "hono": "^2.5.4",
@@ -28,6 +29,7 @@
     "esbuild": "^0.15.15",
     "exif-parser": "^0.1.12",
     "npm-run-all": "^4.1.5",
+    "prisma": "^4.6.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
