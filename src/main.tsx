@@ -27,6 +27,7 @@ app.get('/', async (c) => {
   const html = `
     <html lang="en">
       <head>
+        <title>Nubo</title>
         <script src="app.js" async defer></script>
       </head>
 
@@ -36,16 +37,10 @@ app.get('/', async (c) => {
     </html>
   `;
 
-  // const messages = ['Good Morning', 'Good Evening', 'Good Night', 'Gute Nacht'];
-  // const html = indexFile.replace(
-  //   '<div id="root"></div>',
-  //   `<div id="root">${await renderToString(<App />)}</div>`,
-  // );
-
   return c.html(html);
 });
 
-app.use('/*', serveStatic({ root: './public' }));
+app.use('/*', serveStatic({ root: './.nubo' }));
 
 // app.get('/', (ctx) => {
 //   return ctx.html('<h1>Nubo</h1>');

@@ -5,10 +5,12 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "build:dev": "esbuild src/index.tsx --bundle --jsx=automatic --sourcemap --outfile=.nubo/app.js",
-    "build": "esbuild src/index.tsx --bundle --jsx=automatic --minify --outfile=public/app.js",
-    "dev": "clear && bun --hot --jsx-production src/main.tsx",
-    "dev:node": "clear && nodemon src/node.tsx"
+    "build": "npm-run-all clean build:client",
+    "build:prod": "npm-run-all clean build:client:prod",
+    "build:client": "esbuild src/client/index.tsx --bundle --jsx=automatic --sourcemap --outfile=.nubo/app.js",
+    "build:client:prod": "esbuild src/client/index.tsx --bundle --jsx=automatic --minify --outfile=.nubo/app.js",
+    "dev": "clear && bun --hot src/main.tsx",
+    "clean": "rimraf .nubo"
   },
   "dependencies": {
     "baojs": "^0.2.1",
@@ -27,6 +29,8 @@
     "@types/react-dom": "^18.0.9",
     "esbuild": "^0.15.15",
     "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3"
   }
