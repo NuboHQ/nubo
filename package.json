@@ -6,10 +6,10 @@
   "license": "MIT",
   "scripts": {
     "build": "npm-run-all clean build:client",
-    "build:prod": "npm-run-all clean build:client:prod",
-    "build:client": "esbuild src/client/index.tsx --bundle --jsx=automatic --sourcemap --outfile=.nubo/app.js",
-    "build:client:prod": "esbuild src/client/index.tsx --bundle --jsx=automatic --minify --outfile=.nubo/app.js",
-    "dev": "clear && bun --hot src/main.tsx",
+    "build:client": "esbuild src/client/index.tsx --bundle --jsx=automatic --minify --outfile=.nubo/app.js",
+    "build:dev": "npm-run-all clean build:client:dev",
+    "build:client:dev": "esbuild src/client/index.tsx --bundle --watch --jsx=automatic --sourcemap --outfile=.nubo/app.js",
+    "dev": "clear && concurrently 'bun --hot src/main.tsx' 'bun run build:dev'",
     "clean": "rimraf .nubo"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
+    "concurrently": "^7.6.0",
     "esbuild": "^0.15.15",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
