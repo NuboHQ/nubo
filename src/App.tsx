@@ -11,7 +11,7 @@ export const App: FC<Props> = ({ value }) => {
     <div
       style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 100 }}
     >
-      <h1>1 Count {count}</h1>
+      <h1>Count {count}</h1>
       <br />
       <div>Value: {value}</div>
       <br />
