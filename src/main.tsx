@@ -5,17 +5,7 @@ import { App } from './App';
 import { statSync } from 'fs';
 import { PrismaClient } from '@prisma/client/edge';
 import * as handler from './functions/hello';
-
-const warn = console.warn;
-console.warn = (...data: any) => {
-  try {
-    if (data[0].indexOf('index.html is not found') >= 0) {
-      return;
-    }
-  } catch (error) {}
-
-  warn(...data);
-};
+import './logs';
 
 const prisma = new PrismaClient();
 
