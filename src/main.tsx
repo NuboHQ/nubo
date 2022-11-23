@@ -13,20 +13,26 @@ const getLastUpdated = () => {
   return data.mtime;
 };
 
-app.get('/__dev', (c) => {
-  const updated = getLastUpdated();
+if (process.env.NODE_ENV !== 'production') {
+  app.get('/__dev', (c) => {
+    const updated = getLastUpdated();
 
-  return c.json({ updated });
-});
+    return c.json({ updated });
+  });
+}
 
 app.get('/', async (c) => {
   const app = renderToString(<App />);
+  const nuboData = { env: { environment: process.env.NODE_ENV } };
 
   const html = `
     <html lang="en">
       <head>
         <title>Nubo</title>
         <script src="app.js" async defer></script>
+        <script id="__NUBO_DATA__" type="application/json">
+        ${JSON.stringify(nuboData)}
+        </script>
       </head>
 
       <body>

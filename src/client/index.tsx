@@ -1,6 +1,7 @@
 import { startDev } from '../dev';
 import { hydrateRoot } from 'react-dom/client';
 import { App } from '../App';
+import { config } from './config';
 
 hydrateRoot(document.getElementById('root') as HTMLElement, <App />);
 
@@ -11,6 +12,6 @@ hydrateRoot(document.getElementById('root') as HTMLElement, <App />);
 // const root = createRoot(container!);
 // root.render(<App />);
 
-if (process.env.NODE_ENV !== 'production') {
+if (config.env.environment !== 'production') {
   startDev();
 }

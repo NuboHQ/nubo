@@ -26,6 +26,7 @@ export const reloadOnChange = async () => {
 };
 
 export const startDev = () => {
+  console.log('[nubo-dev-server]');
   interval = setInterval(reloadOnChange, 500);
   reloadOnChange();
 };
