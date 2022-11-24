@@ -1,66 +1,20 @@
-import { FC, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Log } from '@prisma/client';
+import { value } from './value';
+import { PrismaClient } from '@prisma/client/edge';
 
-interface Props {
-  logs: Log[];
-}
+const prisma = new PrismaClient();
 
-export const App: FC<Props> = ({ logs }) => {
-  const [count, setCount] = useState(5);
+const logs = await prisma.log.findMany();
 
+export const App = () => {
   return (
-    <div
-      style={{ fontFamily: 'sans-serif', textAlign: 'center', marginTop: 100 }}
-    >
-      <h1>Count {count}</h1>
-      <br />
-      <br />
+    <div>
+      <h1>{value}</h1>
 
-      <motion.div
-        style={{
-          width: 100,
-          height: 100,
-          backgroundColor: 'cyan',
-          margin: 'auto',
-          cursor: 'pointer',
-        }}
-        initial={{ rotate: 360, opacity: 0 }}
-        animate={{ rotate: 0 * 10, opacity: 1 }}
-        whileHover={{ scale: 1.1, rotate: 20 }}
-        whileTap={{ scale: 0.8 }}
-        onClick={() => setCount(count + 1)}
-      />
-
-      <br />
-      <br />
       {logs.map((log) => (
         <div key={log.id}>{log.message}</div>
       ))}
-
-      <br />
-      <br />
-
-      <button
-        style={{ marginLeft: 10, marginRight: 10 }}
-        onClick={() => setCount(count - 1)}
-      >
-        -
-      </button>
-
-      <button
-        style={{ marginLeft: 10, marginRight: 10 }}
-        onClick={() => setCount(0)}
-      >
-        0
-      </button>
-
-      <button
-        style={{ marginLeft: 10, marginRight: 10 }}
-        onClick={() => setCount(count + 1)}
-      >
-        +
-      </button>
     </div>
   );
 };
+
+export const props = { logs, value };

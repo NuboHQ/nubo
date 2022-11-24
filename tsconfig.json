@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "node",
     "outDir": "dist",
@@ -9,5 +9,5 @@
     "sourceMap": true,
     "types": ["bun-types"]
   },
-  "include": ["src"]
+  "include": ["src", "index.tsx"]
 }

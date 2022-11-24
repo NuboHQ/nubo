@@ -1,0 +1,13 @@
+#!/bin/bash
+
+CMD=$1
+
+if [ "$CMD" = "dev" ]; then
+   cd node_modules/nubo && bun run dev
+elif [ "$CMD" = "build" ]; then
+   cd node_modules/nubo && bun run build
+elif [ "$CMD" = "start" ]; then
+   echo "start it up"
+else
+  echo "Unknown command: $CMD"
+fi
