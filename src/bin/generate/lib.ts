@@ -59,15 +59,17 @@ export const generate = (path: string) => {
   });
 
   const wrapServerCodeLinesStart = [
+    `let Nubo: any = null;`,
     'export let config;',
     ...config.propsKeys.map((key) => `let ${key};`),
-    'export const getServerProps = async () => {',
+    'export const getServerProps = async (nubo: any) => {',
+    'Nubo = nubo;',
   ];
   const wrapServerCodeLinesEnd = [
     'return config;',
     '};',
-    'await getServerProps();',
-    ...config.propsKeys.map((key) => `${key} = config.props.${key};`),
+    'await getServerProps(Nubo);',
+    ...config.propsKeys.map((key) => `${key} = config?.props?.${key} || {};`),
   ];
   const formattedServerLines = [...serverLines];
   formattedServerLines.splice(

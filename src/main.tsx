@@ -124,10 +124,13 @@ app.get('/logs', async (c) => {
 
 app.get('/', async (c) => {
   try {
+    console.log('GET /');
     const url = './.nubo-src/main.server';
-    const main = await import(url);
-
-    const config = await main.getServerProps();
+    await import(url);
+    let main = await import(url);
+    const Nubo = { req: c.req };
+    const config = await main.getServerProps(Nubo);
+    main = await import(url);
 
     const app = renderToString(<main.default />);
     const nuboData = {

@@ -1,7 +1,7 @@
 ---
 import { FC } from 'react';
 
-const id = 22;
+const id = 1;
 const result = await fetch(`https://dummyjson.com/products/${id}`);
 const product = await result.json();
 
