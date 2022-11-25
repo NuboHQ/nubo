@@ -1,11 +1,9 @@
+import { PrismaClient } from '@prisma/client/edge';
+import { spawnSync } from 'bun';
+import { statSync } from 'fs';
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/serve-static.bun';
 import { renderToString } from 'react-dom/server';
-import { spawnSync } from 'bun';
-import { App } from './App';
-import * as allApp from './App';
-import { statSync } from 'fs';
-import { PrismaClient } from '@prisma/client/edge';
 import * as handler from './functions/hello';
 import './logs';
 
@@ -125,18 +123,18 @@ app.get('/logs', async (c) => {
 });
 
 app.get('/', async (c) => {
-  console.log('-------');
-  console.log(allApp.props.logs);
-  console.log('-------');
-  // const [logs] = await Promise.all([prisma.log.findMany()]);
-  // const data = result.json();
-  // console.log(data);
-  const app = renderToString(<App />);
+  console.log('get start...');
+  const main = await import('./generated/main.server');
+
+  await main.getServerProps();
+
+  const app = renderToString(<main.default />);
   const nuboData = {
     env: { environment: process.env.NODE_ENV },
-    props: allApp.props,
+    props: main.config.props,
   };
 
+  console.log('get end');
   const html = `
     <html lang="en">
       <head>

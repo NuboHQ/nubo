@@ -1,0 +1,31 @@
+import { FC } from 'react';
+
+export let config;
+let value;
+
+export const getServerProps = async () => {
+  const sleep = () => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 3000);
+    });
+  };
+
+  console.log('get server start...');
+  await sleep();
+
+  const value = 'e';
+  const logs = [];
+
+  console.log('get server ready');
+  config = { path: '/logs', props: { logs, value } };
+};
+
+await getServerProps();
+
+value = config.props.value;
+
+const Page: FC = () => {
+  return <div>App {value}</div>;
+};
+
+export default Page;

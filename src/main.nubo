@@ -1,0 +1,24 @@
+// ---
+import { FC } from 'react';
+
+const sleep = () => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 5000);
+  });
+};
+
+console.log('server start...');
+await sleep();
+
+const logs = [];
+
+console.log('server ready');
+
+export const config = { path: '/logs', props: { logs } };
+// ---
+
+const Page: FC = () => {
+  return <div>App 2</div>;
+};
+
+export default Page;
