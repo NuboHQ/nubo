@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { last } from 'lodash';
 import { format } from 'prettier';
 import { createSourceFile, ScriptTarget } from 'typescript';
-import { getPropsKeys, processTypescript, reset } from './typescript';
+import { getConfig, processTypescript, resetConfig } from './typescript';
 
 export const generate = (path: string) => {
   const file = last(path.split('/'));
@@ -31,12 +31,11 @@ export const generate = (path: string) => {
     true,
   );
 
-  processTypescript(typescriptCode);
+  processTypescript(typescriptCode, path);
 
-  const propsKeys = getPropsKeys();
+  const config = getConfig(path);
 
-  reset();
-  console.log({ propsKeys });
+  resetConfig(path);
 
   const serverCodeWithBlocks = format(
     jsCode.replace(/'---'/, '//server-block'),
@@ -61,14 +60,14 @@ export const generate = (path: string) => {
 
   const wrapServerCodeLinesStart = [
     'export let config;',
-    ...propsKeys.map((key) => `let ${key};`),
+    ...config.propsKeys.map((key) => `let ${key};`),
     'export const getServerProps = async () => {',
   ];
   const wrapServerCodeLinesEnd = [
     'return config;',
     '};',
     'await getServerProps();',
-    ...propsKeys.map((key) => `${key} = config.props.${key};`),
+    ...config.propsKeys.map((key) => `${key} = config.props.${key};`),
   ];
   const formattedServerLines = [...serverLines];
   formattedServerLines.splice(
@@ -92,7 +91,7 @@ export const generate = (path: string) => {
   const clientLines = [...serverLines];
   const clientPropsLines = [
     `import {config} from '../config'`,
-    ...propsKeys.map((key) => `const ${key} = config.props.${key};`),
+    ...config.propsKeys.map((key) => `const ${key} = config.props.${key};`),
   ];
 
   clientLines.splice(0, 1);
@@ -118,7 +117,7 @@ export const generate = (path: string) => {
 
   writeFileSync(`src/.nubo-src/${serverFileName}`, serverCode, 'utf-8');
   writeFileSync(`src/.nubo-src/${clientFileName}`, clientCode, 'utf-8');
-  console.log('Generated files for:', file);
-  console.log(`  src/.nubo-src/${serverFileName}`);
-  console.log(`  src/.nubo-src/${clientFileName}`);
+  // console.log('Generated files for:', file);
+  // console.log(`  src/.nubo-src/${serverFileName}`);
+  // console.log(`  src/.nubo-src/${clientFileName}`);
 };
