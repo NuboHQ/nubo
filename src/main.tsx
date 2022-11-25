@@ -39,7 +39,6 @@ export const App = () => {
 };
 `;
 
-// const blob = Bun.file('App.client.tsx');
 await Bun.write('index.tsx', indexTsx);
 await Bun.write('App.client.tsx', appTsx);
 

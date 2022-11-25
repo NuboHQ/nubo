@@ -1,0 +1,14 @@
+//---
+import { PrismaClient } from '@prisma/client';
+import { FC } from 'react';
+
+const prisma = new PrismaClient();
+const logs = await prisma.log.findMany();
+
+export { logs };
+export { App };
+//---
+
+const App: FC = () => {
+  return <div>App</div>;
+};

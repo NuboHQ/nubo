@@ -1,13 +1,33 @@
 {
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "outDir": "dist",
-    "target": "ESNext",
+    "target": "es5",
+    "module": "commonjs",
+    "declaration": true,
     "sourceMap": true,
-    "types": ["bun-types"]
+    "outDir": "./dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
-  "include": ["src", "index.tsx"]
+  "compileOnSave": false,
+  "exclude": ["node_modules", "dist"],
+  "include": [
+    "src/**/*",
+    "**/*.nubo",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.test.ts",
+    "**/*.d.ts"
+  ]
 }
