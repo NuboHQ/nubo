@@ -3,21 +3,22 @@ import { FC } from 'react';
 
 const sleep = () => {
   return new Promise((resolve) => {
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, 500);
   });
 };
 
 await sleep();
 
 const logs = [{ id: 1, message: 'Log 1' }];
+const name = 'From Server Name';
 
-export const config = { path: '/logs', props: { logs, value: 'hello' } };
+export const config = { path: '/logs', props: { logs, value: 'hello', name } };
 ---
 
 const Page: FC = () => {
   return (
     <div>
-      <h1>Logs</h1>
+      <h1>Logs - {name}</h1>
 
       <ul>
         {logs.map((log) => (

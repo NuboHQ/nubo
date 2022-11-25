@@ -56,9 +56,6 @@ const processTypescript = (node: Node) => {
   );
 
   processTypescript(typescriptCode);
-  console.log('---');
-  console.log(propsKeys);
-  console.log('---');
 
   const serverCodeWithBlocks = format(
     jsCode.replace(/'---'/, '//server-block'),
@@ -67,15 +64,12 @@ const processTypescript = (node: Node) => {
       parser: 'babel',
     },
   );
-  const serverCode = serverCodeWithBlocks
-    .replace(/\/\/server-block/g, '')
-    .trim();
 
-  const lines = serverCodeWithBlocks.split(/\r?\n/);
+  const serverLines = serverCodeWithBlocks.split(/\r?\n/);
   let lastImportLine = -1;
   let lastServerLine = -1;
 
-  lines.forEach((line, lineIndex) => {
+  serverLines.forEach((line, lineIndex) => {
     if (line.indexOf('import') === 0) {
       lastImportLine = lineIndex;
     }
@@ -84,10 +78,47 @@ const processTypescript = (node: Node) => {
     }
   });
 
-  const removeLinesCount = lastServerLine - lastImportLine + 1;
-  const clientLines = [...lines];
+  const wrapServerCodeLinesStart = [
+    'export let config;',
+    ...propsKeys.map((key) => `let ${key};`),
+    'export const getServerProps = async () => {',
+  ];
+  const wrapServerCodeLinesEnd = [
+    '};',
+    'await getServerProps();',
+    ...propsKeys.map((key) => `${key} = config.props.${key};`),
+  ];
+  const formattedServerLines = [...serverLines];
+  formattedServerLines.splice(
+    lastImportLine + 1,
+    0,
+    ...wrapServerCodeLinesStart,
+  );
+  formattedServerLines.splice(
+    lastServerLine + wrapServerCodeLinesStart.length,
+    0,
+    ...wrapServerCodeLinesEnd,
+  );
+  const formattedServerCode = formattedServerLines.join('\n');
+  const serverCode = formattedServerCode
+    .replace(/\/\/server-block/g, '')
+    .replace('export const config', 'config')
+    .trimStart();
+
+  const removeClientLinesCount = lastServerLine - lastImportLine + 1;
+
+  const clientLines = [...serverLines];
+  const clientPropsLines = [
+    `import {config} from '../config'`,
+    ...propsKeys.map((key) => `const ${key} = config.props.${key};`),
+  ];
+
   clientLines.splice(0, 1);
-  clientLines.splice(lastImportLine, removeLinesCount);
+  clientLines.splice(lastImportLine, 0, ...clientPropsLines);
+  clientLines.splice(
+    lastImportLine + clientPropsLines.length,
+    removeClientLinesCount,
+  );
   const rawclientCode = clientLines.join('\n');
   const clientCode = format(rawclientCode, {
     semi: false,
