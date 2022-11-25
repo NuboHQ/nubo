@@ -1,19 +1,80 @@
 ---
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
-const id = 1;
-const result = await fetch(`https://dummyjson.com/products/${id}`);
+export const config = { path: '/products/:productId' };
+
+const { productId } = Nubo.req.paramData;
+
+const result = await fetch(`https://dummyjson.com/products/${productId}`);
 const product = await result.json();
 
-export const config = { path: '/logs', props: { id, product } };
+export const props = { productId, product };
 ---
 
 const Page: FC = () => {
+  const previous = product.id - 1;
+  const next = product.id + 1;
+
+  const goPrevious = () => {
+    if (previous >= 1) {
+      window.location.href = `/products/${previous}`;
+    }
+  }
+
+  const goNext = () => {
+    if (next <= 100) {
+      window.location.href = `/products/${next}`;
+    }
+  }
+
+  const onKeyPress = (event) => {
+    if (event.key === 'ArrowRight') {
+      goNext();
+    } else if (event.key === 'ArrowLeft') {
+      goPrevious();
+    } else if (event.key === 'ArrowUp') {
+      window.location.href = '/products/100'
+    } else if (event.key === 'ArrowDown') {
+      window.location.href = '/products/1'
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', onKeyPress);
+    };
+  }, []);
+
   return (
     <div>
-      <h1>{product.title}</h1>
+      {previous !== 0 && (
+        <span>
+          <a href={`/products/${previous}`}>Previous</a>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        </span>
+      )}
+
+      {next !== 101 && <a href={`/products/${next}`}>Next</a>}
+
+      <br />
+      <br />
+
+      <h1>
+        {product.brand} {product.title}
+      </h1>
+
+      <img width={200} src={product.images[0]} alt={product.title} />
+
+      <br />
+      <br />
 
       <p>{product.description}</p>
+
+      <h2>${product.price}</h2>
+
+      <pre style={{ display: 'none' }}>{JSON.stringify(product, null, 2)}</pre>
     </div>
   );
 };

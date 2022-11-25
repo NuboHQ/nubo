@@ -1,68 +1,9 @@
-import { PrismaClient } from '@prisma/client/edge';
-import { spawnSync } from 'bun';
 import { statSync } from 'fs';
 import { Hono } from 'hono';
 import { serveStatic } from 'hono/serve-static.bun';
 import { renderToString } from 'react-dom/server';
 import * as handler from './functions/hello';
 import './logs';
-
-const indexTsx = `
-import { startDev } from './src/dev';
-import { hydrateRoot } from 'react-dom/client';
-import { App } from './App.client';
-import { config } from './src/client/config';
-
-hydrateRoot(document.getElementById('root') as HTMLElement, <App />);
-
-if (config.env.environment !== 'production') {
-  startDev();
-}
-`;
-
-const appTsx = `
-import { value } from '../src/value';
-
-const logs = config.props.logs;
-
-export const App = () => {
-  return (
-    <div>
-      {value}
-      {logs.map((log) => (
-        <div key={log.id}>{log.message}</div>
-      ))}
-    </div>
-  );
-};
-`;
-
-await Bun.write('index.tsx', indexTsx);
-await Bun.write('App.client.tsx', appTsx);
-
-spawnSync(
-  [
-    'esbuild',
-    'src/client/index.tsx',
-    '--bundle',
-    '--sourcemap',
-    '--jsx=automatic',
-    '--outfile=.nubo/app.js',
-  ],
-  {
-    stderr: 'inherit',
-    stdout: 'inherit',
-    stdin: 'inherit',
-  },
-);
-
-// spawnSync(['rm', 'index.tsx', 'App.client.tsx'], {
-//   stderr: 'inherit',
-//   stdout: 'inherit',
-//   stdin: 'inherit',
-// });
-
-const prisma = new PrismaClient();
 
 const port = Number(process.env.PORT || 5000);
 const app = new Hono();
@@ -88,61 +29,28 @@ app.get(handler.config.path, async (c, next) => {
   });
 });
 
-app.get('/log', async (c) => {
-  const log = await prisma.log.create({
-    data: {
-      message: 'Hello',
-      level: 'Info',
-      meta: {
-        headers: {},
-      },
-    },
-  });
+app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
+app.get('/.nubo/*', serveStatic({ root: './' }));
 
-  return c.json({ log });
-});
+const url = './.nubo-src/main.server';
+const main = await import(url);
 
-app.get('/log/:id', async (c) => {
-  const log = await prisma.log.create({
-    data: {
-      message: 'Hello',
-      level: 'Info',
-      meta: {
-        headers: {},
-      },
-    },
-  });
-
-  return c.json({ log });
-});
-
-app.get('/logs', async (c) => {
-  const logs = await prisma.log.findMany();
-
-  return c.json({ logs });
-});
-
-app.get('/', async (c) => {
+app.get(main.config?.path || '/', async (c) => {
   try {
-    console.log('GET /');
-    const url = './.nubo-src/main.server';
-    await import(url);
-    let main = await import(url);
     const Nubo = { req: c.req };
-    const config = await main.getServerProps(Nubo);
-    main = await import(url);
+    const props = (await main.getServerProps(Nubo)) || {};
 
-    const app = renderToString(<main.default />);
+    const app = renderToString(<main.default props={props} />);
     const nuboData = {
       env: { environment: process.env.NODE_ENV },
-      props: config.props,
+      props,
     };
 
     const html = `
 	      <html lang="en">
 	        <head>
 	          <title>Nubo</title>
-	          <script src="app.js" async defer></script>
+	          <script src="/.nubo/app.js" async defer></script>
 	          <script id="__NUBO_DATA__" type="application/json">
 	          ${JSON.stringify(nuboData)}
 	          </script>
@@ -160,9 +68,6 @@ app.get('/', async (c) => {
   }
 });
 
-app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
-app.use('/*', serveStatic({ root: './.nubo' }));
-
 if (process.env.NODE_ENV === 'production') {
   console.log(`http://localhost:${port}`);
 }
@@ -173,6 +78,61 @@ if (process.env.NODE_ENV === 'production') {
 // };
 
 // start();
+
+// const indexTsx = `
+// import { startDev } from './src/dev';
+// import { hydrateRoot } from 'react-dom/client';
+// import { App } from './App.client';
+// import { config } from './src/client/config';
+
+// hydrateRoot(document.getElementById('root') as HTMLElement, <App />);
+
+// if (config.env.environment !== 'production') {
+//   startDev();
+// }
+// `;
+
+// const appTsx = `
+// import { value } from '../src/value';
+
+// const logs = config.props.logs;
+
+// export const App = () => {
+//   return (
+//     <div>
+//       {value}
+//       {logs.map((log) => (
+//         <div key={log.id}>{log.message}</div>
+//       ))}
+//     </div>
+//   );
+// };
+// `;
+
+// await Bun.write('index.tsx', indexTsx);
+// await Bun.write('App.client.tsx', appTsx);
+
+// spawnSync(
+//   [
+//     'esbuild',
+//     'src/client/index.tsx',
+//     '--bundle',
+//     '--sourcemap',
+//     '--jsx=automatic',
+//     '--outfile=.nubo/app.js',
+//   ],
+//   {
+//     stderr: 'inherit',
+//     stdout: 'inherit',
+//     stdin: 'inherit',
+//   },
+// );
+
+// spawnSync(['rm', 'index.tsx', 'App.client.tsx'], {
+//   stderr: 'inherit',
+//   stdout: 'inherit',
+//   stdin: 'inherit',
+// });
 
 export default {
   port,

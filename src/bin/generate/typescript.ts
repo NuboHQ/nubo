@@ -1,8 +1,7 @@
 import { forEachChild, Node, SyntaxKind } from 'typescript';
 
 type Config = {
-  isConfig: boolean;
-  isConfigProps: boolean;
+  isProps: boolean;
   propsKeys: string[];
 };
 
@@ -14,21 +13,16 @@ export const processTypescript = (node: Node, key: string) => {
   const config = getConfig(key);
 
   if (SyntaxKind[node.kind] === 'VariableDeclarationList') {
-    if (node.getText().indexOf('const config') === 0) {
-      config.isConfig = true;
+    if (node.getText().indexOf('const props') === 0) {
+      config.isProps = true;
     } else {
-      config.isConfig = false;
+      config.isProps = false;
     }
   }
 
-  if (config.isConfig && SyntaxKind[node.kind] === 'Identifier') {
-    if (config.isConfigProps) {
-      config.isConfigProps = true;
+  if (config.isProps && SyntaxKind[node.kind] === 'Identifier') {
+    if (node.getText() !== 'props') {
       config.propsKeys.push(node.getText());
-    }
-
-    if (node.getText() === 'props') {
-      config.isConfigProps = true;
     }
   }
 
@@ -48,5 +42,5 @@ export const setConfig = (key: string, config: Config) => {
 };
 
 export const resetConfig = (key: string) => {
-  configs[key] = { isConfig: false, isConfigProps: false, propsKeys: [] };
+  configs[key] = { isProps: false, propsKeys: [] };
 };

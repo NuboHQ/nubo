@@ -14,7 +14,12 @@ console.log('Watching for *.nubo file changes...');
 watcher.on('all', async (event, path) => {
   if (last(path.split('.')) === 'nubo') {
     console.log(`wait - compiling ${path}`);
-    generate(path);
+
+    try {
+      generate(path);
+    } catch (error) {
+      return;
+    }
 
     await shell({
       command: 'npm run build:client:dev',

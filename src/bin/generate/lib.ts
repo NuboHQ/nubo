@@ -10,116 +10,140 @@ export const generate = (path: string) => {
   if (!file) return;
 
   const fileName = file.replace('.nubo', '');
-  const serverFileName = `${fileName}.server.tsx`;
-  const clientFileName = `${fileName}.client.tsx`;
-  const nuboCode = readFileSync(`./${path}`, 'utf-8');
-  const jsCode = nuboCode
-    .split(/\r?\n/)
-    .map((line) => {
-      if (line.indexOf('---') === 0) {
-        return '//server-block';
+
+  if (!fileName) return;
+
+  try {
+    const serverFileName = `${fileName}.server.tsx`;
+    const clientFileName = `${fileName}.client.tsx`;
+    const nuboCode = readFileSync(`./${path}`, 'utf-8');
+
+    if (nuboCode.indexOf('export const config') === -1) {
+      console.warn('Missing config');
+      return;
+    }
+
+    const jsCode = nuboCode
+      .split(/\r?\n/)
+      .map((line) => {
+        if (line.indexOf('---') === 0) {
+          return '//server-block';
+        }
+
+        return line;
+      })
+      .join('\n');
+
+    const typescriptCode = createSourceFile(
+      'x.ts',
+      jsCode,
+      ScriptTarget.Latest,
+      true,
+    );
+
+    processTypescript(typescriptCode, path);
+
+    const config = getConfig(path);
+
+    const serverCodeWithBlocks = format(
+      jsCode.replace(/'---'/, '//server-block'),
+      {
+        semi: false,
+        parser: 'babel',
+      },
+    );
+
+    const serverLines = serverCodeWithBlocks.split(/\r?\n/);
+    let lastImportLine = -1;
+    let lastServerLine = -1;
+
+    serverLines.forEach((line, lineIndex) => {
+      if (line.indexOf('export const config') === 0) {
+        lastImportLine = lineIndex;
       }
+      if (line.indexOf('//server-block') === 0) {
+        lastServerLine = lineIndex;
+      }
+    });
 
-      return line;
-    })
-    .join('\n');
+    const wrapServerCodeLinesStart = [
+      `let Nubo: any = null;`,
+      'export let props;',
+      // ...config.propsKeys.map((key) => `let ${key};`),
+      'export const getServerProps = async (nubo: any) => {',
+      'Nubo = nubo;',
+      'if (!Nubo) return;',
+    ];
+    const wrapServerCodeLinesEnd = [
+      'return props;',
+      '};',
+      'await getServerProps(Nubo);',
+      // ...config.propsKeys.map((key) => `${key} = config?.props?.${key} || {};`),
+    ];
+    const formattedServerLines = [...serverLines];
+    formattedServerLines.splice(
+      lastImportLine + 1,
+      0,
+      ...wrapServerCodeLinesStart,
+    );
+    formattedServerLines.splice(
+      lastServerLine + wrapServerCodeLinesStart.length,
+      0,
+      ...wrapServerCodeLinesEnd,
+    );
+    const formattedServerCode = formattedServerLines.join('\n');
+    const serverCode = formattedServerCode
+      .replace(/\/\/server-block/g, '')
+      .replace('export const props', 'props')
+      .replace(
+        'const Page: FC = ()',
+        `const Page: FC = ({ props: { ${config.propsKeys.join(', ')} } }: any)`,
+      )
+      .trimStart();
 
-  const typescriptCode = createSourceFile(
-    'x.ts',
-    jsCode,
-    ScriptTarget.Latest,
-    true,
-  );
+    const removeClientLinesCount = lastServerLine - lastImportLine + 1;
 
-  processTypescript(typescriptCode, path);
+    const clientLines = [...serverLines];
+    const clientPropsLines = [
+      `import { clientConfig } from '../client/config'`,
+      ...config.propsKeys.map(
+        (key) => `const ${key} = clientConfig.props.${key};`,
+      ),
+    ];
 
-  const config = getConfig(path);
-
-  resetConfig(path);
-
-  const serverCodeWithBlocks = format(
-    jsCode.replace(/'---'/, '//server-block'),
-    {
+    clientLines.splice(0, 1);
+    clientLines.splice(lastImportLine, 0, ...clientPropsLines);
+    clientLines.splice(
+      lastImportLine + clientPropsLines.length,
+      removeClientLinesCount,
+    );
+    // console.log('-------');
+    // console.log(clientLines);
+    // console.log('-------');
+    const rawclientCode = clientLines.join('\n');
+    const clientCode = format(rawclientCode, {
       semi: false,
       parser: 'babel',
-    },
-  );
+    }).trim();
 
-  const serverLines = serverCodeWithBlocks.split(/\r?\n/);
-  let lastImportLine = -1;
-  let lastServerLine = -1;
+    // console.log('--SERVER----------');
+    // console.log(serverCode);
+    // console.log('--CLIENT----------');
+    // console.log(clientCode);
 
-  serverLines.forEach((line, lineIndex) => {
-    if (line.indexOf('import') === 0) {
-      lastImportLine = lineIndex;
+    if (!existsSync('src/.nubo-src')) {
+      mkdirSync('src/.nubo-src');
     }
-    if (line.indexOf('//server-block') === 0) {
-      lastServerLine = lineIndex;
-    }
-  });
 
-  const wrapServerCodeLinesStart = [
-    `let Nubo: any = null;`,
-    'export let config;',
-    ...config.propsKeys.map((key) => `let ${key};`),
-    'export const getServerProps = async (nubo: any) => {',
-    'Nubo = nubo;',
-  ];
-  const wrapServerCodeLinesEnd = [
-    'return config;',
-    '};',
-    'await getServerProps(Nubo);',
-    ...config.propsKeys.map((key) => `${key} = config?.props?.${key} || {};`),
-  ];
-  const formattedServerLines = [...serverLines];
-  formattedServerLines.splice(
-    lastImportLine + 1,
-    0,
-    ...wrapServerCodeLinesStart,
-  );
-  formattedServerLines.splice(
-    lastServerLine + wrapServerCodeLinesStart.length,
-    0,
-    ...wrapServerCodeLinesEnd,
-  );
-  const formattedServerCode = formattedServerLines.join('\n');
-  const serverCode = formattedServerCode
-    .replace(/\/\/server-block/g, '')
-    .replace('export const config', 'config')
-    .trimStart();
+    writeFileSync(`src/.nubo-src/${serverFileName}`, serverCode, 'utf-8');
+    writeFileSync(`src/.nubo-src/${clientFileName}`, clientCode, 'utf-8');
+    // console.log('Generated files for:', file);
+    // console.log(`  src/.nubo-src/${serverFileName}`);
+    // console.log(`  src/.nubo-src/${clientFileName}`);
+    resetConfig(path);
+  } catch (error) {
+    console.error(`error - Unable to compile ${path}`);
 
-  const removeClientLinesCount = lastServerLine - lastImportLine + 1;
-
-  const clientLines = [...serverLines];
-  const clientPropsLines = [
-    `import {config} from '../config'`,
-    ...config.propsKeys.map((key) => `const ${key} = config.props.${key};`),
-  ];
-
-  clientLines.splice(0, 1);
-  clientLines.splice(lastImportLine, 0, ...clientPropsLines);
-  clientLines.splice(
-    lastImportLine + clientPropsLines.length,
-    removeClientLinesCount,
-  );
-  const rawclientCode = clientLines.join('\n');
-  const clientCode = format(rawclientCode, {
-    semi: false,
-    parser: 'babel',
-  }).trim();
-
-  // console.log('--SERVER----------');
-  // console.log(serverCode);
-  // console.log('--CLIENT----------');
-  // console.log(clientCode);
-
-  if (!existsSync('src/.nubo-src')) {
-    mkdirSync('src/.nubo-src');
+    throw new Error(`Unable to compile ${path}`);
   }
-
-  writeFileSync(`src/.nubo-src/${serverFileName}`, serverCode, 'utf-8');
-  writeFileSync(`src/.nubo-src/${clientFileName}`, clientCode, 'utf-8');
-  // console.log('Generated files for:', file);
-  // console.log(`  src/.nubo-src/${serverFileName}`);
-  // console.log(`  src/.nubo-src/${clientFileName}`);
 };
