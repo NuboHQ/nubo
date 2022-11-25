@@ -131,15 +131,15 @@ export const generate = (path: string) => {
     // console.log('--CLIENT----------');
     // console.log(clientCode);
 
-    if (!existsSync('src/.nubo-src')) {
-      mkdirSync('src/.nubo-src');
+    if (!existsSync('src/.nubo-routes')) {
+      mkdirSync('src/.nubo-routes');
     }
 
-    writeFileSync(`src/.nubo-src/${serverFileName}`, serverCode, 'utf-8');
-    writeFileSync(`src/.nubo-src/${clientFileName}`, clientCode, 'utf-8');
+    writeFileSync(`src/.nubo-routes/${serverFileName}`, serverCode, 'utf-8');
+    writeFileSync(`src/.nubo-routes/${clientFileName}`, clientCode, 'utf-8');
     // console.log('Generated files for:', file);
-    // console.log(`  src/.nubo-src/${serverFileName}`);
-    // console.log(`  src/.nubo-src/${clientFileName}`);
+    // console.log(`  src/.nubo-routes/${serverFileName}`);
+    // console.log(`  src/.nubo-routes/${clientFileName}`);
     resetConfig(path);
   } catch (error) {
     console.error(`error - Unable to compile ${path}`);

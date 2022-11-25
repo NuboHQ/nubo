@@ -1,4 +1,4 @@
-import { NuboResponse } from './response';
+import { NuboResponse } from '../response';
 import { NuboContext, NuboFunctionConfig } from './types';
 
 export default (context: NuboContext) => {

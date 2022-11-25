@@ -1,12 +1,21 @@
 ---
 import { FC, useEffect } from 'react';
+import ProductDisplay from '../components/Product';
+import { Product } from '../types';
+import { NuboResponse } from '../response'
 
-export const config = { path: '/products/:productId' };
+export const config = { path: '/products/:productId', method: 'ALL' };
 
 const { productId } = Nubo.req.paramData;
 
 const result = await fetch(`https://dummyjson.com/products/${productId}`);
-const product = await result.json();
+const product: Product = await result.json();
+
+if (productId === "10") {
+  return Nubo.redirect('/');
+}
+
+return NuboResponse.json({ message: `Hello from ${Nubo.env.REGION}!` })
 
 export const props = { productId, product };
 ---
@@ -61,20 +70,7 @@ const Page: FC = () => {
       <br />
       <br />
 
-      <h1>
-        {product.brand} {product.title}
-      </h1>
-
-      <img width={200} src={product.images[0]} alt={product.title} />
-
-      <br />
-      <br />
-
-      <p>{product.description}</p>
-
-      <h2>${product.price}</h2>
-
-      <pre style={{ display: 'none' }}>{JSON.stringify(product, null, 2)}</pre>
+      <ProductDisplay product={product} />
     </div>
   );
 };

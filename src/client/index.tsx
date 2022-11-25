@@ -1,5 +1,5 @@
 import { hydrateRoot } from 'react-dom/client';
-import App from '../.nubo-src/main.client';
+import App from '../.nubo-routes/main.client';
 import { startDev } from '../dev';
 import { clientConfig } from './config';
 

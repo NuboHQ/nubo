@@ -32,13 +32,36 @@ app.get(handler.config.path, async (c, next) => {
 app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
 app.get('/.nubo/*', serveStatic({ root: './' }));
 
-const url = './.nubo-src/main.server';
+const url = './.nubo-routes/main.server';
 const main = await import(url);
+const method = main.config?.method?.toLowerCase() || 'all';
 
-app.get(main.config?.path || '/', async (c) => {
+app.get('/', (c) => {
+  return c.text('Home');
+});
+
+app[method](main.config?.path || '/', async (c) => {
   try {
-    const Nubo = { req: c.req };
-    const props = (await main.getServerProps(Nubo)) || {};
+    let redirectPath = null;
+
+    const Nubo = {
+      req: c.req,
+      env: { REGION: process.env.NUBO_REGION },
+      redirect: (path: string) => {
+        redirectPath = path;
+      },
+    };
+    const result = (await main.getServerProps(Nubo)) || {};
+
+    if (result instanceof Response) {
+      return result;
+    }
+    const props = { product: { images: [] } };
+
+    if (redirectPath) {
+      console.log(redirectPath);
+      return c.redirect(redirectPath);
+    }
 
     const app = renderToString(<main.default props={props} />);
     const nuboData = {
