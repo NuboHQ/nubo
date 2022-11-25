@@ -8,7 +8,7 @@
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": ".",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": ["node_modules/@types", "src/@types"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -22,12 +22,5 @@
   },
   "compileOnSave": false,
   "exclude": ["node_modules", "dist"],
-  "include": [
-    "src/**/*",
-    "**/*.nubo",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.test.ts",
-    "**/*.d.ts"
-  ]
+  "include": ["src/**/*", "**/*.ts", "**/*.tsx", "**/*.test.ts", "**/*.d.ts"]
 }

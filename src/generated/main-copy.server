@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 export let config;
+let logs;
 let value;
 
 export const getServerProps = async () => {
@@ -22,6 +23,7 @@ export const getServerProps = async () => {
 
 await getServerProps();
 
+logs = config.props.logs;
 value = config.props.value;
 
 const Page: FC = () => {

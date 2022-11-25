@@ -16,21 +16,16 @@
     "build:client": "esbuild src/client/index.tsx --bundle --jsx=preserve --minify --outfile=.nubo/app.js",
     "build:dev": "npm-run-all clean build:client:dev",
     "build:client:dev": "esbuild src/client/index.tsx --bundle --watch --jsx=automatic --sourcemap --outfile=.nubo/app.js",
-    "generate": "prisma generate --data-proxy",
+    "db:generate": "prisma generate --data-proxy",
     "clean": "rimraf .nubo",
-    "lint": "ts-node --project node.tsconfig.json src/lint.ts",
+    "generate": "ts-node --project node.tsconfig.json src/generate.ts",
     "postinstall": "npm run generate"
   },
   "dependencies": {
     "@prisma/client": "^4.6.1",
-    "acorn": "^8.8.1",
-    "acorn-jsx": "^5.3.2",
     "bun": "^0.0.12",
     "bun-types": "^0.2.2",
     "colors": "^1.4.0",
-    "eslint": "^8.28.0",
-    "eslint-plugin-unused-imports": "^2.0.0",
-    "events": "^3.3.0",
     "framer-motion": "^7.6.9",
     "hono": "^2.5.4",
     "import-reload": "^1.0.3",
@@ -39,9 +34,7 @@
     "prettier": "^2.8.0",
     "prettier-plugin-organize-imports": "^3.2.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "stream": "^0.0.2",
-    "util": "^0.12.5"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/eslint": "^8.4.10",
@@ -54,7 +47,6 @@
     "@typescript-eslint/parser": "^5.44.0",
     "concurrently": "^7.6.0",
     "esbuild": "^0.15.15",
-    "exif-parser": "^0.1.12",
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
     "prisma": "^4.6.1",
