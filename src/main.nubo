@@ -1,30 +1,19 @@
 ---
 import { FC } from 'react';
 
-const sleep = () => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 500);
-  });
-};
+const id = 30;
+const result = await fetch(`https://dummyjson.com/products/${id}`);
+const product = await result.json();
 
-await sleep();
-
-const logs = [{ id: 1, message: 'Log 1' }];
-const name = 'From Server Name';
-
-export const config = { path: '/logs', props: { logs, value: 'hello', name } };
+export const config = { path: '/logs', props: { id, product } };
 ---
 
 const Page: FC = () => {
   return (
     <div>
-      <h1>Logs - {name}</h1>
+      <h1>{product.title}</h1>
 
-      <ul>
-        {logs.map((log) => (
-          <li key={log.id}>{log.message}</li>
-        ))}
-      </ul>
+      <p>{product.description}</p>
     </div>
   );
 };

@@ -123,35 +123,38 @@ app.get('/logs', async (c) => {
 });
 
 app.get('/', async (c) => {
-  console.log('get start...');
-  const main = await import('./generated/main.server');
+  try {
+    const url = './.nubo-src/main.server';
+    const main = await import(url);
 
-  await main.getServerProps();
+    const config = await main.getServerProps();
 
-  const app = renderToString(<main.default />);
-  const nuboData = {
-    env: { environment: process.env.NODE_ENV },
-    props: main.config.props,
-  };
+    const app = renderToString(<main.default />);
+    const nuboData = {
+      env: { environment: process.env.NODE_ENV },
+      props: config.props,
+    };
 
-  console.log('get end');
-  const html = `
-    <html lang="en">
-      <head>
-        <title>Nubo</title>
-        <script src="app.js" async defer></script>
-        <script id="__NUBO_DATA__" type="application/json">
-        ${JSON.stringify(nuboData)}
-        </script>
-      </head>
+    const html = `
+	      <html lang="en">
+	        <head>
+	          <title>Nubo</title>
+	          <script src="app.js" async defer></script>
+	          <script id="__NUBO_DATA__" type="application/json">
+	          ${JSON.stringify(nuboData)}
+	          </script>
+	        </head>
+	
+	        <body>
+	          <div id="root">${app}</div>
+	        </body>
+	      </html>
+	    `;
 
-      <body>
-        <div id="root">${app}</div>
-      </body>
-    </html>
-  `;
-
-  return c.html(html);
+    return c.html(html);
+  } catch (error) {
+    return c.text(error.message);
+  }
 });
 
 app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));

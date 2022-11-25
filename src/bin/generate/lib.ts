@@ -1,42 +1,18 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { last } from 'lodash';
 import { format } from 'prettier';
-import {
-  createSourceFile,
-  forEachChild,
-  Node,
-  ScriptTarget,
-  SyntaxKind,
-} from 'typescript';
+import { createSourceFile, ScriptTarget } from 'typescript';
+import { getPropsKeys, processTypescript, reset } from './typescript';
 
-let isConfig = false;
-let isConfigProps = false;
-const propsKeys: string[] = [];
+export const generate = (path: string) => {
+  const file = last(path.split('/'));
 
-const processTypescript = (node: Node) => {
-  if (SyntaxKind[node.kind] === 'VariableDeclarationList') {
-    if (node.getText().indexOf('const config') === 0) {
-      isConfig = true;
-    } else {
-      isConfig = false;
-    }
-  }
+  if (!file) return;
 
-  if (isConfig && SyntaxKind[node.kind] === 'Identifier') {
-    if (isConfigProps) {
-      isConfigProps = true;
-      propsKeys.push(node.getText());
-    }
-
-    if (node.getText() === 'props') {
-      isConfigProps = true;
-    }
-  }
-
-  forEachChild(node, processTypescript);
-};
-
-(async () => {
-  const nuboCode = readFileSync('./src/main.nubo', 'utf-8');
+  const fileName = file.replace('.nubo', '');
+  const serverFileName = `${fileName}.server.tsx`;
+  const clientFileName = `${fileName}.client.tsx`;
+  const nuboCode = readFileSync(`./${path}`, 'utf-8');
   const jsCode = nuboCode
     .split(/\r?\n/)
     .map((line) => {
@@ -56,6 +32,11 @@ const processTypescript = (node: Node) => {
   );
 
   processTypescript(typescriptCode);
+
+  const propsKeys = getPropsKeys();
+
+  reset();
+  console.log({ propsKeys });
 
   const serverCodeWithBlocks = format(
     jsCode.replace(/'---'/, '//server-block'),
@@ -84,6 +65,7 @@ const processTypescript = (node: Node) => {
     'export const getServerProps = async () => {',
   ];
   const wrapServerCodeLinesEnd = [
+    'return config;',
     '};',
     'await getServerProps();',
     ...propsKeys.map((key) => `${key} = config.props.${key};`),
@@ -130,6 +112,13 @@ const processTypescript = (node: Node) => {
   // console.log('--CLIENT----------');
   // console.log(clientCode);
 
-  writeFileSync('src/generated/main.server.tsx', serverCode, 'utf-8');
-  writeFileSync('src/generated/main.client.tsx', clientCode, 'utf-8');
-})();
+  if (!existsSync('src/.nubo-src')) {
+    mkdirSync('src/.nubo-src');
+  }
+
+  writeFileSync(`src/.nubo-src/${serverFileName}`, serverCode, 'utf-8');
+  writeFileSync(`src/.nubo-src/${clientFileName}`, clientCode, 'utf-8');
+  console.log('Generated files for:', file);
+  console.log(`  src/.nubo-src/${serverFileName}`);
+  console.log(`  src/.nubo-src/${clientFileName}`);
+};
