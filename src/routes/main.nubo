@@ -1,90 +1,17 @@
----
-import { FC, useEffect } from 'react';
-import ProductDisplay from '../components/Product';
+import { FC } from 'react';
 import { Product } from '../types';
-import { NuboResponse } from '../response';
 
 const { productId } = Nubo.req.paramData;
-
-if (new URL(Nubo.req.url).pathname === '/') {
-  return new Response('The Home Page');
-}
-
-if (new URL(Nubo.req.url).pathname === '/products') {
-  const result = await fetch(`https://dummyjson.com/products`);
-  const { products } = await result.json();
-
-  return NuboResponse.json(products);
-}
-
 const result = await fetch(`https://dummyjson.com/products/${productId}`);
 const product: Product = await result.json();
-
-if (productId === '10') {
-  return NuboResponse.json({
-    message: `Hello from ${Nubo.env.region}!`,
-    product,
-  });
-}
-
-if (productId === '11') {
-  return Nubo.redirect('/');
-}
 
 export const props = { productId, product };
 ---
 
 const Page: FC = () => {
-  const previous = product.id - 1;
-  const next = product.id + 1;
-
-  const goPrevious = () => {
-    if (previous >= 1) {
-      window.location.href = `/products/${previous}`;
-    }
-  };
-
-  const goNext = () => {
-    if (next <= 100) {
-      window.location.href = `/products/${next}`;
-    }
-  };
-
-  const onKeyPress = (event) => {
-    if (event.key === 'ArrowRight') {
-      goNext();
-    } else if (event.key === 'ArrowLeft') {
-      goPrevious();
-    } else if (event.key === 'ArrowUp') {
-      window.location.href = '/products/100';
-    } else if (event.key === 'ArrowDown') {
-      window.location.href = '/products/1';
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('keydown', onKeyPress);
-
-    return () => {
-      document.removeEventListener('keydown', onKeyPress);
-    };
-  }, []);
-
   return (
     <div>
-      {previous !== 0 && (
-        <span>
-          <a href={`/products/${previous}`}>Previous</a>
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        </span>
-      )}
-
-      {next !== 101 && <a href={`/products/${next}`}>Next</a>}
-
-      <br />
-      <br />
-
-      <ProductDisplay product={product} />
+      {product.title}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { watch } from 'chokidar';
 import { last } from 'lodash';
-import shell from '../../shell';
-import { generate } from './lib';
+import shell from '../shell';
+import { generate } from './generate';
 
 const watcher = watch('.', {
   ignored: /(^|[\/\\])\../,

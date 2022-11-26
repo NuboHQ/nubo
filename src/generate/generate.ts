@@ -17,12 +17,14 @@ export const generate = (path: string) => {
     const serverFileName = `${fileName}.server.tsx`;
     const clientFileName = `${fileName}.client.tsx`;
     const nuboCode = readFileSync(`./${path}`, 'utf-8');
+    const nuboCodeWithServerLine =
+      nuboCode.indexOf('---') === -1 ? `${nuboCode}\n---` : nuboCode;
 
-    const jsCode = nuboCode
+    const jsCode = nuboCodeWithServerLine
       .split(/\r?\n/)
       .map((line) => {
         if (line.indexOf('---') === 0) {
-          return '//server-block';
+          return '//server-line';
         }
 
         return line;
@@ -41,7 +43,7 @@ export const generate = (path: string) => {
     const config = getConfig(path);
 
     const serverCodeWithBlocks = format(
-      jsCode.replace(/'---'/, '//server-block'),
+      jsCode.replace(/'---'/, '//server-line'),
       {
         semi: false,
         parser: 'babel',
@@ -56,7 +58,7 @@ export const generate = (path: string) => {
       if (line.indexOf('import') === 0) {
         lastImportLine = lineIndex;
       }
-      if (line.indexOf('//server-block') === 0) {
+      if (line.indexOf('//server-line') === 0) {
         lastServerLine = lineIndex;
       }
     });
@@ -88,7 +90,7 @@ export const generate = (path: string) => {
     );
     const formattedServerCode = formattedServerLines.join('\n');
     const serverCode = formattedServerCode
-      .replace(/\/\/server-block/g, '')
+      .replace(/\/\/server-line/g, '')
       .replace('export const props', 'props')
       .replace(
         'const Page: FC = ()',
@@ -101,12 +103,8 @@ export const generate = (path: string) => {
     const clientLines = [...serverLines];
     const clientPropsLines = [
       `import { clientConfig } from '../client/config'`,
-      ...config.propsKeys.map(
-        (key) => `const ${key} = clientConfig.props.${key};`,
-      ),
     ];
 
-    clientLines.splice(0, 1);
     clientLines.splice(lastImportLine, 0, ...clientPropsLines);
     clientLines.splice(
       lastImportLine + clientPropsLines.length,
@@ -115,8 +113,12 @@ export const generate = (path: string) => {
     // console.log('-------');
     // console.log(clientLines);
     // console.log('-------');
-    const rawclientCode = clientLines.join('\n');
-    const clientCode = format(rawclientCode, {
+    const rawClientCode = clientLines.join('\n');
+    const clientCodeWithProps = rawClientCode.replace(
+      'const Page: FC = ()',
+      `const Page: FC = ({ props: { ${config.propsKeys.join(', ')} } }: any)`,
+    );
+    const clientCode = format(clientCodeWithProps, {
       semi: false,
       parser: 'babel',
     }).trim();
@@ -142,3 +144,9 @@ export const generate = (path: string) => {
     throw new Error(`Unable to compile ${path}`);
   }
 };
+
+const [file] = process.argv.slice(2);
+
+if (file) {
+  generate(file);
+}
