@@ -14,7 +14,7 @@ export type NuboRoute = {
   id: string;
   path: string;
   method: NuboRouteMethod | NuboRouteMethod[];
-  file: string;
+  source: string;
 };
 
 export type Product = {
