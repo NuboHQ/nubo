@@ -56,7 +56,7 @@ app[method](main.config?.path || '/', async (c) => {
     if (result instanceof Response) {
       return result;
     }
-    const props = { product: { images: [] } };
+    const props = result;
 
     if (redirectPath) {
       console.log(redirectPath);
