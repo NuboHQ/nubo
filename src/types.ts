@@ -1,6 +1,19 @@
+export type NuboRouteMethod =
+  | 'ALL'
+  | 'GET'
+  | 'HEAD'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'CONNECT'
+  | 'OPTIONS'
+  | 'TRACE'
+  | 'PATCH';
+
 export type NuboRoute = {
+  id: string;
   path: string;
-  method: 'ALL' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS';
+  method: NuboRouteMethod | NuboRouteMethod[];
   file: string;
 };
 

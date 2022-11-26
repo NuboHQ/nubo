@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
 app.get('/.nubo/*', serveStatic({ root: './' }));
 
-const url = './.nubo-routes/main.server';
+const url = './.nubo-generated/main.server';
 const main = await import(url);
 
 const handler: Handler = async (c) => {
@@ -47,7 +47,6 @@ const handler: Handler = async (c) => {
     const props = result;
 
     if (redirectPath) {
-      console.log(redirectPath);
       return c.redirect(redirectPath);
     }
 
@@ -80,7 +79,11 @@ const handler: Handler = async (c) => {
 };
 
 routes.forEach((route) => {
-  app[route.method.toLowerCase()](route.path, handler);
+  const methods = Array.isArray(route.method) ? route.method : [route.method];
+
+  methods.forEach((method) => {
+    app[method.toLowerCase()](route.path, handler);
+  });
 });
 
 app.onError((error, c) => {

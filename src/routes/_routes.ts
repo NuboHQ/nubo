@@ -1,13 +1,23 @@
 import { NuboRoute } from '../types';
 
 export default [
-  { path: '/', method: 'GET', file: 'main.nubo' },
+  { id: 'home', path: '/', method: 'GET', file: 'main.nubo' },
 
-  { path: '/products', method: 'GET', file: 'main.nubo' },
+  {
+    id: 'products',
+    path: '/products',
+    method: 'ALL',
+    file: 'main.nubo',
+  },
 
-  { path: '/products/:productId', method: 'GET', file: 'main.nubo' },
+  {
+    id: 'product',
+    path: '/products/:productId',
+    method: 'GET',
+    file: 'main.nubo',
+  },
 
-  { path: 'error', method: 'GET', file: 'error.nubo' },
+  // { id: 'error', path: '*', method: 'ALL', file: 'error.nubo' },
 
-  { path: 'not-found', method: 'GET', file: 'not-found.nubo' },
+  // { id: 'not-found', path: '*', method: 'ALL', file: 'not-found.nubo' },
 ] as NuboRoute[];
