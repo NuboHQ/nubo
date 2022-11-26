@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently 'bun --hot src/main.tsx' 'npm run generate:watch'",
-    "start": "bun src/main.tsx",
+    "start": "NODE_ENV=production bun src/main.tsx",
     "build": "npm-run-all clean build:client",
     "build:cli": "esbuild src/bin/nubo.ts --bundle --platform=node --outfile=bin/nubo",
     "cli": "ts-node src/bin/nubo.ts",

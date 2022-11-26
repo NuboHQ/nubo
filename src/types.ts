@@ -1,3 +1,9 @@
+export type NuboRoute = {
+  path: string;
+  method: 'ALL' | 'GET' | 'POST' | 'PUT' | 'DELETE' | 'OPTIONS';
+  file: string;
+};
+
 export type Product = {
   id: number;
   title: string;

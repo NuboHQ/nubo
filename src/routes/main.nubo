@@ -2,23 +2,34 @@
 import { FC, useEffect } from 'react';
 import ProductDisplay from '../components/Product';
 import { Product } from '../types';
-import { NuboResponse } from '../response'
-
-export const config = { path: '/products/:productId', method: 'ALL' };
+import { NuboResponse } from '../response';
 
 const { productId } = Nubo.req.paramData;
+
+if (new URL(Nubo.req.url).pathname === '/') {
+  return new Response('The Home Page');
+}
+
+if (new URL(Nubo.req.url).pathname === '/products') {
+  const result = await fetch(`https://dummyjson.com/products`);
+  const { products } = await result.json();
+
+  return NuboResponse.json(products);
+}
 
 const result = await fetch(`https://dummyjson.com/products/${productId}`);
 const product: Product = await result.json();
 
-if (productId === "10") {
-  return NuboResponse.json({ message: `Hello from ${Nubo.env.REGION}!`, product })
+if (productId === '10') {
+  return NuboResponse.json({
+    message: `Hello from ${Nubo.env.REGION}!`,
+    product,
+  });
 }
 
-if (productId === "11") {
+if (productId === '11') {
   return Nubo.redirect('/');
 }
-
 
 export const props = { productId, product };
 ---
@@ -31,13 +42,13 @@ const Page: FC = () => {
     if (previous >= 1) {
       window.location.href = `/products/${previous}`;
     }
-  }
+  };
 
   const goNext = () => {
     if (next <= 100) {
       window.location.href = `/products/${next}`;
     }
-  }
+  };
 
   const onKeyPress = (event) => {
     if (event.key === 'ArrowRight') {
@@ -45,9 +56,9 @@ const Page: FC = () => {
     } else if (event.key === 'ArrowLeft') {
       goPrevious();
     } else if (event.key === 'ArrowUp') {
-      window.location.href = '/products/100'
+      window.location.href = '/products/100';
     } else if (event.key === 'ArrowDown') {
-      window.location.href = '/products/1'
+      window.location.href = '/products/1';
     }
   };
 

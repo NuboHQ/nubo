@@ -1,9 +1,9 @@
 import { statSync } from 'fs';
-import { Hono } from 'hono';
+import { Handler, Hono } from 'hono';
 import { serveStatic } from 'hono/serve-static.bun';
 import { renderToString } from 'react-dom/server';
-import * as handler from './functions/hello';
 import './logs';
+import routes from './routes/_routes';
 
 const port = Number(process.env.PORT || 5000);
 const app = new Hono();
@@ -22,31 +22,19 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-app.get(handler.config.path, async (c, next) => {
-  return handler.default({
-    req: c.req,
-    region: process.env.NUBO_REGION || 'local',
-  });
-});
-
 app.use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }));
 app.get('/.nubo/*', serveStatic({ root: './' }));
 
 const url = './.nubo-routes/main.server';
 const main = await import(url);
-const method = main.config?.method?.toLowerCase() || 'all';
 
-app.get('/', (c) => {
-  return c.text('Home');
-});
-
-app[method](main.config?.path || '/', async (c) => {
+const handler: Handler = async (c) => {
   try {
     let redirectPath = null;
 
     const Nubo = {
       req: c.req,
-      env: { REGION: process.env.NUBO_REGION },
+      env: { region: process.env.NUBO_REGION },
       redirect: (path: string) => {
         redirectPath = path;
       },
@@ -89,6 +77,19 @@ app[method](main.config?.path || '/', async (c) => {
   } catch (error) {
     return c.text(error.message);
   }
+};
+
+routes.forEach((route) => {
+  app[route.method.toLowerCase()](route.path, handler);
+});
+
+app.onError((error, c) => {
+  console.error(`${error.message}`);
+  return c.text(`Error - ${error.message}`, 500);
+});
+
+app.notFound((c) => {
+  return c.text(`Page not found`, 404);
 });
 
 if (process.env.NODE_ENV === 'production') {

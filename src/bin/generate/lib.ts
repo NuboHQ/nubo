@@ -18,11 +18,6 @@ export const generate = (path: string) => {
     const clientFileName = `${fileName}.client.tsx`;
     const nuboCode = readFileSync(`./${path}`, 'utf-8');
 
-    if (nuboCode.indexOf('export const config') === -1) {
-      console.warn('Missing config');
-      return;
-    }
-
     const jsCode = nuboCode
       .split(/\r?\n/)
       .map((line) => {
@@ -58,7 +53,7 @@ export const generate = (path: string) => {
     let lastServerLine = -1;
 
     serverLines.forEach((line, lineIndex) => {
-      if (line.indexOf('export const config') === 0) {
+      if (line.indexOf('import') === 0) {
         lastImportLine = lineIndex;
       }
       if (line.indexOf('//server-block') === 0) {
