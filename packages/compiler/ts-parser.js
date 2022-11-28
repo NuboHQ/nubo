@@ -1,4 +1,3 @@
-// const parser = require('@babel/parser');
 const parser = require('@typescript-eslint/parser');
 const fs = require('fs');
 
@@ -21,9 +20,13 @@ const parsed = parser.parse(code, {
 const result = { exports: [] };
 
 parsed.body.forEach((declaration) => {
+  if (declaration.type === 'ImportDeclaration') {
+    // console.log(JSON.stringify(declaration));
+  }
   if (declaration.type === 'ExportNamedDeclaration') {
     const exportName = declaration.declaration.declarations[0].id.name;
     const properties = declaration.declaration.declarations[0].init.properties;
+    console.log(exportName);
     const props = properties.map((property) => property.key.name);
 
     result.exports.push({ name: exportName, props });

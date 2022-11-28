@@ -94,11 +94,14 @@ func compile(file string) {
 		}
 	}
 
-	serverFile, err := os.Create(serverFilePath)
-	serverFile.WriteString(rawServerCode)
+	importLines := rawServerLines[0 : lastImportLine+1]
+	importsCode := strings.Join(importLines, "\n")
+
+	rawServerFile, err := os.Create(serverFilePath)
+	rawServerFile.WriteString(rawServerCode)
 
 	// -----
-	tsParserCommand := exec.Command("npm", "run", "ts-parser", serverFilePath)
+	tsParserCommand := exec.Command("npm", "run", "swc", serverFilePath)
 	tsParserStdout, err := tsParserCommand.Output()
 
 	tsRaw := string(tsParserStdout)
@@ -115,13 +118,32 @@ func compile(file string) {
 	}
 	// -----
 
+	serverCode := ""
+	serverCodeExtra := "\nexport let props;"
+	serverCodeExtra += "\n\nexport const getServerProps = async () => {"
+
+	for i := 0; i < len(rawServerLines); i++ {
+		serverCode += rawServerLines[i] + "\n"
+
+		if i == lastImportLine {
+			serverCode += "\n" + serverCodeExtra
+		}
+	}
+	serverCode += "\nreturn props;"
+	serverCode += "\n}"
+
+	if strings.Index(serverCode, "export const props") != -1 {
+		serverCode = strings.Replace(serverCode, "export const props", "props", 1)
+	}
+
+	serverFile, err := os.Create(serverFilePath)
+	serverFile.WriteString(serverCode)
+
 	// client
 	if rawClientCode != "" {
-		importLines := rawServerLines[0 : lastImportLine+1]
-		imports := strings.Join(importLines, "\n")
 		clientCodeWrapStart := "export const Page: FC = () => {"
 		clientCodeWrapEnd := "}"
-		clientCodeWrapped := imports + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
+		clientCodeWrapped := importsCode + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
 		clientCode := clientCodeWrapped
 
 		if len(propsExport.Props) > 0 {
@@ -137,8 +159,8 @@ func compile(file string) {
 		}
 	}
 
-	prettierCommand := exec.Command("npm", "run", "prettier", "out")
-	prettierCommand.Output()
+	// prettierCommand := exec.Command("npm", "run", "prettier", "out")
+	// prettierCommand.Output()
 
 	elapsed := time.Since(start)
 	fmt.Printf("[nubo:compiler] Compiled "+fileName+" - %.2fs", elapsed.Seconds())
