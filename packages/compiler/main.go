@@ -29,6 +29,15 @@ func main() {
 
 	args := os.Args[1:]
 	path := args[0]
+
+	compile(path)
+
+	fmt.Println()
+	elapsed := time.Since(start)
+	fmt.Printf("Duration: %.2fs", elapsed.Seconds())
+}
+
+func compile(path string) {
 	pathSegments := strings.Split(path, "/")
 	fileName := pathSegments[len(pathSegments)-1]
 	name := strings.Replace(fileName, ".nubo", "", 1)
@@ -54,6 +63,7 @@ func main() {
 		}
 	}
 
+	os.Remove(serverFilePath)
 	serverFile, err := os.Create(serverFilePath)
 	serverFile.WriteString(rawServerCode)
 
@@ -75,24 +85,27 @@ func main() {
 	}
 	// -----
 
-	importLines := rawServerLines[0 : lastImportLine+1]
-	imports := strings.Join(importLines, "\n")
-	clientCodeWrapStart := "export const Page: FC = () => {"
-	clientCodeWrapEnd := "}"
-	clientCodeWrapped := imports + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
-	clientPropsText := "export const Page: FC = ({ props: { " + strings.Join(propsExport.Props, ", ") + " } }: any)"
-	clientCode := strings.Replace(clientCodeWrapped, "export const Page: FC = ()", clientPropsText, 1)
+	// client
+	os.Remove(clientFilePath)
 
-	clientFile, err := os.Create(clientFilePath)
-	clientFile.WriteString(clientCode)
+	if rawClientCode != "" {
+		importLines := rawServerLines[0 : lastImportLine+1]
+		imports := strings.Join(importLines, "\n")
+		clientCodeWrapStart := "export const Page: FC = () => {"
+		clientCodeWrapEnd := "}"
+		clientCodeWrapped := imports + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
+		clientPropsText := "export const Page: FC = ({ props: { " + strings.Join(propsExport.Props, ", ") + " } }: any)"
+		clientCode := strings.Replace(clientCodeWrapped, "export const Page: FC = ()", clientPropsText, 1)
+
+		clientFile, err := os.Create(clientFilePath)
+		clientFile.WriteString(clientCode)
+
+		if err == nil {
+			fmt.Println(err)
+		}
+	}
 
 	prettierCommand := exec.Command("npm", "run", "prettier", "out")
 	prettierCommand.Output()
 
-	// prettierLines := strings.Split(string(stdout), "\n")
-	elapsed := time.Since(start)
-
-	// fmt.Println(strings.Join(prettierLines[4:len(prettierLines)-1], "\n"))
-	fmt.Println()
-	fmt.Printf("Duration: %.2fs", elapsed.Seconds())
 }
