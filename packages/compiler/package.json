@@ -7,8 +7,10 @@
     "prettier": "prettier --write",
     "ts-parser": "node ts-parser.js",
     "ts-parser:dev": "nodemon ts-parser.js",
-    "swc": "node swc.js",
-    "swc:dev": "nodemon swc.js"
+    "swc:parse": "node swc/parse.js",
+    "swc:parse:dev": "nodemon swc/parse.js",
+    "swc:transform": "node swc/transform.js",
+    "swc:transform:dev": "nodemon swc/transform.js"
   },
   "keywords": [],
   "author": "Nubo Inc.",

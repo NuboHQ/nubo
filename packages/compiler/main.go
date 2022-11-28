@@ -69,6 +69,7 @@ func compile(file string) {
 	serverFilePath := "out/" + serverFileName
 	clientFileName := name + ".client.tsx"
 	clientFilePath := "out/" + clientFileName
+	clientFilePathJs := "out/" + name + ".client.js"
 
 	removeCompiledFiles(file)
 
@@ -101,10 +102,8 @@ func compile(file string) {
 	rawServerFile, err := os.Create(serverFilePath)
 	rawServerFile.WriteString(rawServerCode)
 
-	return
-
 	// -----
-	tsParserCommand := exec.Command("npm", "run", "swc", serverFilePath)
+	tsParserCommand := exec.Command("npm", "run", "swc:parse", serverFilePath)
 	tsParserStdout, err := tsParserCommand.Output()
 
 	tsRaw := string(tsParserStdout)
@@ -144,8 +143,8 @@ func compile(file string) {
 
 	// client
 	if rawClientCode != "" {
-		clientCodeWrapStart := "export const Page: FC = () => {"
-		clientCodeWrapEnd := "}"
+		clientCodeWrapStart := "export const Page: FC = () => {\nreturn ("
+		clientCodeWrapEnd := ")}"
 		clientCodeWrapped := importsCode + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
 		clientCode := clientCodeWrapped
 
@@ -156,6 +155,12 @@ func compile(file string) {
 
 		clientFile, err := os.Create(clientFilePath)
 		clientFile.WriteString(clientCode)
+
+		tsTransformerCommand := exec.Command("npm", "run", "swc:transform", clientFilePath)
+		tsTransformerStdout, err := tsTransformerCommand.Output()
+
+		clientFileJs, err := os.Create(clientFilePathJs)
+		clientFileJs.WriteString(strings.Split(string(tsTransformerStdout), "---")[1])
 
 		if err != nil {
 			fmt.Println(err)
@@ -222,6 +227,7 @@ func removeCompiledFiles(path string) {
 	serverFilePath := "out/" + serverFileName
 	clientFileName := name + ".client.tsx"
 	clientFilePath := "out/" + clientFileName
+	clientFilePathJs := "out/" + name + ".client.js"
 
 	if fileNameParts[len(fileNameParts)-1] != "nubo" {
 		return
@@ -229,4 +235,5 @@ func removeCompiledFiles(path string) {
 
 	os.Remove(serverFilePath)
 	os.Remove(clientFilePath)
+	os.Remove(clientFilePathJs)
 }

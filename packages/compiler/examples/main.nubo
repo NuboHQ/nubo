@@ -7,3 +7,8 @@ export const props = { product }
 
 // return NuboResponse.json({ message: 'Hello from Nubo Edge!' })
 ---
+
+<div>
+  <h1>Product 1</h1>
+  <p>This is a really good description of the product.</p>
+</div>
