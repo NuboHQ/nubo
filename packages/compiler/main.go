@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 type TsResult struct {
@@ -24,9 +25,21 @@ func check(e error) {
 }
 
 func main() {
+	start := time.Now()
+
+	args := os.Args[1:]
+	path := args[0]
+	pathSegments := strings.Split(path, "/")
+	fileName := pathSegments[len(pathSegments)-1]
+	name := strings.Replace(fileName, ".nubo", "", 1)
+	serverFileName := name + ".server.tsx"
+	serverFilePath := "out/" + serverFileName
+	clientFileName := name + ".client.tsx"
+	clientFilePath := "out/" + clientFileName
+
 	_ = os.Mkdir("out", os.ModePerm)
 
-	data, err := os.ReadFile("examples/product.nubo")
+	data, err := os.ReadFile(path)
 	check(err)
 
 	parts := strings.Split(string(data), "---")
@@ -41,11 +54,11 @@ func main() {
 		}
 	}
 
-	serverFile, err := os.Create("out/product.server.tsx")
+	serverFile, err := os.Create(serverFilePath)
 	serverFile.WriteString(rawServerCode)
 
 	// -----
-	tsParserCommand := exec.Command("npm", "run", "ts-parser", "out/product.server.tsx")
+	tsParserCommand := exec.Command("npm", "run", "ts-parser", serverFilePath)
 	tsParserStdout, err := tsParserCommand.Output()
 
 	tsRaw := string(tsParserStdout)
@@ -60,8 +73,6 @@ func main() {
 			propsExport = tsResult.Exports[i]
 		}
 	}
-
-	fmt.Println(propsExport.Props)
 	// -----
 
 	importLines := rawServerLines[0 : lastImportLine+1]
@@ -72,8 +83,16 @@ func main() {
 	clientPropsText := "export const Page: FC = ({ props: { " + strings.Join(propsExport.Props, ", ") + " } }: any)"
 	clientCode := strings.Replace(clientCodeWrapped, "export const Page: FC = ()", clientPropsText, 1)
 
-	clientFile, err := os.Create("out/product.client.tsx")
+	clientFile, err := os.Create(clientFilePath)
 	clientFile.WriteString(clientCode)
 
-	exec.Command("npm", "run", "prettier")
+	prettierCommand := exec.Command("npm", "run", "prettier", "out")
+	prettierCommand.Output()
+
+	// prettierLines := strings.Split(string(stdout), "\n")
+	elapsed := time.Since(start)
+
+	// fmt.Println(strings.Join(prettierLines[4:len(prettierLines)-1], "\n"))
+	fmt.Println()
+	fmt.Printf("Duration: %.2fs", elapsed.Seconds())
 }
