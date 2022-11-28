@@ -97,8 +97,11 @@ func compile(file string) {
 	importLines := rawServerLines[0 : lastImportLine+1]
 	importsCode := strings.Join(importLines, "\n")
 
+	// create server file for swc to parse
 	rawServerFile, err := os.Create(serverFilePath)
 	rawServerFile.WriteString(rawServerCode)
+
+	return
 
 	// -----
 	tsParserCommand := exec.Command("npm", "run", "swc", serverFilePath)

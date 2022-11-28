@@ -11,12 +11,18 @@ const code = fs.readFileSync(path, 'utf-8');
     target: 'es2022',
   });
 
-  const result = { exports: [] };
+  const result = { exports: [], imports: [] };
 
   parsed.body.forEach((declaration) => {
-    // if (declaration.type === 'ImportDeclaration') {
-    //   console.log(JSON.stringify(declaration));
-    // }
+    if (declaration.type === 'ImportDeclaration') {
+      const importName = declaration.source.value;
+      const specifiers = declaration.specifiers.map(
+        (specifier) => specifier.local.value,
+      );
+
+      result.imports.push({ name: importName, specifiers });
+      // console.log(JSON.stringify(declaration));
+    }
 
     if (declaration.type === 'ExportDeclaration') {
       const exportName = declaration.declaration.declarations[0].id.value;
