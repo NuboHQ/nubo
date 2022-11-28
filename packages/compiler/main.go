@@ -122,8 +122,12 @@ func compile(file string) {
 		clientCodeWrapStart := "export const Page: FC = () => {"
 		clientCodeWrapEnd := "}"
 		clientCodeWrapped := imports + "\nimport { FC } from 'react';" + "\n\n" + clientCodeWrapStart + "\n" + rawClientCode + "\n" + clientCodeWrapEnd
-		clientPropsText := "export const Page: FC = ({ props: { " + strings.Join(propsExport.Props, ", ") + " } }: any)"
-		clientCode := strings.Replace(clientCodeWrapped, "export const Page: FC = ()", clientPropsText, 1)
+		clientCode := clientCodeWrapped
+
+		if len(propsExport.Props) > 0 {
+			clientPropsText := "export const Page: FC = ({ props: { " + strings.Join(propsExport.Props, ", ") + " } }: any)"
+			clientCode = strings.Replace(clientCodeWrapped, "export const Page: FC = ()", clientPropsText, 1)
+		}
 
 		clientFile, err := os.Create(clientFilePath)
 		clientFile.WriteString(clientCode)
@@ -137,7 +141,7 @@ func compile(file string) {
 	prettierCommand.Output()
 
 	elapsed := time.Since(start)
-	fmt.Printf("Compiled: "+fileName+" - %.2fs", elapsed.Seconds())
+	fmt.Printf("[nubo:compile] Compiled "+fileName+" - %.2fs", elapsed.Seconds())
 	fmt.Println()
 }
 
