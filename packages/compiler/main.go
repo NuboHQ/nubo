@@ -156,11 +156,14 @@ func compile(file string) {
 		clientFile, err := os.Create(clientFilePath)
 		clientFile.WriteString(clientCode)
 
-		tsTransformerCommand := exec.Command("npm", "run", "swc:transform", clientFilePath)
+		// tsTransformerCommand := exec.Command("npm", "run", "swc:transform", clientFilePath)
+		tsTransformerCommand := exec.Command("swc", "parse", clientFilePath, "-o", clientFilePathJs, "-s", "inline", "-q")
 		tsTransformerStdout, err := tsTransformerCommand.Output()
 
-		clientFileJs, err := os.Create(clientFilePathJs)
-		clientFileJs.WriteString(strings.Split(string(tsTransformerStdout), "---")[1])
+		fmt.Println(string(tsTransformerStdout))
+
+		// clientFileJs, err := os.Create(clientFilePathJs)
+		// clientFileJs.WriteString(strings.Split(string(tsTransformerStdout), "---")[1])
 
 		if err != nil {
 			fmt.Println(err)
