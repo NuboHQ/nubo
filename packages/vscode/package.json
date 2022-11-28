@@ -1,0 +1,366 @@
+{
+  "name": "nubo-vscode",
+  "displayName": "Nubo",
+  "description": "Language support for Nubo",
+  "categories": [
+    "Programming Languages",
+    "Formatters",
+    "Linters"
+  ],
+  "qna": false,
+  "keywords": [
+    "nubo",
+    "bun",
+    "typescript",
+    "javascript",
+    "react",
+    "edge",
+    "cloud"
+  ],
+  "icon": "assets/icon.png",
+  "type": "commonjs",
+  "galleryBanner": {
+    "color": "#FFBE2D",
+    "theme": "dark"
+  },
+  "version": "0.0.2",
+  "author": "Nubo Inc.",
+  "license": "MIT",
+  "publisher": "nubo",
+  "scripts": {
+    "build": "pnpm build:node & pnpm build:browser",
+    "dev": "pnpm build:node --watch & pnpm build:browser --watch",
+    "build:node": "node ./scripts/build-node.js",
+    "build:browser": "node ./scripts/build-browser.js",
+    "build:ci:node": "pnpm build:node & pnpm build:browser --empty",
+    "build:ci:browser": "pnpm build:browser & pnpm build:node --empty",
+    "test": "pnpm test:vscode && pnpm test:grammar",
+    "test:vscode": "node ./test/runTest.js",
+    "test:grammar": "node ./test/grammar/test.mjs",
+    "update-grammar-snapshots": "node ./test/grammar/test.mjs --updateSnapshot"
+  },
+  "engines": {
+    "vscode": "^1.67.0"
+  },
+  "activationEvents": [
+    "onLanguage:astro",
+    "workspaceContains:astro.config.*"
+  ],
+  "dependencies": {
+    "@astrojs/compiler": "^0.29.16",
+    "@astrojs/ts-plugin": "0.4.1",
+    "prettier": "^2.7.1",
+    "prettier-plugin-astro": "^0.7.0"
+  },
+  "devDependencies": {
+    "@astrojs/language-server": "0.29.1",
+    "@types/mocha": "^9.1.0",
+    "@types/vscode": "^1.67.0",
+    "@vscode/test-electron": "^2.1.3",
+    "esbuild": "0.14.54",
+    "esbuild-plugin-copy": "^1.3.0",
+    "glob": "^8.0.3",
+    "kleur": "^4.1.5",
+    "mocha": "^9.2.2",
+    "path-browserify": "^1.0.1",
+    "typescript": "~4.8.2",
+    "vscode-languageclient": "^8.0.1",
+    "vscode-tmgrammar-test": "^0.1.1"
+  },
+  "main": "./dist/node/client.js",
+  "browser": "./dist/browser/client.js",
+  "files": [
+    "dist/",
+    "languages/",
+    "syntaxes/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withastro/language-tools.git",
+    "directory": "packages/vscode"
+  },
+  "contributes": {
+    "typescriptServerPlugins": [
+      {
+        "name": "@astrojs/ts-plugin",
+        "enableForWorkspaceTypeScriptVersions": true
+      }
+    ],
+    "commands": [
+      {
+        "command": "astro.restartLanguageServer",
+        "title": "Astro: Restart Language Server"
+      },
+      {
+        "command": "astro.showTSXOutput",
+        "title": "Astro: Debug: Show TSX Output"
+      },
+      {
+        "command": "astro.selectTypescriptVersion",
+        "title": "Astro: Select Typescript Version..."
+      },
+      {
+        "command": "astro.findFileReferences",
+        "title": "Astro: Find File References"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "astro.findFileReferences",
+          "when": "editorLangId == astro",
+          "group": "4_search"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "astro.findFileReferences",
+          "when": "resourceLangId == astro && resourceScheme == file"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "astro.findFileReferences",
+          "when": "resourceLangId == astro",
+          "group": "4_search"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Astro configuration",
+      "properties": {
+        "astro.language-server.ls-path": {
+          "scope": "application",
+          "type": "string",
+          "title": "Language Server: Path",
+          "description": "Path to the language server executable. You won't need this in most cases, set this only when needing a specific version of the language server"
+        },
+        "astro.language-server.runtime": {
+          "scope": "application",
+          "type": "string",
+          "title": "Language Server: Runtime",
+          "description": "Path to the node executable used to execute the language server. You won't need this in most cases"
+        },
+        "astro.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        },
+        "astro.typescript.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript",
+          "description": "Enable TypeScript features"
+        },
+        "astro.typescript.allowArbitraryAttributes": {
+          "type": "boolean",
+          "default": false,
+          "title": "TypeScript: Allow arbitrary attributes on HTML elements",
+          "description": "Enable the usage of non-standard HTML attributes, such as the ones added by AlpineJS or petite-vue"
+        },
+        "astro.typescript.diagnostics.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Diagnostics",
+          "description": "Enable diagnostic messages for TypeScript"
+        },
+        "astro.typescript.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Hover Info",
+          "description": "Enable hover info for TypeScript"
+        },
+        "astro.typescript.documentSymbols.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Symbols in Outline",
+          "description": "Enable document symbols for TypeScript"
+        },
+        "astro.typescript.completions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Completions",
+          "description": "Enable completions for TypeScript"
+        },
+        "astro.typescript.definitions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Go to Definition",
+          "description": "Enable go to definition for TypeScript"
+        },
+        "astro.typescript.codeActions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Code Actions",
+          "description": "Enable code actions for TypeScript"
+        },
+        "astro.typescript.signatureHelp.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Signature Help",
+          "description": "Enable signature help (parameter hints) for TypeScript"
+        },
+        "astro.typescript.rename.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Rename",
+          "description": "Enable rename functionality for JS/TS variables inside Astro files"
+        },
+        "astro.typescript.semanticTokens.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "TypeScript: Semantic Tokens",
+          "description": "Enable semantic tokens (used for semantic highlighting) for TypeScript."
+        },
+        "astro.html.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML",
+          "description": "Enable HTML features"
+        },
+        "astro.html.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML: Hover Info",
+          "description": "Enable hover info for HTML"
+        },
+        "astro.html.completions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML: Completions",
+          "description": "Enable completions for HTML"
+        },
+        "astro.html.completions.emmet": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML: Emmet Completions",
+          "description": "Enable Emmet completions for HTML"
+        },
+        "astro.html.tagComplete.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML: Tag Completion",
+          "description": "Enable tag completion for HTML"
+        },
+        "astro.html.documentSymbols.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "HTML: Symbols in Outline",
+          "description": "Enable document symbols for CSS"
+        },
+        "astro.css.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS",
+          "description": "Enable CSS features"
+        },
+        "astro.css.hover.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS: Hover Info",
+          "description": "Enable hover info for CSS"
+        },
+        "astro.css.completions.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS: Completions",
+          "description": "Enable completions for CSS"
+        },
+        "astro.css.completions.emmet": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS: Emmet Completions",
+          "description": "Enable Emmet completions for CSS"
+        },
+        "astro.css.documentColors.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS: Document Colors",
+          "description": "Enable color picker for CSS"
+        },
+        "astro.css.documentSymbols.enabled": {
+          "type": "boolean",
+          "default": true,
+          "title": "CSS: Symbols in Outline",
+          "description": "Enable document symbols for CSS"
+        },
+        "astro.format.indentFrontmatter": {
+          "deprecationMessage": "The `astro.format` settings are deprecated. Formatting is now powered by Prettier and can be configured through a Prettier configuration file.",
+          "type": "boolean",
+          "default": false,
+          "title": "Formatting: Indent frontmatter",
+          "description": "Indent the formatter by one level of indentation"
+        },
+        "astro.format.newLineAfterFrontmatter": {
+          "deprecationMessage": "The `astro.format` settings are deprecated. Formatting is now powered by Prettier and can be configured through a Prettier configuration file.",
+          "type": "boolean",
+          "default": true,
+          "title": "Formatting: Add line return after the frontmatter",
+          "description": "Add a line return between the frontmatter and the template"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "astro",
+        "extensions": [
+          ".nubo"
+        ],
+        "aliases": [
+          "Nubo"
+        ],
+        "configuration": "./languages/astro-language-configuration.json",
+        "icon": {
+          "light": "./assets/lang-icon-nubo.svg",
+          "dark": "./assets/lang-icon-nubo.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "astro",
+        "scopeName": "source.astro",
+        "path": "./syntaxes/astro.tmLanguage.json",
+        "embeddedLanguages": {
+          "text.html": "html",
+          "text.html.markdown": "markdown",
+          "source.css": "css",
+          "source.css.less": "less",
+          "source.css.scss": "scss",
+          "source.sass": "sass",
+          "source.stylus": "stylus",
+          "source.js": "javascript",
+          "source.ts": "typescript",
+          "source.json": "json",
+          "source.tsx": "typescriptreact"
+        },
+        "unbalancedBracketScopes": [
+          "keyword.operator.relational",
+          "storage.type.function.arrow",
+          "keyword.operator.bitwise.shift",
+          "meta.brace.angle",
+          "punctuation.definition.tag"
+        ]
+      },
+      {
+        "scopeName": "text.html.markdown.astro",
+        "path": "./syntaxes/markdown.astro.tmLanguage.json",
+        "injectTo": [
+          "text.html.markdown",
+          "source.astro"
+        ],
+        "embeddedLanguages": {
+          "meta.embedded.block.astro": "astro",
+          "meta.embedded.block.astro.frontmatter": "typescriptreact"
+        }
+      }
+    ]
+  }
+}

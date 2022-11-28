@@ -1,5 +1,16 @@
-node_modules
+node_modules/
+dist/
+*.tsbuildinfo
 .DS_Store
-.env
+.vercel
+_site/
+*.log
+package-lock.json
+.turbo/
+.vscode-test/
 
-.nubo*
+# .vscode files other than at top-level
+**/.vscode
+
+# do not commit .env files or any files that end with `.env`
+*.env

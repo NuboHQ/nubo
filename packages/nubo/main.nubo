@@ -1,0 +1,13 @@
+---
+import Page from "./src/Page";
+
+const result = await fetch('https://dummyjson.com/products');
+const products: any[] = await result.json();
+
+export const props = { products };
+
+return new Response(JSON.stringify(products));
+---
+
+
+<Page />
