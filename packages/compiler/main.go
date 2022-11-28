@@ -33,7 +33,7 @@ func main() {
 	var file string
 
 	flag.BoolVar(&shouldWatch, "watch", false, "Watch directory")
-	flag.StringVar(&directory, "dir", ".", "Directory to watch")
+	flag.StringVar(&directory, "dir", "./", "Directory to watch")
 	flag.StringVar(&file, "file", "", "File to compile")
 
 	flag.Parse()
@@ -141,12 +141,13 @@ func compile(file string) {
 	prettierCommand.Output()
 
 	elapsed := time.Since(start)
-	fmt.Printf("[nubo:compile] Compiled "+fileName+" - %.2fs", elapsed.Seconds())
+	fmt.Printf("[nubo:compiler] Compiled "+fileName+" - %.2fs", elapsed.Seconds())
 	fmt.Println()
 }
 
 func watch(directory string) {
-	fmt.Println("Watching for file changes in " + directory + "...")
+	fmt.Println("[nubo-compiler] Watch directory: " + directory)
+	fmt.Println("[nubo-compiler] Waiting for file changes...")
 	// creates a new file watcher
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
