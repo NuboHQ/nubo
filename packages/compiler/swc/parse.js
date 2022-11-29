@@ -5,7 +5,14 @@ const [path] = process.argv.slice(2);
 const code = fs.readFileSync(path, 'utf-8');
 
 (async () => {
-  const parsed = await parse(code, {
+  const commentedCoded = code.split('\n').map((line) => {
+    if (line.indexOf('return') === 0) {
+      return `// ${line}`;
+    }
+    return line;
+  }).join('\n');
+
+  const parsed = await parse(commentedCoded, {
     syntax: 'typescript',
     comments: false,
     target: 'es2022',
@@ -30,8 +37,6 @@ const code = fs.readFileSync(path, 'utf-8');
 
         result.exports.push({ name: exportName, props });
       }
-    } else {
-      console.log('something else');
     }
   });
 

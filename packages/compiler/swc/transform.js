@@ -1,3 +1,7 @@
+// ---------------------------------------------------------------------------------
+// NOTE:  This file for testing purposes only. SWC is called directly from compiler.
+// ---------------------------------------------------------------------------------
+
 const { transform } = require('@swc/core');
 const fs = require('fs');
 
@@ -18,7 +22,6 @@ const code = fs.readFileSync(path, 'utf-8');
       transform: {},
     },
   });
-  
 
   console.log('---');
   console.log(result.code);

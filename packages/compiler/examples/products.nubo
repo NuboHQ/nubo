@@ -3,8 +3,9 @@ import { NuboResponse } from 'nubo';
 
 const products = await fetch('https://data.nubo.com/products');
 
+export const props = {
+  products,
+};
 
 return NuboResponse.json({ products })
 ---
-
-<div>Products</div>

@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -49,6 +51,8 @@ func main() {
 		watch(directory)
 
 		return
+	} else {
+		compileDir(directory)
 	}
 
 }
@@ -78,6 +82,10 @@ func compile(file string) {
 	data, err := os.ReadFile(file)
 	check(err)
 
+	if string(data) == "" {
+		return
+	}
+
 	parts := strings.Split(string(data), "---")
 
 	if len(parts) < 2 {
@@ -105,8 +113,8 @@ func compile(file string) {
 	// -----
 	tsParserCommand := exec.Command("npm", "run", "swc:parse", serverFilePath)
 	tsParserStdout, err := tsParserCommand.Output()
-
 	tsRaw := string(tsParserStdout)
+
 	tsString := strings.Split(tsRaw, "---")[1]
 	var tsResult TsResult
 	json.Unmarshal([]byte(tsString), &tsResult)
@@ -219,6 +227,48 @@ func watch(directory string) {
 	}
 
 	<-done
+}
+
+func compileDir(dir string) {
+	err := filepath.Walk(dir,
+		func(path string, info os.FileInfo, err error) error {
+
+			if err != nil {
+				return err
+			}
+
+			fileNameParts := strings.Split(path, ".")
+			shouldCompile := fileNameParts[len(fileNameParts)-1] == "nubo"
+
+			if shouldCompile {
+				compile(path)
+			}
+
+			return err
+		})
+
+	if err != nil {
+
+		log.Println(err)
+	}
+
+	// files, err := ioutil.ReadDir(dir)
+
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// for _, file := range files {
+	// 	fileNameParts := strings.Split(file.Name(), ".")
+
+	// 	if file.IsDir() {
+	// 		fmt.Println(file);
+	// 	} else {
+	// 		if fileNameParts[len(fileNameParts)-1] == "nubo" {
+	// 			fmt.Println(file.Name(), file.IsDir())
+	// 		}
+	// 	}
+	// }
 }
 
 func removeCompiledFiles(path string) {
