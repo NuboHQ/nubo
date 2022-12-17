@@ -8,6 +8,8 @@ elif [ "$CMD" = "build" ]; then
    cd node_modules/nubo && bun run build
 elif [ "$CMD" = "start" ]; then
    echo "start it up"
+elif [ "$CMD" = "compile" ]; then
+   node_modules/nubo/bin/nubo-compiler --file main.nubo
 else
   echo "Unknown command: $CMD"
 fi
