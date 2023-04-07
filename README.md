@@ -1,17 +1,30 @@
 # Nubo
 
-## Nubo Edge Functions
+## Install
+
+```
+npm install nubo
+```
+
+```
+yarn add nubo
+```
+
+## Usage
 
 ```typescript
-// functions/hello.ts
+import { connect } from 'nubo';
 
-import { NuboContext } from 'nubo';
+const conn = connect({ url: 'nubo://...' });
+const results = await conn.execute('SELECT * FROM users WHERE id=?', [1]);
+console.log(results);
+```
 
-export const path = '/';
+### Drizzle
 
-export const handler = () => {
-  return {
-    message: `Hello from Nubo Edge Function in ${process.env.NUBO_REGION}`,
-  };
-};
+```typescript
+import { drizzle } from 'drizzle-orm/planetscale-serverless';
+
+const connection = connect({ url: 'nubo://...' });
+const db = drizzle(connection);
 ```
