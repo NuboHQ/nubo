@@ -1,6 +1,6 @@
 {
   "name": "nubo",
-  "version": "0.0.5-alpha",
+  "version": "0.0.7-alpha",
   "description": "Nubo Client",
   "author": "Marcel Thomas",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "clean": "rimraf dist",
     "build": "npm-run-all clean build:main build:bin",
     "build:main": "tsup src/index.ts --format cjs,esm --dts",
-    "build:bin": "tsup src/nubo.ts --format cjs",
+    "build:bin": "tsup src/nubo.ts --format cjs,esm --dts",
     "lint": "tsc"
   },
   "bin": {
