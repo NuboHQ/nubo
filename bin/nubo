@@ -1,0 +1,3 @@
+#!/bin/sh
+
+node node_modules/nubo/dist/nubo.js "$1" "$2"
