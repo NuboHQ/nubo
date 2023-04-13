@@ -1,8 +1,8 @@
-import { connect as dbConnect } from '@planetscale/database';
-import fetch from 'node-fetch';
+import { connect as dbConnect, Config } from '@planetscale/database';
 
 export type NuboConnectOptions = {
   url?: string;
+  fetch?: Config['fetch'];
 };
 
 export const connect = (options?: NuboConnectOptions) => {
@@ -19,7 +19,7 @@ export const connect = (options?: NuboConnectOptions) => {
   const url = `https://${apiKey}@data.nubo.global/sql`;
 
   return dbConnect({
-    fetch,
+    ...(options?.fetch && { fetch: options.fetch }),
     url,
   });
 };
