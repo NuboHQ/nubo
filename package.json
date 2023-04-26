@@ -1,6 +1,6 @@
 {
   "name": "nubo",
-  "version": "0.0.13-alpha",
+  "version": "0.1.0",
   "description": "Nubo Client",
   "author": "Marcel Thomas",
   "license": "MIT",
@@ -30,9 +30,14 @@
     "type": "git",
     "url": "git+https://github.com/NuboHQ/nubo.git"
   },
-  "keywords": [],
+  "keywords": [
+    "nubo",
+    "database",
+    "serverless",
+    "edge"
+  ],
   "bugs": {
     "url": "https://github.com/NuboHQ/nubo/issues"
   },
-  "homepage": "https://github.com/NuboHQ/nubo#readme"
+  "homepage": "https://github.com/NuboHQ/nubo"
 }
